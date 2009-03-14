@@ -39,7 +39,7 @@ public class DbConnector {
 		     * if your sqlText is an Insert you must call 'stmt.executeUpdate(sqlText)'
 		     * which returns the number of rows processed
 		    */
-		    ResultSet rs = stmt.executeQuery(sqlText);
+//		    ResultSet rs = stmt.executeQuery(sqlText);
 		    
 		    /*
 		     * ResultSet object is like an iterator.  Calling rs.next() will iterate through 
@@ -48,15 +48,44 @@ public class DbConnector {
 		     * I explored.
 		     */
 		    
-		    while(rs.next())
-		    {
-		    	for(int i = 1; i <= 5; i++)
-		    	{
-		    		System.out.print(rs.getString(i) + ", ");
-		    	}
-		    	System.out.print("\n");
-		    }
-		  
+//		    while(rs.next())
+//		    {
+//		    	for(int i = 1; i <= 5; i++)
+//		    	{
+//		    		System.out.print(rs.getString(i) + ", ");
+//		    	}
+//		    	System.out.print("\n");
+//		    }
+		    
+		    /**
+		     * ssh command to connect:
+		     * ssh -N -p 22 k9e6@remote.ugrad.cs.ubc.ca -L 9998:dbhost.ugrad.cs.ubc.ca:1521
+		     */
+		    /** 
+		     * Below are tests from Martin, executed properly
+		     */
+//		    String create = "CREATE TABLE Test( id INTEGER, text CHAR(8), PRIMARY KEY(id))";
+//		    stmt.executeUpdate(create);
+//		    
+//		    String insert = "INSERT INTO Test(id,text) VALUES(0,'haha')";
+//		    stmt.executeUpdate(insert);
+//		    insert = "INSERT INTO Test(id,text) VALUES(5,'yay')";
+//		    stmt.executeUpdate(insert);
+//		    insert = "INSERT INTO Test(id,text) VALUES(9,'lol')";
+//		    stmt.executeUpdate(insert);
+//		    
+//		    String select = "SELECT * FROM Test";
+//		    ResultSet rs = stmt.executeQuery(select);
+//		    
+//		    while (rs.next())
+//		    	System.out.println(rs.getInt("id") + ": " + rs.getString("text"));
+//		    
+//		    select = "SELECT text FROM Test WHERE id > 3";
+//		    rs = stmt.executeQuery(select);
+//		    
+//		    while (rs.next())
+//		    	System.out.println(rs.getString("text"));
+		    
 		    System.out.println("\n-end");
 		}
 		catch(SQLException e)
