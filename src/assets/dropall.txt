@@ -1,0 +1,14 @@
+DROP TABLE ReturnItem;
+DROP TABLE Return;
+DROP TABLE PurchaseItem;
+DROP TABLE Purchase;
+DROP TABLE Stored;
+DROP TABLE ShipItem;
+DROP TABLE HasSong;
+DROP TABLE LeadSinger;
+DROP TABLE Customer;
+DROP TABLE Store;
+DROP TABLE Shipment;
+DROP TABLE Supplier;
+DROP TABLE Item;
+

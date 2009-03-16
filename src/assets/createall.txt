@@ -1,0 +1,122 @@
+CREATE TABLE Item (
+    upc INTEGER,
+    title VARCHAR(255),
+    type VARCHAR(3) NOT NULL,
+    category VARCHAR(20) NOT NULL,
+    company VARCHAR(255),
+    year INTEGER,
+    sellPrice NUMERIC(20,2),
+    PRIMARY KEY(upc),
+    CHECK (type = 'CD' OR type = 'DVD'),
+    CHECK (category = 'rock' OR category = 'pop' OR category = 'rap' OR category = 'country' OR category = 'classical' OR category = 'new age' OR category = 'instrumental')
+);
+
+CREATE TABLE Supplier (
+    name VARCHAR(255),
+    address VARCHAR(255),
+    city VARCHAR(255),
+    status VARCHAR(8),
+    PRIMARY KEY(name),
+    CHECK (status = 'active' OR status = 'inactive')
+);
+
+CREATE TABLE Shipment (
+    sid INTEGER,
+    supName VARCHAR(255),
+    storeName VARCHAR(255),
+    shipDate DATE,
+    PRIMARY KEY(sid)
+);
+
+CREATE TABLE Store (
+    name VARCHAR(255),
+    address VARCHAR(255),
+    type VARCHAR(255),
+    PRIMARY KEY(name)
+);
+
+CREATE TABLE Customer (
+    cid INTEGER,
+    password VARCHAR(255),
+    name VARCHAR(255),
+    address VARCHAR(255),
+    phone VARCHAR(255),
+    PRIMARY KEY(cid)
+);
+
+CREATE TABLE LeadSinger (
+    upc INTEGER,
+    name VARCHAR(255),
+    PRIMARY KEY(upc,name),
+    FOREIGN KEY(upc) REFERENCES Item ON DELETE CASCADE /*ON UPDATE CASCADE*/
+);
+
+CREATE TABLE HasSong (
+    upc INTEGER,
+    title VARCHAR(255),
+    PRIMARY KEY(upc,title),
+    FOREIGN KEY(upc) REFERENCES Item ON DELETE CASCADE /*ON UPDATE CASCADE*/
+);
+
+CREATE TABLE ShipItem (
+    sid INTEGER,
+    upc INTEGER,
+    supPrice NUMERIC(20,2),
+    quantity INTEGER,
+    PRIMARY KEY(sid,upc),
+    FOREIGN KEY(sid) REFERENCES Shipment ON DELETE CASCADE /*ON UPDATE CASCADE*/,
+    FOREIGN KEY(upc) REFERENCES Item /*ON UPDATE CASCADE*/,
+    CHECK (quantity >= 0)   
+);
+
+CREATE TABLE Stored (
+    name VARCHAR(255),
+    upc INTEGER,
+    stock INTEGER,
+    PRIMARY KEY(name,upc),
+    FOREIGN KEY(name) REFERENCES Store ON DELETE CASCADE /*ON UPDATE CASCADE*/,
+    FOREIGN KEY(upc) REFERENCES Item ON DELETE CASCADE /*ON UPDATE CASCADE*/,
+    CHECK (stock >= 0)
+);
+
+CREATE TABLE Purchase (
+    receiptId INTEGER,
+    purchaseDate DATE,
+    cid INTEGER NOT NULL,
+    name VARCHAR(255),
+    cardNum INTEGER,
+    expire DATE,
+    expectedDate DATE,
+    deliveredDate DATE,
+    PRIMARY KEY(receiptId),
+    FOREIGN KEY(cid) REFERENCES Customer /*ON UPDATE CASCADE*/
+);
+
+CREATE TABLE PurchaseItem (
+    receiptId INTEGER,
+    upc INTEGER,
+    quantity INTEGER,
+    PRIMARY KEY(receiptId, upc),
+    FOREIGN KEY(receiptId) REFERENCES Purchase ON DELETE CASCADE /*ON UPDATE CASCADE*/,
+    FOREIGN KEY(upc) REFERENCES Item /*ON UPDATE CASCADE*/,
+    CHECK (quantity >= 0)
+);
+
+CREATE TABLE Return (
+    retid INTEGER,
+    returnDate DATE,
+    receiptId INTEGER,
+    name VARCHAR(255),
+    PRIMARY KEY(retid),
+    FOREIGN KEY(receiptId) REFERENCES Purchase /*ON UPDATE CASCADE*/
+);
+
+CREATE TABLE ReturnItem (
+    retid INTEGER,
+    upc INTEGER,
+    quantity INTEGER,
+    PRIMARY KEY(retid,upc),
+    FOREIGN KEY(retid) REFERENCES Return /*ON UPDATE CASCADE*/,
+    FOREIGN KEY(upc) REFERENCES Item /*ON UPDATE CASCADE*/,
+    CHECK (quantity >= 0)
+);
