@@ -51,6 +51,8 @@ public class DbConnector {
 			String dbUrl = "jdbc:oracle:thin:@localhost:9998:ug";
 			
 			con = DriverManager.getConnection(dbUrl, username, password);	
+
+//			con.setAutoCommit(false);
 		}
 		catch(SQLException e)
 		{
@@ -185,7 +187,14 @@ public class DbConnector {
 	{
 		try
 		{
+//			con.rollback();
 			con.close();
+//			String username = "ora_v6c6";
+//			String password = "a83455063";
+//			String dbUrl = "jdbc:oracle:thin:@localhost:9998:ug";
+//			Connection con2 = DriverManager.getConnection(dbUrl, username, password);
+//			con2.rollback();
+			
 		}
 		catch(SQLException e)
 		{
