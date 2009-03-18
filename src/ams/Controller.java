@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import ams.ui.AMSFrame;
+
 public class Controller {
 
 	private static Controller instance;
@@ -27,5 +29,12 @@ public class Controller {
 	public Connection getConnection()
 	{
 		return connection;
+	}
+	
+	public void start()
+	{
+		AMSFrame frame = new AMSFrame();
+		frame.pack();
+		frame.setVisible(true);
 	}
 }

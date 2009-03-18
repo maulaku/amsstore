@@ -1,5 +1,8 @@
 package ams.ui;
 
-public class ManagerView {
+import javax.swing.JPanel;
 
+public class ManagerView extends JPanel {
+
+	public static final String ID = "MANAGERVIEW";
 }
