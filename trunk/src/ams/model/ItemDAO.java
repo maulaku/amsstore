@@ -1,6 +1,6 @@
 package ams.model;
 
-public class ItemFacade extends QueryFacade {
+public class ItemDAO extends AbstractDAO {
 	
 	public final String NAME = "Item";
 	protected String getTableName() {

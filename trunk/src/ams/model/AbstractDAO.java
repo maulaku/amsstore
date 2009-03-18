@@ -6,7 +6,7 @@ import java.sql.Statement;
 
 import ams.Controller;
 
-public abstract class QueryFacade {
+public abstract class AbstractDAO {
 	
 	public ResultSet select(Where where, String... attributes )
 	{
