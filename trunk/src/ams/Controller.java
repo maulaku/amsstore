@@ -1,8 +1,14 @@
 package ams;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Vector;
+
+import javax.swing.DefaultListModel;
 
 import ams.ui.AMSFrame;
 
@@ -29,6 +35,41 @@ public class Controller {
 	public Connection getConnection()
 	{
 		return connection;
+	}
+	
+	public Vector<String> getTableNames()
+	{
+		Vector<String> set = new Vector<String>();
+		try
+		{
+			DatabaseMetaData data = getConnection().getMetaData();
+			ResultSet tables = data.getTables(null, null, null, new String[] {"TABLE"});
+			while (tables.next())
+				set.add(tables.getString("TABLE_NAME"));
+		} 
+		catch (Exception e)
+		{
+			set = null;
+		}
+		return set;
+	}
+	
+	public Vector<String> getColumnNames(String tableName) 
+	{
+		Vector<String> set = new Vector<String>();
+	
+		try
+		{
+			DatabaseMetaData data = getConnection().getMetaData();
+			ResultSet columns = data.getColumns(null, null, tableName, null);
+			while (columns.next())
+				set.add(columns.getString("COLUMN_NAME"));
+		} 
+		catch (Exception e)
+		{
+			set = null;
+		}
+		return set;
 	}
 	
 	public void start()
