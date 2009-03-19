@@ -8,9 +8,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 
 public class AMSFrame extends JFrame
 {
@@ -26,7 +28,7 @@ public class AMSFrame extends JFrame
 		initComponents();
 	}
 	
-	private void addButtonListener(JButton button, final String id)
+	private void addButtonListener(JToggleButton button, final String id)
 	{
 		button.addActionListener(new ActionListener() {
 			@Override
@@ -40,14 +42,22 @@ public class AMSFrame extends JFrame
 	private void initComponents()
 	{
 		JPanel buttonPanel = new JPanel();
-		JButton button = new JButton("Clerk");
+		ButtonGroup group = new ButtonGroup();
+		JToggleButton button = new JToggleButton("Clerk");
+		group.add(button);
 		buttonPanel.add(button);
 		addButtonListener(button, ClerkView.ID);
-		button = new JButton("Customer");
+		button = new JToggleButton("Customer");
 		addButtonListener(button, CustomerView.ID);
+		group.add(button);
 		buttonPanel.add(button);
-		button = new JButton("Manager");
+		button = new JToggleButton("Manager");
 		addButtonListener(button, ManagerView.ID);
+		group.add(button);
+		buttonPanel.add(button);
+		button = new JToggleButton("Table");
+		addButtonListener(button, TableView.ID);
+		group.add(button);
 		buttonPanel.add(button);
 		
 		buttonPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -56,21 +66,15 @@ public class AMSFrame extends JFrame
 		contentPanel.add(new ClerkView(), ClerkView.ID);
 		contentPanel.add(new CustomerView(), CustomerView.ID);
 		contentPanel.add(new ManagerView(), ManagerView.ID);
+		contentPanel.add(new TableView(), TableView.ID);
 		
 		contentPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
-		JPanel mainPanel = new JPanel(new BorderLayout());
+		JPanel mainPanel = new JPanel(new BorderLayout(5,5));
+		mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		mainPanel.add(contentPanel, BorderLayout.CENTER);
 		mainPanel.add(buttonPanel, BorderLayout.NORTH);
 		
 		setContentPane(mainPanel);
-	}
-	
-	// driver to test the GUI
-	public static void main(String[] args)
-	{
-		AMSFrame frame = new AMSFrame();
-		frame.pack();
-		frame.setVisible(true);
 	}
 }

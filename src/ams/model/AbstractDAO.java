@@ -35,7 +35,7 @@ public abstract class AbstractDAO {
 			} catch (Exception ex) { System.err.println(ex.getMessage());}
 		}
 		return results;
-	}
+	}	
 	
 	private String getQueryString(String... attributes)
 	{
