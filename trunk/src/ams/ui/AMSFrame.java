@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
@@ -22,7 +21,7 @@ public class AMSFrame extends JFrame
 	public AMSFrame()
 	{
 		setTitle("Allegro Music Store");
-		setPreferredSize(new Dimension(800,600));
+		setPreferredSize(new Dimension(1024,768));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBackground(Color.WHITE);
 		initComponents();
@@ -44,6 +43,7 @@ public class AMSFrame extends JFrame
 		JPanel buttonPanel = new JPanel();
 		ButtonGroup group = new ButtonGroup();
 		JToggleButton button = new JToggleButton("Clerk");
+		button.setSelected(true); // default view
 		group.add(button);
 		buttonPanel.add(button);
 		addButtonListener(button, ClerkView.ID);
