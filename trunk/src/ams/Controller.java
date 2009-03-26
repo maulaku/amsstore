@@ -3,6 +3,7 @@ package ams;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -42,10 +43,12 @@ public class Controller {
 		Vector<String> set = new Vector<String>();
 		try
 		{
-			DatabaseMetaData data = getConnection().getMetaData();
-			ResultSet tables = data.getTables(null, null, null, new String[] {"TABLE"});
-			while (tables.next())
-				set.add(tables.getString("TABLE_NAME"));
+			
+			PreparedStatement statement = getConnection().prepareStatement("SELECT table_name FROM user_tables");
+			ResultSet results = statement.executeQuery();
+			
+			while (results.next())
+				set.add(results.getString("TABLE_NAME"));
 		} 
 		catch (Exception e)
 		{

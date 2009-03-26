@@ -30,7 +30,7 @@ public class AMSFrame extends JFrame
 	private void addButtonListener(JToggleButton button, final String id)
 	{
 		button.addActionListener(new ActionListener() {
-			@Override
+//			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				cardLayout.show(contentPanel, id);

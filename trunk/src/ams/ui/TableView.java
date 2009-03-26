@@ -59,7 +59,7 @@ public class TableView extends JPanel
 	private void initListeners()
 	{
 		list.addListSelectionListener(new ListSelectionListener() {
-			@Override
+//			@Override
 			public void valueChanged(ListSelectionEvent e)
 			{
 				table.removeAll();
