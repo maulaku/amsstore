@@ -1,8 +1,32 @@
 package ams.ui;
 
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
-public class ManagerView extends JPanel {
+import ams.ui.clerk.ItemPurchasePanel;
+import ams.ui.clerk.ItemReturnPanel;
+import ams.ui.customer.PurchaseOnlinePanel;
+import ams.ui.customer.RegistrationPanel;
+import ams.ui.manager.SupplierPanel;
+
+
+
+
+public class ManagerView extends JTabbedPane {
 
 	public static final String ID = "MANAGERVIEW";
+	
+	public ManagerView()
+	{
+		setTabPlacement(JTabbedPane.LEFT);
+		initComponents();
+	}
+	
+	private void initComponents()
+	{
+//		addTab("Purchase Item Online", new PurchaseOnlinePanel());
+		addTab("Registration", new RegistrationPanel());
+		addTab("Supplier", new SupplierPanel());
+
+	}
 }
