@@ -68,11 +68,15 @@ public class SupplierPanel extends JPanel {
 		
 		infoPanel.setBorder(BorderFactory.createTitledBorder("Registration Information"));
 		add(infoPanel, BorderLayout.CENTER);
-		addButton = new JButton("Register");
-		delButton = new JButton("Delete");
 		
-		add(addButton);
-		add(delButton);
+		addButton = new JButton("Add");
+		delButton = new JButton("Delete");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(addButton);
+		buttonPanel.add(delButton);
+		
+		add(buttonPanel);
+		
 	}
 	
 	private void initListeners()
@@ -107,6 +111,10 @@ public class SupplierPanel extends JPanel {
 		{
 			System.err.println(e.getMessage());
 		}
+		nameField.setText(" ");
+		addressField.setText(" ");
+		cityField.setText(" ");
+		statusField.setText(" ");
 	}
 	
 	
@@ -122,35 +130,14 @@ public class SupplierPanel extends JPanel {
 		{
 			System.err.println(e.getMessage());
 		}	
-			
+		
+		nameField.setText(" ");
+		addressField.setText(" ");
+		cityField.setText(" ");
+		statusField.setText(" ");
 	}
 
 	
-//	private int getUniqueCID()
-//	{
-//		ArrayList<Integer> cids = new ArrayList<Integer>();
-//		try
-//		{
-//			Statement s = Controller.getInstance().getConnection().createStatement();
-//			String updateString = "SELECT cid FROM Customer";
-//			ResultSet rs = s.executeQuery(updateString);
-//			while(rs.next())
-//			{
-//				cids.add(rs.getInt("cid"));
-//			}
-//		}
-//		catch(SQLException e)
-//		{
-//			System.err.println(e.getMessage());
-//		}
-//		
-//		int max = 0;
-//		for(int i : cids)
-//		{
-//			if(i > max)
-//				max = i;
-//		}
-//		return max+1;
-//	}
+
 }
 

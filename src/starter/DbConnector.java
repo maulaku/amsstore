@@ -120,6 +120,7 @@ public class DbConnector {
 			String sqlText = "SELECT * FROM Item";
 
 			ResultSet rs = stmt.executeQuery(sqlText);
+			//rs.getMetaData().getColumnCount();
 			
 		    /*
 		     * ResultSet object is like an iterator.  Calling rs.next() will iterate through 
