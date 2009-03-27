@@ -2,15 +2,19 @@ package ams;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Vector;
 
 import javax.swing.DefaultListModel;
 
+import ams.model.Purchase;
+import ams.model.PurchaseDAO;
 import ams.ui.AMSFrame;
 
 public class Controller {
@@ -73,6 +77,13 @@ public class Controller {
 			set = null;
 		}
 		return set;
+	}
+	
+	public void purchase(Purchase purchase)
+	{
+		Date date = new Date(System.currentTimeMillis());
+		purchase.setPurchaseDate(date);
+		PurchaseDAO.getInstance().purchase(purchase);
 	}
 	
 	public void start()

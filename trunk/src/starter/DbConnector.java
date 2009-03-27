@@ -18,8 +18,8 @@ public class DbConnector {
 			 * "src\\assets\\dropall.txt"
 			 */
 			runScript("src" + File.separator+ "assets" + File.separator+ "createall.txt");
-			update();
-			query();
+//			update();
+//			query();
 			cleanUp();
 	}
 	
