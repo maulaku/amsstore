@@ -21,12 +21,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
+import ams.Controller;
+import ams.model.Purchase;
+import ams.model.PurchaseItem;
+
 public class ItemPurchasePanel extends JPanel
 {
-//	#  INSERT INTO Purchase (receiptId, date, cid, name, cardNum, expire) VALUES (???, ???, ???, ???, ???, ???);
-//	# INSERT INTO PurchaseItem (receiptId,  upc, quantity) VALUES (???, ???, ???);
-//
-//	    * (for each of the items in the purchase)
 	
 	private ArrayList<ItemPanel> items;
 	
@@ -178,7 +178,27 @@ public class ItemPurchasePanel extends JPanel
 	
 	private void confirmPurchase()
 	{
-		// TODO:
+		Purchase purchase = new Purchase();
+		PurchaseItem[] purchaseItems = new PurchaseItem[items.size()];
+		for (int i = 0; i < items.size(); ++i)			
+		{
+			ItemPanel panel = items.get(i);
+			purchaseItems[i] = new PurchaseItem(panel.getUPC(), panel.getQuantity());
+		}
+		purchase.setPurchaseItems(purchaseItems);
+		purchase.setPayByCash();
+		if (cardButton.isSelected())
+		{
+			int cardNum = Integer.parseInt(cardNumField.getText());
+			String expiryDate = expireField.getText();
+			purchase.setPayByCredit(cardNum, expiryDate);
+		} 
+		Controller.getInstance().purchase(purchase);
+	
+		removeAllItemPanels();
+		cardNumField.setText("");
+		expireField.setText("");
+		cashButton.setSelected(true);
 	}
 	
 	void removePanel( ItemPanel panel )
@@ -231,6 +251,16 @@ public class ItemPurchasePanel extends JPanel
 					ItemPurchasePanel.this.removePanel(ItemPanel.this);
 				}
 			});
+		}
+		
+		public int getUPC()
+		{
+			return Integer.parseInt(upcField.getText());
+		}
+		
+		public int getQuantity()
+		{
+			return Integer.parseInt(quantityField.getText());
 		}
 		
 	}

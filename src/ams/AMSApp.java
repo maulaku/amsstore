@@ -2,13 +2,17 @@ package ams;
 
 import java.sql.DriverManager;
 
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 public class AMSApp
 {
+	private static final String DB_URL = "jdbc:oracle:thin:@localhost:9998:ug";
+	
+	private static final String USERNAME = "ora_v6c6";
+	
+	private static final String PASSWORD = "a83455063";
+	
 	public static void main(String[] args)
 	{
 		SwingUtilities.invokeLater( new Runnable() {
@@ -23,13 +27,8 @@ public class AMSApp
 				
 				try {
 					DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-				    
-					String username = "ora_v6c6";
-					String password = "a83455063";
-								
-					String dbUrl = "jdbc:oracle:thin:@localhost:9998:ug";
 					
-					Controller.getInstance().initializeConnection(dbUrl, username, password);
+					Controller.getInstance().initializeConnection(DB_URL, USERNAME, PASSWORD);
 				} 
 				catch (Exception e)
 				{

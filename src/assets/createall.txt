@@ -82,7 +82,7 @@ CREATE TABLE Stored (
 CREATE TABLE Purchase (
     receiptId INTEGER,
     purchaseDate DATE,
-    cid INTEGER NOT NULL,
+    cid INTEGER,
     name VARCHAR(255),
     cardNum INTEGER,
     expire DATE,

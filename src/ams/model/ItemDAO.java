@@ -1,6 +1,6 @@
 package ams.model;
 
-public class ItemDAO extends AbstractDAO {
+public class ItemDAO {
 	
 	public final String NAME = "Item";
 	protected String getTableName() {
