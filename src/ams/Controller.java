@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.Vector;
 
 import ams.model.Purchase;
@@ -82,6 +83,7 @@ public class Controller {
 	
 	/**
 	 * Deletes a tuple from a table given the values of the tuple.
+	 * whereValues must contain all the values of the tuple. If missing columns, use deleteTuple(String tableName, Map<String,Object> whereValues)
 	 * 
 	 * @param tableName the name of the table from which you are deleting
 	 * @param whereValues a vector of objects containing the values of the tuple being deleted
@@ -121,6 +123,47 @@ public class Controller {
 		return result;
 	}
 	
+	/**
+	 * Warning: this may delete multiple tuples if your key does not single out 1 tuple.
+	 * 
+	 * @param tableName the name of the table from where you are deleting
+	 * @param whereValues a mapping of column names to values of the tuple you are deleting
+	 * @return true if the operation is successful
+	 */
+	public boolean deleteTuple(String tableName, Map<String,Object> whereValues)
+	{
+		boolean result = true;
+		try
+		{
+			String whereString = "";
+			int i = 1;
+			for (String columnName : whereValues.keySet())
+			{
+				if (i > 1) 
+					whereString += " AND ";
+				whereString += columnName + "=?";				
+				++i;
+			}					
+				
+			String query = "DELETE FROM " + tableName + " WHERE " + whereString;
+			PreparedStatement statement = getConnection().prepareStatement(query);
+			
+			i = 1;
+			for (String columnName : whereValues.keySet())
+			{
+				statement.setObject(i, whereValues.get(columnName));
+				++i;
+			}
+			
+			statement.executeUpdate();
+			statement.close();
+		} catch ( SQLException e )
+		{
+			e.printStackTrace();
+			result = false;
+		}
+		return result;
+	}
 	
 	/**
 	 * Inserts a tuple into a table given the values of the tuple.
