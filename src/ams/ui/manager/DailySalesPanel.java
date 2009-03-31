@@ -24,8 +24,6 @@ public class DailySalesPanel extends JPanel
 	
 	private void initComponents()
 	{
-		populateTableList();
-		
 		table = new JTable() {
 			@Override
 			public boolean isCellEditable(int row, int column)
@@ -35,6 +33,9 @@ public class DailySalesPanel extends JPanel
 		};
 		table.setBackground(Color.WHITE);
 
+		populateTableList();
+		
+		
 		//TODO: Add Total Daily Sales
 	}
 	
