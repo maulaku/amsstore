@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
@@ -17,6 +18,7 @@ public class AMSFrame extends JFrame
 {
 	private JPanel contentPanel;
 	private CardLayout cardLayout;
+	private JLabel statusLabel;
 	
 	public AMSFrame()
 	{
@@ -70,11 +72,22 @@ public class AMSFrame extends JFrame
 		
 		contentPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
+		statusLabel = new JLabel(" ");
+		JPanel statusPanel = new JPanel(new BorderLayout());
+		statusPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		statusPanel.add(statusLabel, BorderLayout.CENTER);
+				
 		JPanel mainPanel = new JPanel(new BorderLayout(5,5));
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		mainPanel.add(contentPanel, BorderLayout.CENTER);
 		mainPanel.add(buttonPanel, BorderLayout.NORTH);
+		mainPanel.add(statusPanel, BorderLayout.SOUTH);
 		
 		setContentPane(mainPanel);
+	}
+	
+	public void setStatusString(String status)
+	{
+		statusLabel.setText(status);
 	}
 }

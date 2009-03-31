@@ -20,9 +20,11 @@ public class Controller {
 	
 	private static Connection connection;
 	
+	private AMSFrame uiFrame;
+	
 	private String currentInsert, currentDelete;
 	private PreparedStatement insert, delete;
-	
+		
 	private Controller() {}
 	
 	public void initializeConnection(String dbUrl, String username, String password) throws SQLException
@@ -218,8 +220,13 @@ public class Controller {
 	
 	public void start()
 	{
-		AMSFrame frame = new AMSFrame();
-		frame.pack();
-		frame.setVisible(true);
+		uiFrame = new AMSFrame();
+		uiFrame.pack();
+		uiFrame.setVisible(true);
+	}
+	
+	public void setStatusString(String status)
+	{
+		uiFrame.setStatusString(status);
 	}
 }
