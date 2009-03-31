@@ -182,9 +182,9 @@ public class TableView extends JPanel
 			model.addRow(values);
 			for (int i = 0; i < insertModel.getColumnCount(); ++i)
 				insertModel.setValueAt("", 0, i);
-			Controller.getInstance().setStatusString("Insert Successful.");
+			Controller.getInstance().setStatusString("Insert Successful.", AMSFrame.SUCCESS);
 		} else
-			Controller.getInstance().setStatusString("Insert Failed.");
+			Controller.getInstance().setStatusString("Insert Failed.", AMSFrame.FAILURE);
 		
 	}
 	
@@ -192,11 +192,12 @@ public class TableView extends JPanel
 	{		
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		
-		Controller.getInstance().setStatusString("Delete Failed.");
-		if (Controller.getInstance().deleteTuple((String) list.getSelectedValue(), (Vector<Object>) model.getDataVector().get(rowNum)));
+		
+		if (Controller.getInstance().deleteTuple((String) list.getSelectedValue(), (Vector<Object>) model.getDataVector().get(rowNum)))
 		{
 			model.removeRow(rowNum);
-			Controller.getInstance().setStatusString("Tuple Deleted.");
-		} 
+			Controller.getInstance().setStatusString("Tuple Deleted.", AMSFrame.SUCCESS);
+		} else
+			Controller.getInstance().setStatusString("Delete Failed.", AMSFrame.FAILURE);	
 	}
 }
