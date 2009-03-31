@@ -2,11 +2,21 @@ package ams.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Enumeration;
 import java.util.Vector;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -14,7 +24,9 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import ams.Controller;
 
@@ -24,7 +36,8 @@ public class TableView extends JPanel
 	public static final String ID = "TABLEVIEW";
 	
 	private JList list;
-	private JTable table;
+	private JTable table, insertTable;
+	private JButton insertButton;
 	
 	public TableView()
 	{
@@ -49,9 +62,33 @@ public class TableView extends JPanel
 		table.setBackground(Color.WHITE);
 		JScrollPane tablePane = new JScrollPane(table);
 		
+		insertTable = new JTable();
+		insertTable.setBackground(Color.WHITE);
+		insertTable.getTableHeader().setReorderingAllowed(false);
+		insertButton = new JButton("Insert");
+		
+		JPanel modifyPanel = new JPanel();
+		modifyPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		modifyPanel.setLayout(new BoxLayout(modifyPanel, BoxLayout.Y_AXIS));
+		JPanel panel = new JPanel();
+		panel.add(new JLabel("To delete, select a tuple from the table above and press delete."));
+		modifyPanel.add(panel);
+		panel = new JPanel(new BorderLayout(5,5));
+		panel.add(new JLabel("To insert, enter values: "), BorderLayout.WEST);
+		JScrollPane insertPane = new JScrollPane(insertTable);
+		insertPane.setPreferredSize(new Dimension(insertPane.getPreferredSize().width, insertTable.getRowHeight() * 2 + 10));
+		insertPane.setMaximumSize(new Dimension(insertPane.getPreferredSize().width, insertTable.getRowHeight() * 2 + 10));
+		panel.add(insertPane, BorderLayout.CENTER);		
+		panel.add(insertButton, BorderLayout.EAST);
+		modifyPanel.add(panel);
+		
+		JPanel rightPanel = new JPanel(new BorderLayout());
+		rightPanel.add(tablePane, BorderLayout.CENTER);
+		rightPanel.add(modifyPanel, BorderLayout.SOUTH);
+		
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setLeftComponent(listPane);
-		splitPane.setRightComponent(tablePane);
+		splitPane.setRightComponent(rightPanel);
 		
 		add(splitPane, BorderLayout.CENTER);
 	}
@@ -63,11 +100,12 @@ public class TableView extends JPanel
 			public void valueChanged(ListSelectionEvent e)
 			{
 				table.removeAll();
+				insertTable.removeAll();
 				if (!list.isSelectionEmpty())
 				{
 					String tableName = (String) list.getSelectedValue();
 					Vector<String> columns = Controller.getInstance().getColumnNames(tableName);
-					DefaultTableModel model = (DefaultTableModel) table.getModel();
+					
 					Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 					if (columns != null)
 					{	
@@ -92,8 +130,38 @@ public class TableView extends JPanel
 						
 					} 
 					// display it in the table
+					DefaultTableModel model = (DefaultTableModel) table.getModel();
 					model.setDataVector(data, columns);
+					
+					Vector<Object> emptyVector = new Vector<Object>();
+					for (int i = 0; i < columns.size(); ++i)
+						emptyVector.add("");
+					data = new Vector<Vector<Object>>();
+					data.add(emptyVector);
+					DefaultTableModel insertModel = (DefaultTableModel) insertTable.getModel();
+					Vector<Object> a = new Vector<Object>(columns);
+					insertModel.setDataVector(data, a);
+					
 				}
+			}
+		});
+		
+		table.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e)
+			{
+				if (table.getSelectedRowCount() <= 0)
+					return;
+				if (e.getKeyCode() == KeyEvent.VK_DELETE)
+					deleteTuple(table.getSelectedRow());
+			}
+		});
+		
+		insertButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				insertTuple();
 			}
 		});
 	}
@@ -102,5 +170,30 @@ public class TableView extends JPanel
 	{
 		for (String tableName : Controller.getInstance().getTableNames())
 			((DefaultListModel) list.getModel()).addElement(tableName);		
+	}
+	
+	private void insertTuple()
+	{
+		Vector<Object> values = new Vector<Object>();
+		DefaultTableModel insertModel = (DefaultTableModel) insertTable.getModel();
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		for (int i = 0; i < insertModel.getColumnCount(); ++i)
+			values.add(insertModel.getValueAt(0, i));
+		
+		if (Controller.getInstance().insertTuple((String) list.getSelectedValue(), values))
+		{
+			model.addRow(values);
+			for (int i = 0; i < insertModel.getColumnCount(); ++i)
+				insertModel.setValueAt("", 0, i);
+		}
+		
+	}
+	
+	private void deleteTuple(int rowNum)
+	{		
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		
+		if (Controller.getInstance().deleteTuple((String) list.getSelectedValue(), (Vector<Object>) model.getDataVector().get(rowNum)));
+			model.removeRow(rowNum);
 	}
 }
