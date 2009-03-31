@@ -73,8 +73,8 @@ public class TableView extends JPanel
 		panel = new JPanel(new BorderLayout(5,5));
 		panel.add(new JLabel("To insert, enter values: "), BorderLayout.WEST);
 		JScrollPane insertPane = new JScrollPane(insertTable);
-		insertPane.setPreferredSize(new Dimension(insertPane.getPreferredSize().width, insertTable.getRowHeight() * 2 + 10));
-		insertPane.setMaximumSize(new Dimension(insertPane.getPreferredSize().width, insertTable.getRowHeight() * 2 + 10));
+		insertPane.setPreferredSize(new Dimension(insertPane.getPreferredSize().width, insertTable.getRowHeight() * 2 + 8));
+		insertPane.setMaximumSize(new Dimension(insertPane.getPreferredSize().width, insertTable.getRowHeight() * 2 + 8));
 		panel.add(insertPane, BorderLayout.CENTER);		
 		panel.add(insertButton, BorderLayout.EAST);
 		modifyPanel.add(panel);
@@ -182,7 +182,9 @@ public class TableView extends JPanel
 			model.addRow(values);
 			for (int i = 0; i < insertModel.getColumnCount(); ++i)
 				insertModel.setValueAt("", 0, i);
-		}
+			Controller.getInstance().setStatusString("Insert Successful.");
+		} else
+			Controller.getInstance().setStatusString("Insert Failed.");
 		
 	}
 	
@@ -190,7 +192,11 @@ public class TableView extends JPanel
 	{		
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		
+		Controller.getInstance().setStatusString("Delete Failed.");
 		if (Controller.getInstance().deleteTuple((String) list.getSelectedValue(), (Vector<Object>) model.getDataVector().get(rowNum)));
+		{
 			model.removeRow(rowNum);
+			Controller.getInstance().setStatusString("Tuple Deleted.");
+		} 
 	}
 }
