@@ -16,6 +16,10 @@ import javax.swing.JToggleButton;
 
 public class AMSFrame extends JFrame
 {
+	public static final Color SUCCESS = new Color(0,200,0,200);
+	
+	public static final Color FAILURE = new Color(200,0,0,200);
+	
 	private JPanel contentPanel;
 	private CardLayout cardLayout;
 	private JLabel statusLabel;
@@ -73,6 +77,7 @@ public class AMSFrame extends JFrame
 		contentPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
 		statusLabel = new JLabel(" ");
+		statusLabel.setOpaque(true);
 		JPanel statusPanel = new JPanel(new BorderLayout());
 		statusPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		statusPanel.add(statusLabel, BorderLayout.CENTER);
@@ -89,5 +94,10 @@ public class AMSFrame extends JFrame
 	public void setStatusString(String status)
 	{
 		statusLabel.setText(status);
+	}
+	
+	public void setStatusColor(Color color)
+	{
+		statusLabel.setBackground(color);
 	}
 }

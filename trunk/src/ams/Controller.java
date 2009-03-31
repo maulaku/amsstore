@@ -1,5 +1,6 @@
 package ams;
 
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Date;
@@ -15,7 +16,7 @@ import ams.model.PurchaseDAO;
 import ams.ui.AMSFrame;
 
 public class Controller {
-
+	
 	private static Controller instance;
 	
 	private static Connection connection;
@@ -227,6 +228,12 @@ public class Controller {
 	
 	public void setStatusString(String status)
 	{
+		setStatusString(status, null);
+	}
+	
+	public void setStatusString(String status, Color color)
+	{
 		uiFrame.setStatusString(status);
+		uiFrame.setStatusColor(color);
 	}
 }
