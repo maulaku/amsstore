@@ -6,9 +6,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -48,20 +51,39 @@ public class AMSFrame extends JFrame
 	{
 		JPanel buttonPanel = new JPanel();
 		ButtonGroup group = new ButtonGroup();
-		JToggleButton button = new JToggleButton("Clerk");
+		
+		JToggleButton button = new JToggleButton("Customer");
+		button.setIcon(new ImageIcon(getClass().getResource("/ams/ui/icons/customers.png")));
+		Dimension dim = button.getPreferredSize();
+		
+		button = new JToggleButton("Clerk");
+		button.setIcon(new ImageIcon(getClass().getResource("/ams/ui/icons/clerk.png")));
+		button.setPreferredSize(dim);
 		button.setSelected(true); // default view
+		button.setFocusable(false);
 		group.add(button);
 		buttonPanel.add(button);
 		addButtonListener(button, ClerkView.ID);
+		
 		button = new JToggleButton("Customer");
+		button.setFocusable(false);
+		button.setIcon(new ImageIcon(getClass().getResource("/ams/ui/icons/customers.png")));
 		addButtonListener(button, CustomerView.ID);
 		group.add(button);
 		buttonPanel.add(button);
+		
 		button = new JToggleButton("Manager");
+		button.setFocusable(false);
+		button.setIcon(new ImageIcon(getClass().getResource("/ams/ui/icons/manager.png")));
+		button.setPreferredSize(dim);
 		addButtonListener(button, ManagerView.ID);
 		group.add(button);
 		buttonPanel.add(button);
+		
 		button = new JToggleButton("Table");
+		button.setFocusable(false);
+		button.setIcon(new ImageIcon(getClass().getResource("/ams/ui/icons/tables.png")));
+		button.setPreferredSize(dim);
 		addButtonListener(button, TableView.ID);
 		group.add(button);
 		buttonPanel.add(button);
