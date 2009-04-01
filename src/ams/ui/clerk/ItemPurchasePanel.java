@@ -195,7 +195,15 @@ public class ItemPurchasePanel extends JPanel
 		for (int i = 0; i < items.size(); ++i)			
 		{
 			ItemPanel panel = items.get(i);
-			purchaseItems[i] = new PurchaseItem(panel.getUPC(), panel.getQuantity());
+			try
+			{
+				purchaseItems[i] = new PurchaseItem(panel.getUPC(), panel.getQuantity());
+			} catch (NumberFormatException e)
+			{
+				Controller.getInstance().setStatusString("Transaction Failed: item information is invalid", AMSFrame.FAILURE);
+				reset();
+				return;
+			}
 		}
 		purchase.setPurchaseItems(purchaseItems);
 		purchase.setPayByCash();

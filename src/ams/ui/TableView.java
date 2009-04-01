@@ -193,7 +193,7 @@ public class TableView extends JPanel
 		} 
 		catch (SQLException e)
 		{
-			Controller.getInstance().setStatusString("Insert Failed.", AMSFrame.FAILURE);
+			Controller.getInstance().setStatusString("Insert Failed: " + e.getMessage(), AMSFrame.FAILURE);
 			e.printStackTrace();
 		}
 	}
@@ -209,7 +209,7 @@ public class TableView extends JPanel
 			Controller.getInstance().setStatusString("Tuple Deleted.", AMSFrame.SUCCESS);
 		} catch (SQLException e)
 		{
-			Controller.getInstance().setStatusString("Delete Failed.", AMSFrame.FAILURE);
+			Controller.getInstance().setStatusString("Delete Failed: " + e.getMessage(), AMSFrame.FAILURE);
 			e.printStackTrace();
 		}		
 	}

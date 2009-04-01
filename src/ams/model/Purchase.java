@@ -4,8 +4,6 @@ import java.sql.Date;
 
 public class Purchase
 {
-	private int receiptId;
-	
 	private PurchaseItem[] items;
 	
 	private boolean payByCredit;
@@ -14,17 +12,7 @@ public class Purchase
 	
 	private String expiryDate;
 	
-	private Date purchaseDate;
-	
-	public void setReceiptId(int rId)
-	{
-		receiptId = rId;
-	}
-	
-	public int getReceiptId()
-	{
-		return receiptId;
-	}
+	private Date purchaseDate;	
 	
 	public void setPurchaseItems(PurchaseItem[] purchaseItems)
 	{

@@ -79,6 +79,7 @@ public class PurchaseDAO
 			values.add(item.getQuantity());
 			
 			Controller.getInstance().insertTuple("PURCHASEITEM", values);
+			ItemDAO.getInstance().updateStock(item.getUPC(), -item.getQuantity());
 			receipt.addItem(ItemDAO.getInstance().getItem(item.getUPC()));
 		}
 	}

@@ -14,6 +14,8 @@ import java.util.Vector;
 import ams.model.Purchase;
 import ams.model.PurchaseDAO;
 import ams.model.Receipt;
+import ams.model.Shipment;
+import ams.model.ShipmentDAO;
 import ams.ui.AMSFrame;
 
 public class Controller {
@@ -188,6 +190,13 @@ public class Controller {
 		return PurchaseDAO.getInstance().purchase(purchase);
 	}
 	
+	public void processShipment(Shipment shipment)
+	{
+		Date date = new Date(System.currentTimeMillis());
+		shipment.setDate(date);
+		ShipmentDAO.getInstance().processShipment(shipment);
+	}
+	
 	public void start()
 	{
 		uiFrame = new AMSFrame();
@@ -204,5 +213,5 @@ public class Controller {
 	{
 		uiFrame.setStatusString(status);
 		uiFrame.setStatusColor(color);
-	}
+	}	
 }
