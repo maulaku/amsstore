@@ -3,19 +3,17 @@ package ams.model;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
+import java.util.Vector;
 
 import ams.Controller;
+import ams.ui.AMSFrame;
 
 public class PurchaseDAO
 {
 	private static PurchaseDAO instance;
 	
-	private int receiptId;	
-	
 	private PurchaseDAO()
 	{
-		findNextReceiptID();
 	}
 	
 	public static PurchaseDAO getInstance()
@@ -25,66 +23,63 @@ public class PurchaseDAO
 		return instance;
 	}
 	
-	private void findNextReceiptID()
+	private int findNextReceiptID()
 	{
+		int receiptId = 0;
 		try
 		{
 			String query = "SELECT MAX(receiptId) FROM Purchase";
 			PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement(query);
 			ResultSet result = statement.executeQuery();
+			result.next();
 			receiptId = result.getInt(1);
-		} catch (SQLException e) {}
-	}
-		
-	public void purchase(Purchase purchase)
-	{
-		int rId = ++receiptId;		
-		String insert = "INSERT INTO PURCHASE (receiptId, purchaseDate, cid, name, cardNum, expire, expectedDate, deliveredDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
-		try
-		{
-			PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement(insert);
-			statement.setInt(1, rId);
-			statement.setDate(2, purchase.getPurchaseDate());
-			statement.setNull(3, Types.INTEGER);
-			statement.setNull(4, Types.CHAR);
-			if (purchase.isPaidByCredit())
-			{
-				statement.setInt(5, purchase.getCreditCardNum());
-				statement.setString(6, purchase.getCardExpiryDate());
-			} else
-			{
-				statement.setNull(5, Types.INTEGER);
-				statement.setNull(6, Types.CHAR);
-			}
-			statement.setNull(7, Types.DATE);
-			statement.setNull(8, Types.DATE);
-			
-			statement.executeUpdate();
-			statement.close();
-			
-			insertPurchaseItems(rId, purchase.getPurchaseItems());
-		} catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return receiptId;
+	}
 		
+	public Receipt purchase(Purchase purchase)
+	{
+		int rId = findNextReceiptID() + 1;
+		Receipt receipt = new Receipt(rId, purchase);
+		try
+		{
+			Vector<Object> values = new Vector<Object>();
+			values.add(rId);
+			values.add(purchase.getPurchaseDate());
+			values.add(null);
+			values.add(null);
+			Integer creditNum = purchase.isPaidByCredit() ? purchase.getCreditCardNum() : null;
+			String creditDate = purchase.isPaidByCredit() ? purchase.getCardExpiryDate() : null;
+			values.add(creditNum);
+			values.add(creditDate);
+			values.add(null);
+			values.add(null);
+			Controller.getInstance().insertTuple("PURCHASE", values);
+			insertPurchaseItems(receipt, purchase.getPurchaseItems());
+			Controller.getInstance().setStatusString("Purchase successful: see receipt.", AMSFrame.SUCCESS);
+		} catch (SQLException e)
+		{			
+			receipt = null;
+			e.printStackTrace();
+			Controller.getInstance().setStatusString("Purchase Failed: " + e.getMessage(), AMSFrame.FAILURE);
+		}
+		return receipt;
 	}
 	
-	public void insertPurchaseItems(int rId, PurchaseItem[] items) throws SQLException
-	{
-		String insert = "INSERT INTO PurchaseItem (receiptId, upc, quantity) VALUES (?, ?, ?)";
-		
-		PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement(insert);
-		
+	public void insertPurchaseItems(Receipt receipt, PurchaseItem[] items) throws SQLException
+	{		
+		Vector<Object> values = new Vector<Object>();
 		for (PurchaseItem item: items)
-		{
-			statement.setInt(1, rId);
-			statement.setInt(2, item.getUPC());
-			statement.setInt(3, item.getQuantity());
-			statement.executeUpdate();
+		{		
+			values.clear();						
+			values.add(receipt.getReceiptId());
+			values.add(item.getUPC());
+			values.add(item.getQuantity());
+			
+			Controller.getInstance().insertTuple("PURCHASEITEM", values);
+			receipt.addItem(ItemDAO.getInstance().getItem(item.getUPC()));
 		}
-		statement.close();
-		
 	}
 }

@@ -1,9 +1,42 @@
 package ams.model;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import ams.Controller;
+
 public class ItemDAO {
 	
-	public final String NAME = "Item";
-	protected String getTableName() {
-		return NAME;
+	private static ItemDAO instance;
+	
+	private ItemDAO() 
+	{
+		
+	}
+	
+	public static ItemDAO getInstance()
+	{
+		if (instance == null)
+			instance = new ItemDAO();
+		return instance;
+	}
+	
+	public Item getItem(int upc) throws SQLException
+	{
+		String query = "SELECT * FROM ITEM WHERE upc=" + upc;
+		
+		PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement(query);
+		ResultSet results = statement.executeQuery();
+		results.next();
+		Item item = new Item(upc);
+		item.setTitle(results.getString(2));
+		item.setType(results.getString(3));
+		item.setCategory(results.getString(4));
+		item.setCompany(results.getString(5));
+		item.setYear(results.getInt(6));
+		item.setPrice(results.getDouble(7)); 
+		
+		return item;
 	}
 }

@@ -8,6 +8,8 @@ import ams.ui.clerk.ItemReturnPanel;
 import ams.ui.customer.PurchaseOnlinePanel;
 import ams.ui.customer.RegistrationPanel;
 import ams.ui.manager.DailySalesPanel;
+import ams.ui.manager.DeliveryPanel;
+import ams.ui.manager.ShipmentPanel;
 import ams.ui.manager.SupplierPanel;
 import ams.ui.manager.TopSellingItemsPanel;
 
@@ -31,5 +33,7 @@ public class ManagerView extends JTabbedPane {
 		addTab("Supplier", new SupplierPanel());
 		addTab("Daily Sales Report", new DailySalesPanel());
 		addTab("Top Selling Items", new TopSellingItemsPanel());
+		addTab("Process Order Delivery", new DeliveryPanel());
+		addTab("Process Shipment From Supplier", new ShipmentPanel());
 	}
 }

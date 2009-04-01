@@ -13,6 +13,7 @@ import java.util.Vector;
 
 import ams.model.Purchase;
 import ams.model.PurchaseDAO;
+import ams.model.Receipt;
 import ams.ui.AMSFrame;
 
 public class Controller {
@@ -90,40 +91,29 @@ public class Controller {
 	 * 
 	 * @param tableName the name of the table from which you are deleting
 	 * @param whereValues a vector of objects containing the values of the tuple being deleted
-	 * @return true if operation is successful 
 	 */
-	public boolean deleteTuple(String tableName, Vector<Object> whereValues)
+	public void deleteTuple(String tableName, Vector<Object> whereValues) throws SQLException
 	{
-		boolean result = true;
-		try
+		if (currentDelete == null || !tableName.equals(currentDelete))
 		{
-			if (currentDelete == null || !tableName.equals(currentDelete))
+			Vector<String> columnNames = getColumnNames(tableName);
+			String whereString = "";
+			for (int i = 0; i < columnNames.size(); ++i)
 			{
-				Vector<String> columnNames = getColumnNames(tableName);
-				String whereString = "";
-				for (int i = 0; i < columnNames.size(); ++i)
-				{
-					if (i > 0) 
-						whereString += " AND ";
-					whereString += columnNames.get(i) + "=?";
-				}
-					
-				String query = "DELETE FROM " + tableName + " WHERE " + whereString;
-				delete = getConnection().prepareStatement(query);
-				currentDelete = tableName;
+				if (i > 0) 
+					whereString += " AND ";
+				whereString += columnNames.get(i) + "=?";
 			}
-			
-			for (int i = 0; i < whereValues.size(); ++i)
-				delete.setObject(i+1, whereValues.get(i));
-			
-			delete.executeUpdate();
-			delete.close();
-		} catch ( SQLException e )
-		{
-			e.printStackTrace();
-			result = false;
+				
+			String query = "DELETE FROM " + tableName + " WHERE " + whereString;
+			delete = getConnection().prepareStatement(query);
+			currentDelete = tableName;
 		}
-		return result;
+		
+		for (int i = 0; i < whereValues.size(); ++i)
+			delete.setObject(i+1, whereValues.get(i));
+		
+		delete.executeUpdate();
 	}
 	
 	/**
@@ -131,41 +121,31 @@ public class Controller {
 	 * 
 	 * @param tableName the name of the table from where you are deleting
 	 * @param whereValues a mapping of column names to values of the tuple you are deleting
-	 * @return true if the operation is successful
 	 */
-	public boolean deleteTuple(String tableName, Map<String,Object> whereValues)
+	public void deleteTuple(String tableName, Map<String,Object> whereValues) throws SQLException
 	{
-		boolean result = true;
-		try
+		String whereString = "";
+		int i = 1;
+		for (String columnName : whereValues.keySet())
 		{
-			String whereString = "";
-			int i = 1;
-			for (String columnName : whereValues.keySet())
-			{
-				if (i > 1) 
-					whereString += " AND ";
-				whereString += columnName + "=?";				
-				++i;
-			}					
-				
-			String query = "DELETE FROM " + tableName + " WHERE " + whereString;
-			PreparedStatement statement = getConnection().prepareStatement(query);
+			if (i > 1) 
+				whereString += " AND ";
+			whereString += columnName + "=?";				
+			++i;
+		}					
 			
-			i = 1;
-			for (String columnName : whereValues.keySet())
-			{
-				statement.setObject(i, whereValues.get(columnName));
-				++i;
-			}
-			
-			statement.executeUpdate();
-			statement.close();
-		} catch ( SQLException e )
+		String query = "DELETE FROM " + tableName + " WHERE " + whereString;
+		PreparedStatement statement = getConnection().prepareStatement(query);
+		
+		i = 1;
+		for (String columnName : whereValues.keySet())
 		{
-			e.printStackTrace();
-			result = false;
+			statement.setObject(i, whereValues.get(columnName));
+			++i;
 		}
-		return result;
+		
+		statement.executeUpdate();
+		statement.close();
 	}
 	
 	/**
@@ -173,50 +153,39 @@ public class Controller {
 	 * 
 	 * @param tableName the name of the table into which you are inserting
 	 * @param values a vector of objects containing the values of the tuple being inserted
-	 * @return true if operation is successful
 	 */
-	public boolean insertTuple(String tableName, Vector<Object> values)
+	public void insertTuple(String tableName, Vector<Object> values) throws SQLException
 	{
-		boolean result = true;
-		try
+		if (currentInsert == null || !tableName.equals(currentInsert))
 		{
-			if (currentInsert == null || !tableName.equals(currentInsert))
+			Vector<String> columnNames = getColumnNames(tableName);
+			String tableDef = "";
+			String valString = "";
+			for (int i = 0; i < columnNames.size(); ++i)
 			{
-				Vector<String> columnNames = getColumnNames(tableName);
-				String tableDef = "";
-				String valString = "";
-				for (int i = 0; i < columnNames.size(); ++i)
-				{
-					if (i > 0) {
-						tableDef += ",";
-						valString += ",";
-					}
-					tableDef += columnNames.get(i);
-					valString += "?";
+				if (i > 0) {
+					tableDef += ",";
+					valString += ",";
 				}
-					
-				String query = "INSERT INTO " + tableName + " (" + tableDef + ") VALUES (" + valString + ")";
-				insert = getConnection().prepareStatement(query);
-				currentInsert = tableName;
+				tableDef += columnNames.get(i);
+				valString += "?";
 			}
-			
-			for (int i = 0; i < values.size(); ++i)
-				insert.setObject(i+1, values.get(i));
-			insert.executeUpdate();
-			insert.close();
-		} catch ( SQLException e)
-		{
-			result = false;
-			e.printStackTrace();
+				
+			String query = "INSERT INTO " + tableName + " (" + tableDef + ") VALUES (" + valString + ")";
+			insert = getConnection().prepareStatement(query);
+			currentInsert = tableName;
 		}
-		return result;
+		
+		for (int i = 0; i < values.size(); ++i)
+			insert.setObject(i+1, values.get(i));
+		insert.executeUpdate();	
 	}
 	
-	public void purchase(Purchase purchase)
+	public Receipt purchase(Purchase purchase)
 	{
 		Date date = new Date(System.currentTimeMillis());
 		purchase.setPurchaseDate(date);
-		PurchaseDAO.getInstance().purchase(purchase);
+		return PurchaseDAO.getInstance().purchase(purchase);
 	}
 	
 	public void start()
