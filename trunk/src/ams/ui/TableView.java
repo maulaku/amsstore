@@ -9,6 +9,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -177,27 +178,34 @@ public class TableView extends JPanel
 		for (int i = 0; i < insertModel.getColumnCount(); ++i)
 			values.add(insertModel.getValueAt(0, i));
 		
-		if (Controller.getInstance().insertTuple((String) list.getSelectedValue(), values))
+		try
 		{
+			Controller.getInstance().insertTuple((String) list.getSelectedValue(), values);
 			model.addRow(values);
 			for (int i = 0; i < insertModel.getColumnCount(); ++i)
 				insertModel.setValueAt("", 0, i);
 			Controller.getInstance().setStatusString("Insert Successful.", AMSFrame.SUCCESS);
-		} else
+		} 
+		catch (SQLException e)
+		{
 			Controller.getInstance().setStatusString("Insert Failed.", AMSFrame.FAILURE);
-		
+			e.printStackTrace();
+		}
 	}
 	
 	private void deleteTuple(int rowNum)
 	{		
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		
-		
-		if (Controller.getInstance().deleteTuple((String) list.getSelectedValue(), (Vector<Object>) model.getDataVector().get(rowNum)))
+		try
 		{
+			Controller.getInstance().deleteTuple((String) list.getSelectedValue(), (Vector<Object>) model.getDataVector().get(rowNum));
 			model.removeRow(rowNum);
 			Controller.getInstance().setStatusString("Tuple Deleted.", AMSFrame.SUCCESS);
-		} else
-			Controller.getInstance().setStatusString("Delete Failed.", AMSFrame.FAILURE);	
+		} catch (SQLException e)
+		{
+			Controller.getInstance().setStatusString("Delete Failed.", AMSFrame.FAILURE);
+			e.printStackTrace();
+		}		
 	}
 }

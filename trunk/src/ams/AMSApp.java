@@ -2,6 +2,8 @@ package ams;
 
 import java.sql.DriverManager;
 
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -33,6 +35,7 @@ public class AMSApp
 				catch (Exception e)
 				{
 					// cannot let application start
+					JOptionPane.showMessageDialog(new JPanel(), "Cannot initialize connection!\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					System.err.println("Cannot initialize connection: " + e.getMessage());
 					System.exit(1);
 				}

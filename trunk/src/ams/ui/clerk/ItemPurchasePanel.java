@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -14,7 +15,10 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -24,6 +28,8 @@ import javax.swing.border.EtchedBorder;
 import ams.Controller;
 import ams.model.Purchase;
 import ams.model.PurchaseItem;
+import ams.model.Receipt;
+import ams.ui.AMSFrame;
 
 public class ItemPurchasePanel extends JPanel
 {
@@ -37,6 +43,8 @@ public class ItemPurchasePanel extends JPanel
 	private JRadioButton cardButton, cashButton;
 	
 	private JTextField cardNumField, expireField;
+	
+	private JCheckBox receiptBox;
 	
 	public ItemPurchasePanel()
 	{
@@ -98,6 +106,9 @@ public class ItemPurchasePanel extends JPanel
 		expireField.setPreferredSize(new Dimension(50, expireField.getPreferredSize().height));			
 		expireField.setEditable(false);
 		
+		receiptBox = new JCheckBox("Show Receipt");
+		receiptBox.setSelected(true);
+		
 		purchaseButton = new JButton("Confirm Purchase");
 		
 		JPanel purchaseInfoPanel = new JPanel();
@@ -113,6 +124,7 @@ public class ItemPurchasePanel extends JPanel
 		label = new JLabel("Expiry Date:");
 		purchaseInfoPanel.add(label);
 		purchaseInfoPanel.add(expireField);
+		purchaseInfoPanel.add(receiptBox);
 		purchaseInfoPanel.add(purchaseButton);
 		purchaseInfoPanel.setMaximumSize(new Dimension(purchaseInfoPanel.getPreferredSize().width,50));
 		
@@ -189,16 +201,44 @@ public class ItemPurchasePanel extends JPanel
 		purchase.setPayByCash();
 		if (cardButton.isSelected())
 		{
-			int cardNum = Integer.parseInt(cardNumField.getText());
+			int cardNum = 0;
+			try
+			{
+				cardNum = Integer.parseInt(cardNumField.getText());
+			} 
+			catch (NumberFormatException e)
+			{
+				Controller.getInstance().setStatusString("Transaction Failed: credit card number is invalid", AMSFrame.FAILURE);
+				reset();
+				return;
+			}
 			String expiryDate = expireField.getText();
 			purchase.setPayByCredit(cardNum, expiryDate);
 		} 
-		Controller.getInstance().purchase(purchase);
+		Receipt receipt = Controller.getInstance().purchase(purchase);
+		
+		if (receiptBox.isSelected())
+			printReceipt(receipt);
+		reset();
+	}
 	
+	public void printReceipt(Receipt receipt)
+	{
+		ReceiptDialog dialog = new ReceiptDialog(receipt);
+		dialog.setDefaultCloseOperation(ReceiptDialog.DISPOSE_ON_CLOSE);
+		dialog.pack();
+		dialog.setLocationRelativeTo(this);
+		dialog.setVisible(true);
+	}
+	
+	public void reset()
+	{
 		removeAllItemPanels();
 		cardNumField.setText("");
 		expireField.setText("");
 		cashButton.setSelected(true);
+		cardNumField.setEditable(false);
+		expireField.setEditable(false);
 	}
 	
 	void removePanel( ItemPanel panel )
