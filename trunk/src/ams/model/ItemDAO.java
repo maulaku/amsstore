@@ -39,4 +39,38 @@ public class ItemDAO {
 		
 		return item;
 	}
+	
+	public void updatePrice(int upc, double price) throws SQLException
+	{
+		String update = "UPDATE ITEM SET sellPrice = ? WHERE upc = ?";
+		PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement(update);
+		statement.setDouble(1, price);
+		statement.setInt(2, upc);
+		statement.executeUpdate();
+		statement.close();		
+	}
+	
+	/**
+	 * Sets the stock of the item specified by upc to be old stock + dQuantity.
+	 * @param upc
+	 * @param dQuantity
+	 * @throws SQLException
+	 */
+	public void updateStock(int upc, int dQuantity) throws SQLException
+	{
+		String query = "SELECT stock FROM STORED WHERE upc = ?";
+		PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement(query);
+		statement.setInt(1, upc);
+		ResultSet result = statement.executeQuery();
+		result.next();
+		int oldQuantity = result.getInt(1);
+		statement.close();
+		
+		String update = "UPDATE STORED SET stock = ? WHERE upc = ?";
+		statement = Controller.getInstance().getConnection().prepareStatement(update);
+		statement.setInt(1, oldQuantity + dQuantity);
+		statement.setInt(2, upc);
+		statement.executeUpdate();
+		statement.close();
+	}
 }
