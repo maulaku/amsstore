@@ -19,15 +19,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
-import javax.swing.border.LineBorder;
 
 import ams.Controller;
 
 public class AMSFrame extends JFrame
 {
-	public static final Color SUCCESS = new Color(0,200,0,180);
+	public static final Color SUCCESS = new Color(55,205,55,255);
 	
-	public static final Color FAILURE = new Color(200,0,0,180);
+	public static final Color FAILURE = new Color(205,55,55,255);
 	
 	private BufferedImage headerImage;
 	
