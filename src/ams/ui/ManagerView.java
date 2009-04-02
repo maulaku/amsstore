@@ -6,7 +6,6 @@ import javax.swing.JTabbedPane;
 import ams.ui.clerk.ItemPurchasePanel;
 import ams.ui.clerk.ItemReturnPanel;
 import ams.ui.customer.PurchaseOnlinePanel;
-import ams.ui.customer.RegistrationPanel;
 import ams.ui.manager.DailySalesPanel;
 import ams.ui.manager.DeliveryPanel;
 import ams.ui.manager.ShipmentPanel;
