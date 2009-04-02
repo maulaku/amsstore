@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -18,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
+import javax.swing.border.LineBorder;
 
 import ams.Controller;
 
@@ -26,6 +28,8 @@ public class AMSFrame extends JFrame
 	public static final Color SUCCESS = new Color(0,200,0,180);
 	
 	public static final Color FAILURE = new Color(200,0,0,180);
+	
+	private BufferedImage headerImage;
 	
 	private JPanel contentPanel;
 	private CardLayout cardLayout;
@@ -37,6 +41,12 @@ public class AMSFrame extends JFrame
 		setPreferredSize(new Dimension(1024,768));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBackground(Color.WHITE);
+		try
+		{
+			headerImage = ImageIO.read(getClass().getResourceAsStream("/ams/ui/icons/header.png"));
+		} catch (Exception e)
+		{			
+		}
 		initComponents();
 		
 		addWindowListener(new WindowAdapter() {
@@ -61,7 +71,15 @@ public class AMSFrame extends JFrame
 	
 	private void initComponents()
 	{
-		JPanel buttonPanel = new JPanel();
+		JPanel buttonPanel = new JPanel() {
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				
+				if (headerImage != null)
+					g.drawImage(headerImage, 0, 0, getWidth(), getHeight(), 0, 0, headerImage.getWidth(), headerImage.getHeight(), this);
+				g.drawRect(0, 0, getWidth()-1, getHeight()-1);
+			};
+		};		
 		ButtonGroup group = new ButtonGroup();
 		
 		JToggleButton button = new JToggleButton("Customer");
@@ -100,7 +118,8 @@ public class AMSFrame extends JFrame
 		group.add(button);
 		buttonPanel.add(button);
 		
-		buttonPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		buttonPanel.setBorder(BorderFactory.createEmptyBorder(35, 100, 0, 0));
+		buttonPanel.setPreferredSize(new Dimension(buttonPanel.getPreferredSize().height, 120));
 		
 		contentPanel = new JPanel(cardLayout = new CardLayout());
 		contentPanel.add(new ClerkView(), ClerkView.ID);
@@ -118,6 +137,7 @@ public class AMSFrame extends JFrame
 		statusPanel.add(statusLabel, BorderLayout.CENTER);
 				
 		JPanel mainPanel = new JPanel(new BorderLayout(5,5));
+		mainPanel.setBackground(Color.WHITE);
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		mainPanel.add(contentPanel, BorderLayout.CENTER);
 		mainPanel.add(buttonPanel, BorderLayout.NORTH);
