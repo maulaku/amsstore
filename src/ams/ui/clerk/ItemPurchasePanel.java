@@ -1,6 +1,7 @@
 package ams.ui.clerk;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -49,6 +50,7 @@ public class ItemPurchasePanel extends JPanel
 	public ItemPurchasePanel()
 	{
 		items = new ArrayList<ItemPanel>();
+		setBackground(Color.WHITE);
 		setLayout(new BorderLayout(5,5));
 		initComponents();
 		initListeners();
@@ -77,6 +79,7 @@ public class ItemPurchasePanel extends JPanel
 		clearButton.setPreferredSize(new Dimension(100, clearButton.getPreferredSize().height));
 
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		buttonPanel.setBackground(Color.WHITE);
 		buttonPanel.add(addButton);
 		buttonPanel.add(clearButton);
 	
@@ -87,6 +90,7 @@ public class ItemPurchasePanel extends JPanel
 		JScrollPane itemPane = new JScrollPane(itemPanel);
 		
 		JPanel purchaseItemsPanel = new JPanel(new BorderLayout(5,5));
+		purchaseItemsPanel.setBackground(Color.WHITE);
 		purchaseItemsPanel.setBorder(BorderFactory.createTitledBorder("Item Purchases"));
 		purchaseItemsPanel.add(itemPane, BorderLayout.CENTER);
 		purchaseItemsPanel.add(buttonPanel, BorderLayout.SOUTH);
@@ -95,8 +99,10 @@ public class ItemPurchasePanel extends JPanel
 		ButtonGroup group = new ButtonGroup();
 		cashButton = new JRadioButton("Cash");
 		cashButton.setSelected(true);
+		cashButton.setBackground(Color.WHITE);
 		group.add(cashButton);
 		cardButton = new JRadioButton("Credit Card");
+		cardButton.setBackground(Color.WHITE);
 		group.add(cardButton);
 		
 		cardNumField = new JTextField();
@@ -108,10 +114,12 @@ public class ItemPurchasePanel extends JPanel
 		
 		receiptBox = new JCheckBox("Show Receipt");
 		receiptBox.setSelected(true);
+		receiptBox.setBackground(Color.WHITE);
 		
 		purchaseButton = new JButton("Confirm Purchase");
 		
 		JPanel purchaseInfoPanel = new JPanel();
+		purchaseInfoPanel.setBackground(Color.WHITE);
 		purchaseInfoPanel.setBorder(BorderFactory.createTitledBorder("Purchase Information"));
 		JLabel label = new JLabel("Method of Payment:");
 		purchaseInfoPanel.add(label);
@@ -265,6 +273,7 @@ public class ItemPurchasePanel extends JPanel
 		{
 			setLayout(new FlowLayout(FlowLayout.LEADING, 10, 5));
 			setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+			setBackground(new Color(205,205,245));
 			setMinimumSize(new Dimension(ItemPurchasePanel.this.getWidth(), 35));
 			setMaximumSize(new Dimension(ItemPurchasePanel.this.getWidth(), 35));
 			initComponents();
