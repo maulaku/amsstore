@@ -15,6 +15,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFormattedTextField;
@@ -61,10 +62,11 @@ public class ItemPurchasePanel extends JPanel
 				
 				for (ItemPanel panel : items)
 				{
-					panel.setMinimumSize(new Dimension(getWidth(), 35));
-					panel.setMaximumSize(new Dimension(getWidth(), 35));
+					panel.setMinimumSize(new Dimension(getWidth()-20, 45));
+					panel.setMaximumSize(new Dimension(getWidth()-20, 45));
 					panel.updateUI();
 				}
+				updateUI();
 			}
 		});
 		
@@ -271,18 +273,22 @@ public class ItemPurchasePanel extends JPanel
 		
 		public ItemPanel()
 		{
-			setLayout(new FlowLayout(FlowLayout.LEADING, 10, 5));
+			setLayout(new FlowLayout(FlowLayout.LEADING, 10, 10));
 			setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-			setBackground(new Color(205,205,245));
-			setMinimumSize(new Dimension(ItemPurchasePanel.this.getWidth(), 35));
-			setMaximumSize(new Dimension(ItemPurchasePanel.this.getWidth(), 35));
+			setBackground(new Color(220,220,245));
+			setMinimumSize(new Dimension(ItemPurchasePanel.this.getWidth()-20, 45));
+			setPreferredSize(new Dimension(ItemPurchasePanel.this.getWidth()-20, 45));
+			setMaximumSize(new Dimension(ItemPurchasePanel.this.getWidth()-20, 45));
 			initComponents();
 			initListeners();
 		}
 		
 		private void initComponents()
 		{
-			removeButton = new JButton("Remove") ;
+			removeButton = new JButton(new ImageIcon(getClass().getResource("/ams/ui/icons/close.png")));
+			removeButton.setContentAreaFilled(false);
+			removeButton.setPreferredSize(new Dimension(22,22));
+			removeButton.setFocusable(false);
 			
 			JLabel upcLabel = new JLabel("upc: ");
 			JLabel quantityLabel = new JLabel("quantity: ");

@@ -1,6 +1,7 @@
 package ams.ui.manager;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -39,6 +41,7 @@ public class ShipmentPanel extends JPanel
 	{
 		items = new ArrayList<ItemPanel>();
 		setLayout(new BorderLayout(5,5));
+		setBackground(Color.WHITE);
 		initComponents();
 		initListeners();
 
@@ -48,10 +51,11 @@ public class ShipmentPanel extends JPanel
 				
 				for (ItemPanel panel : items)
 				{
-					panel.setMinimumSize(new Dimension(getWidth(), 35));
-					panel.setMaximumSize(new Dimension(getWidth(), 35));
+					panel.setMinimumSize(new Dimension(getWidth()-20, 45));
+					panel.setMaximumSize(new Dimension(getWidth()-20, 45));
 					panel.updateUI();
 				}
+				updateUI();
 			}
 		});
 		
@@ -61,11 +65,12 @@ public class ShipmentPanel extends JPanel
 	{
 		// button panel code
 		addButton = new JButton("Add Shipment Item");
-		addButton.setPreferredSize(new Dimension(180, 30));
+//		addButton.setPreferredSize(new Dimension(180, 30));
 		clearButton = new JButton("Clear Shipment Items");
-		clearButton.setPreferredSize(new Dimension(180, 30));
+//		clearButton.setPreferredSize(new Dimension(180, 30));
 		
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		buttonPanel.setBackground(Color.WHITE);
 		buttonPanel.add(addButton);
 		buttonPanel.add(clearButton);
 	
@@ -74,26 +79,31 @@ public class ShipmentPanel extends JPanel
 		itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
 	
 		JScrollPane itemPane = new JScrollPane(itemPanel);
+//		itemPane.setBackground(Color.WHITE);
 		
 		JPanel shipItemsPanel = new JPanel(new BorderLayout(5,5));
+		shipItemsPanel.setBackground(Color.WHITE);
 		shipItemsPanel.setBorder(BorderFactory.createTitledBorder("Shipment Items"));
 		shipItemsPanel.add(itemPane, BorderLayout.CENTER);
 		shipItemsPanel.add(buttonPanel, BorderLayout.SOUTH);
 
 		processButton = new JButton("Process Shipment");
-		processButton.setPreferredSize(new Dimension(180, 30));
+//		processButton.setPreferredSize(new Dimension(180, 30));
 		
 		storeField = new JTextField();
 		storeField.setPreferredSize(new Dimension(100, storeField.getPreferredSize().height));
 		supplierField = new JTextField();
 		supplierField.setPreferredSize(new Dimension(100, supplierField.getPreferredSize().height));
 		
-		JPanel shipmentInfoPanel = new JPanel();
+		JPanel shipmentInfoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		shipmentInfoPanel.setBackground(Color.WHITE);
 		shipmentInfoPanel.setBorder(BorderFactory.createTitledBorder("Shipment Information"));
 		JLabel label = new JLabel("Supplier Name:");
+		label.setBackground(Color.WHITE);
 		shipmentInfoPanel.add(label);
 		shipmentInfoPanel.add(supplierField);
 		label = new JLabel("Store Name:");
+		label.setBackground(Color.WHITE);
 		shipmentInfoPanel.add(label);
 		shipmentInfoPanel.add(storeField);
 		shipmentInfoPanel.add(Box.createHorizontalStrut(25));
@@ -183,21 +193,26 @@ public class ShipmentPanel extends JPanel
 		
 		public ItemPanel()
 		{
-			setLayout(new FlowLayout(FlowLayout.LEADING, 10, 5));
+			setLayout(new FlowLayout(FlowLayout.LEADING, 10, 10));
 			setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-			setMinimumSize(new Dimension(ShipmentPanel.this.getWidth(), 35));
-			setMaximumSize(new Dimension(ShipmentPanel.this.getWidth(), 35));
+			setBackground(new Color(220,220,245));
+			setMinimumSize(new Dimension(ShipmentPanel.this.getWidth()-20, 45));
+			setPreferredSize(new Dimension(ShipmentPanel.this.getWidth()-20, 45));
+			setMaximumSize(new Dimension(ShipmentPanel.this.getWidth()-20, 45));
 			initComponents();
 			initListeners();
 		}
 		
 		private void initComponents()
 		{
-			removeButton = new JButton("Remove") ;
+			removeButton = new JButton(new ImageIcon(getClass().getResource("/ams/ui/icons/close.png")));
+			removeButton.setContentAreaFilled(false);
+			removeButton.setPreferredSize(new Dimension(22,22));
+			removeButton.setFocusable(false);
 			
 			JLabel upcLabel = new JLabel("upc:");
 			JLabel quantityLabel = new JLabel("quantity:");
-			JLabel costLabel = new JLabel("cost:");
+			JLabel costLabel = new JLabel("cost: $");
 			
 			upcField = new JTextField();
 			upcField.setPreferredSize(new Dimension(100, upcField.getPreferredSize().height));
