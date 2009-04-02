@@ -204,6 +204,21 @@ public class Controller {
 		uiFrame.setVisible(true);
 	}
 	
+	public void stop()
+	{
+		try
+		{
+			if (insert != null)
+				insert.close();
+			if (delete != null)
+				delete.close();
+			connection.close();
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	public void setStatusString(String status)
 	{
 		setStatusString(status, null);

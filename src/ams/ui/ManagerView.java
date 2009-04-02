@@ -22,6 +22,7 @@ public class ManagerView extends JTabbedPane {
 	
 	public ManagerView()
 	{
+		setFocusable(false);
 		setTabPlacement(JTabbedPane.LEFT);
 		initComponents();
 	}
@@ -29,11 +30,12 @@ public class ManagerView extends JTabbedPane {
 	private void initComponents()
 	{
 //		addTab("Purchase Item Online", new PurchaseOnlinePanel());
-		addTab("Registration", new RegistrationPanel());
-		addTab("Supplier", new SupplierPanel());
-		addTab("Daily Sales Report", new DailySalesPanel());
-		addTab("Top Selling Items", new TopSellingItemsPanel());
-		addTab("Process Order Delivery", new DeliveryPanel());
-		addTab("Process Shipment From Supplier", new ShipmentPanel());
+		addTab("<html><body leftmargin=15 topmargin=8 marginwidth=12 marginheight=10>Registration</body></html>", new RegistrationPanel());
+		addTab("<html><body leftmargin=15 topmargin=8 marginwidth=12 marginheight=10>Supplier</body></html>", new SupplierPanel());
+		addTab("<html><body leftmargin=15 topmargin=8 marginwidth=12 marginheight=10>Daily Sales Report</body></html>", new DailySalesPanel());
+		addTab("<html><body leftmargin=15 topmargin=8 marginwidth=12 marginheight=10>Top Selling Items</body></html>", new TopSellingItemsPanel());
+		addTab("<html><body leftmargin=15 topmargin=8 marginwidth=12 marginheight=10>Process Order Delivery</body></html>", new DeliveryPanel());
+		addTab("<html><body leftmargin=15 topmargin=8 marginwidth=12 marginheight=10>Process Supplier Shipment</body></html>", new ShipmentPanel());
+			
 	}
 }

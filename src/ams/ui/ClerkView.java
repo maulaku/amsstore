@@ -11,14 +11,15 @@ public class ClerkView extends JTabbedPane {
 	
 	public ClerkView()
 	{
+		setFocusable(false);
 		setTabPlacement(JTabbedPane.LEFT);
 		initComponents();
 	}
 	
 	private void initComponents()
-	{
-		addTab("Regular Item Purchase", new ItemPurchasePanel());
-		addTab("Item Return", new ItemReturnPanel());
+	{	
+		addTab("<html><body leftmargin=15 topmargin=8 marginwidth=20 marginheight=10>Regular Item Purchase</body></html>", new ItemPurchasePanel());
+		addTab("<html><body leftmargin=15 topmargin=8 marginwidth=20 marginheight=10>Item Return</body></html>", new ItemReturnPanel());
 	}
 	
 }

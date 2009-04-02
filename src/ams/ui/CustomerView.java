@@ -14,6 +14,7 @@ public class CustomerView extends JTabbedPane {
 	
 	public CustomerView()
 	{
+		setFocusable(false);
 		setTabPlacement(JTabbedPane.LEFT);
 		initComponents();
 	}
@@ -21,6 +22,6 @@ public class CustomerView extends JTabbedPane {
 	private void initComponents()
 	{
 //		addTab("Purchase Item Online", new PurchaseOnlinePanel());
-		addTab("Registration", new RegistrationPanel());
+		addTab("<html><body leftmargin=25 topmargin=8 marginwidth=45 marginheight=10>Registration</body></html>", new RegistrationPanel());
 	}
 }
