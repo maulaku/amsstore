@@ -1,5 +1,6 @@
 package ams.model;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -43,9 +44,11 @@ public class ShipmentDAO
 	
 	public void processShipment(Shipment shipment)
 	{
-		int sId = findNextShipmentID() + 1; 
+		int sId = findNextShipmentID() + 1;
+		Connection con = Controller.getInstance().getConnection();
 		try
 		{
+			con.setAutoCommit(false);
 			Vector<Object> values = new Vector<Object>();
 			values.add(sId);
 			values.add(shipment.getSupplierName());
@@ -54,11 +57,21 @@ public class ShipmentDAO
 			Controller.getInstance().insertTuple("SHIPMENT", values);
 			insertShipItems(sId, shipment.getShipItems());
 			Controller.getInstance().setStatusString("Shipment successfully processed.", AMSFrame.SUCCESS);
+			
+			con.commit();
+			con.setAutoCommit(true);
 		} catch (SQLException e)
-		{			
+		{		
+			try
+			{
+				con.rollback();
+			} catch (SQLException ex)
+			{
+				e.printStackTrace();
+			}
 			e.printStackTrace();
 			Controller.getInstance().setStatusString("Shipment Process Failed: " + e.getMessage(), AMSFrame.FAILURE);
-		}
+		}		
 	}
 	
 	public void insertShipItems(int sId, Vector<ShipItem> items) throws SQLException

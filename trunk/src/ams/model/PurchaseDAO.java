@@ -1,5 +1,6 @@
 package ams.model;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -43,8 +44,11 @@ public class PurchaseDAO
 	{
 		int rId = findNextReceiptID() + 1;
 		Receipt receipt = new Receipt(rId, purchase);
+		Connection con = Controller.getInstance().getConnection();
 		try
 		{
+			con.setAutoCommit(false);
+			
 			Vector<Object> values = new Vector<Object>();
 			values.add(rId);
 			values.add(purchase.getPurchaseDate());
@@ -59,8 +63,18 @@ public class PurchaseDAO
 			Controller.getInstance().insertTuple("PURCHASE", values);
 			insertPurchaseItems(receipt, purchase.getPurchaseItems());
 			Controller.getInstance().setStatusString("Purchase successful: see receipt.", AMSFrame.SUCCESS);
+			
+			con.commit();
+			con.setAutoCommit(true);
 		} catch (SQLException e)
 		{			
+			try
+			{
+				con.rollback();
+			} catch (SQLException ex)
+			{	
+				e.printStackTrace();
+			}
 			receipt = null;
 			e.printStackTrace();
 			Controller.getInstance().setStatusString("Purchase Failed: " + e.getMessage(), AMSFrame.FAILURE);
