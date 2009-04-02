@@ -66,7 +66,7 @@ public class SupplierPanel extends JPanel {
 		subPanel.add(statusField);
 		infoPanel.add(subPanel);
 		
-		infoPanel.setBorder(BorderFactory.createTitledBorder("Registration Information"));
+		infoPanel.setBorder(BorderFactory.createTitledBorder("Supplier Registration Information"));
 		add(infoPanel, BorderLayout.CENTER);
 		
 		addButton = new JButton("Add");

@@ -29,8 +29,6 @@ public class ManagerView extends JTabbedPane {
 	
 	private void initComponents()
 	{
-//		addTab("Purchase Item Online", new PurchaseOnlinePanel());
-		addTab("<html><body leftmargin=15 topmargin=8 marginwidth=12 marginheight=10>Registration</body></html>", new RegistrationPanel());
 		addTab("<html><body leftmargin=15 topmargin=8 marginwidth=12 marginheight=10>Supplier</body></html>", new SupplierPanel());
 		addTab("<html><body leftmargin=15 topmargin=8 marginwidth=12 marginheight=10>Daily Sales Report</body></html>", new DailySalesPanel());
 		addTab("<html><body leftmargin=15 topmargin=8 marginwidth=12 marginheight=10>Top Selling Items</body></html>", new TopSellingItemsPanel());
