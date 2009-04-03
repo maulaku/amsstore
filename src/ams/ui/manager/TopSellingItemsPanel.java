@@ -45,7 +45,7 @@ public class TopSellingItemsPanel extends JPanel
 		buttonPanel.add(label);
 		numField = new JTextField();
 		numField.setPreferredSize(new Dimension(100, numField.getPreferredSize().height));
-		numField.setEditable(false);
+		numField.setEditable(true);
 		buttonPanel.add(numField);
 		buttonPanel.add(searchButton);
 
@@ -88,12 +88,12 @@ public class TopSellingItemsPanel extends JPanel
 		columns.add("total");
 
 		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-		if (columns != null)
+		if(columns != null)
 		{	
 			//TODO: Get date string
 			int limit = Integer.parseInt(numField.getText());
 			String date = "";
-			String queryString = "SELECT I.upc, I.title, I.company, S.stock, SUM(PI.quantity) AS total, P.date FROM Item I, Stored S, PurchaseItem PI, Purchase P WHERE I.upc = PI.upc AND I.upc = S.upc AND PI.receiptId = P.receiptId AND P.date = '" + date + "' GROUP BY I.upc ORDER BY total DESC LIMIT " + limit;
+			String queryString = "SELECT i.upc, i.title, i.company, s.stock, SUM(pi.quantity) AS total, p.date FROM Item i, Stored s, PurchaseItem pi, Purchase p WHERE i.upc = pi.upc AND i.upc = s.upc AND pi.receiptId = p.receiptId AND p.date = '" + date + "' GROUP BY i.upc ORDER BY total DESC LIMIT " + limit;
 			
 			try
 			{
@@ -101,7 +101,7 @@ public class TopSellingItemsPanel extends JPanel
 				ResultSet results = statement.executeQuery();
 				
 				// add data into the table
-				while (results.next())
+				while(results.next())
 				{
 					Vector<Object> rowData = new Vector<Object>();
 					for (String columnName : columns)
@@ -112,10 +112,10 @@ public class TopSellingItemsPanel extends JPanel
 			}
 			catch (Exception e)
 			{
-				
+				System.err.println(e.getMessage());
 			}
-			
 		} 
+		
 		// display it in the table
 		model.setDataVector(data, columns);
 	}
