@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -45,6 +47,13 @@ public class TableView extends JPanel
 	public TableView()
 	{
 		setLayout(new BorderLayout(5,5));
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent e)
+			{
+				updateEntries();
+			}
+		});
 		initComponents();
 		initListeners();
 	}
@@ -102,50 +111,7 @@ public class TableView extends JPanel
 //			@Override
 			public void valueChanged(ListSelectionEvent e)
 			{
-				table.removeAll();
-				insertTable.removeAll();
-				if (!list.isSelectionEmpty())
-				{
-					String tableName = (String) list.getSelectedValue();
-					Vector<String> columns = Controller.getInstance().getColumnNames(tableName);
-					
-					Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-					if (columns != null)
-					{	
-						String queryString = "SELECT * FROM " + tableName;
-						
-						try
-						{
-							PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement(queryString);
-							ResultSet results = statement.executeQuery();
-							
-							// add data into the table
-							while (results.next())
-							{
-								Vector<Object> rowData = new Vector<Object>();
-								for (String columnName : columns)
-									rowData.add(results.getObject(columnName));
-								data.add(rowData);
-							}
-							statement.close();
-						} catch (Exception ex)
-						{}
-						
-					} 
-					// display it in the table
-					DefaultTableModel model = (DefaultTableModel) table.getModel();
-					model.setDataVector(data, columns);
-					
-					Vector<Object> emptyVector = new Vector<Object>();
-					for (int i = 0; i < columns.size(); ++i)
-						emptyVector.add("");
-					data = new Vector<Vector<Object>>();
-					data.add(emptyVector);
-					DefaultTableModel insertModel = (DefaultTableModel) insertTable.getModel();
-					Vector<Object> a = new Vector<Object>(columns);
-					insertModel.setDataVector(data, a);
-					
-				}
+				updateEntries();
 			}
 		});
 		
@@ -167,6 +133,54 @@ public class TableView extends JPanel
 				insertTuple();
 			}
 		});
+	}
+	
+	private void updateEntries()
+	{
+		table.removeAll();
+		insertTable.removeAll();
+		if (!list.isSelectionEmpty())
+		{
+			String tableName = (String) list.getSelectedValue();
+			Vector<String> columns = Controller.getInstance().getColumnNames(tableName);
+			
+			Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+			if (columns != null)
+			{	
+				String queryString = "SELECT * FROM " + tableName;
+				
+				try
+				{
+					PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement(queryString);
+					ResultSet results = statement.executeQuery();
+					
+					// add data into the table
+					while (results.next())
+					{
+						Vector<Object> rowData = new Vector<Object>();
+						for (String columnName : columns)
+							rowData.add(results.getObject(columnName));
+						data.add(rowData);
+					}
+					statement.close();
+				} catch (Exception ex)
+				{}
+				
+			} 
+			// display it in the table
+			DefaultTableModel model = (DefaultTableModel) table.getModel();
+			model.setDataVector(data, columns);
+			
+			Vector<Object> emptyVector = new Vector<Object>();
+			for (int i = 0; i < columns.size(); ++i)
+				emptyVector.add("");
+			data = new Vector<Vector<Object>>();
+			data.add(emptyVector);
+			DefaultTableModel insertModel = (DefaultTableModel) insertTable.getModel();
+			Vector<Object> a = new Vector<Object>(columns);
+			insertModel.setDataVector(data, a);
+			
+		}	
 	}
 	
 	private void populateTableList()

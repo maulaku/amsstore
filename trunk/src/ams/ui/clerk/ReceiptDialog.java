@@ -65,10 +65,9 @@ public class ReceiptDialog extends JDialog
 		double totalAmount = 0;
 		
 		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-		Vector<Object> row = new Vector<Object>();
 		for (int i = 0; i < receipt.getItems().size(); ++i)
 		{
-			row.clear();
+			Vector<Object> row = new Vector<Object>();
 			Item item = receipt.getItems().get(i);
 			PurchaseItem pItem = receipt.getPurchase().getPurchaseItems()[i];
 			int quantity = pItem.getQuantity();
@@ -91,8 +90,8 @@ public class ReceiptDialog extends JDialog
 		
 		if (receipt.getPurchase().isPaidByCredit())
 		{
-			int num = receipt.getPurchase().getCreditCardNum();
-			String s = Integer.toString(num);
+			long num = receipt.getPurchase().getCreditCardNum();
+			String s = Long.toString(num);
 			String x = "";
 			for (int i = s.length()-6; i >= 0; --i)
 				x += "x";

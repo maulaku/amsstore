@@ -13,6 +13,7 @@ public class ClerkView extends JTabbedPane {
 	{
 		setFocusable(false);
 		setTabPlacement(JTabbedPane.LEFT);
+		setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
 		initComponents();
 	}
 	

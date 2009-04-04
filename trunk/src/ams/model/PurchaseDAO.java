@@ -1,6 +1,7 @@
 package ams.model;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,7 +25,7 @@ public class PurchaseDAO
 		return instance;
 	}
 	
-	private int findNextReceiptID()
+	public long findMaxReceiptID()
 	{
 		int receiptId = 0;
 		try
@@ -38,63 +39,64 @@ public class PurchaseDAO
 			e.printStackTrace();
 		}
 		return receiptId;
-	}
-		
-	public Receipt purchase(Purchase purchase)
+	}	
+	
+	public void insertPurchase(long rId, Purchase purchase) throws SQLException
 	{
-		int rId = findNextReceiptID() + 1;
-		Receipt receipt = new Receipt(rId, purchase);
-		Connection con = Controller.getInstance().getConnection();
-		try
-		{
-			con.setAutoCommit(false);
-			
-			Vector<Object> values = new Vector<Object>();
-			values.add(rId);
-			values.add(purchase.getPurchaseDate());
-			values.add(null);
-			values.add(null);
-			Integer creditNum = purchase.isPaidByCredit() ? purchase.getCreditCardNum() : null;
-			String creditDate = purchase.isPaidByCredit() ? purchase.getCardExpiryDate() : null;
-			values.add(creditNum);
-			values.add(creditDate);
-			values.add(null);
-			values.add(null);
-			Controller.getInstance().insertTuple("PURCHASE", values);
-			insertPurchaseItems(receipt, purchase.getPurchaseItems());
-			Controller.getInstance().setStatusString("Purchase successful: see receipt.", AMSFrame.SUCCESS);
-			
-			con.commit();
-			con.setAutoCommit(true);
-		} catch (SQLException e)
-		{			
-			try
-			{
-				con.rollback();
-			} catch (SQLException ex)
-			{	
-				e.printStackTrace();
-			}
-			receipt = null;
-			e.printStackTrace();
-			Controller.getInstance().setStatusString("Purchase Failed: " + e.getMessage(), AMSFrame.FAILURE);
-		}
-		return receipt;
+		Vector<Object> values = new Vector<Object>();
+		values.add(rId);
+		values.add(purchase.getPurchaseDate());
+		values.add(null);
+		values.add(null);
+		Long creditNum = purchase.isPaidByCredit() ? purchase.getCreditCardNum() : null;
+		Date creditDate = purchase.isPaidByCredit() ? purchase.getCardExpiryDate() : null;
+		values.add(creditNum);
+		values.add(creditDate);
+		values.add(null);
+		values.add(null);
+		Controller.getInstance().insertTuple("PURCHASE", values);
 	}
 	
-	public void insertPurchaseItems(Receipt receipt, PurchaseItem[] items) throws SQLException
+	public void insertPurchaseItem(Receipt receipt, PurchaseItem item) throws SQLException
 	{		
 		Vector<Object> values = new Vector<Object>();
-		for (PurchaseItem item: items)
-		{		
-			values.clear();						
-			values.add(receipt.getReceiptId());
-			values.add(item.getUPC());
-			values.add(item.getQuantity());
-			
-			Controller.getInstance().insertTuple("PURCHASEITEM", values);
-			ItemDAO.getInstance().updateStock(item.getUPC(), -item.getQuantity());
-			receipt.addItem(ItemDAO.getInstance().getItem(item.getUPC()));
+		values.clear();						
+		values.add(receipt.getReceiptId());
+		values.add(item.getUPC());
+		values.add(item.getQuantity());
+		
+		Controller.getInstance().insertTuple("PURCHASEITEM", values);
+		ItemDAO.getInstance().updateStock(item.getUPC(), -item.getQuantity());
+		receipt.addItem(ItemDAO.getInstance().getItem(item.getUPC()));
+	}
+	
+	public Vector<PurchaseItem> selectPurchaseItems(long rId) throws SQLException
+	{
+		Vector<PurchaseItem> items = new Vector<PurchaseItem>();
+		
+		String query = "SELECT upc, quantity FROM PURCHASEITEM WHERE receiptId = ?";
+		PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement(query);
+		statement.setLong(1, rId);
+		ResultSet results = statement.executeQuery();
+		
+		while (results.next())
+		{
+			long upc = results.getLong(1);
+			int quantity = results.getInt(2);
+			PurchaseItem item = new PurchaseItem(upc, quantity);
+			items.add(item);
 		}
+		return items;
+	}
+	
+	public void updateDeliveredDate(long receiptId, Date deliveredDate) throws SQLException
+	{
+		// set delivered date
+		String update = "UPDATE PURCHASE SET deliveredDate = ? WHERE receiptId = ?";
+		PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement(update);
+		statement.setDate(1, deliveredDate);
+		statement.setLong(2, receiptId);
+		
+		statement.executeUpdate();
 	}
 }

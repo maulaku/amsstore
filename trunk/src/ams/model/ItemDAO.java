@@ -5,14 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import ams.Controller;
+import ams.exceptions.OutOfStockException;
 
 public class ItemDAO {
-	
-
-	private static final String NAME = "Item";
-	public static String getTableName() {
-		return NAME;
-	}
+		
 	private static ItemDAO instance;
 	
 	private ItemDAO() 
@@ -74,7 +70,7 @@ public class ItemDAO {
 		return instance;
 	}
 	
-	public Item getItem(int upc) throws SQLException
+	public Item getItem(long upc) throws SQLException
 	{
 		String query = "SELECT * FROM ITEM WHERE upc=" + upc;
 		
@@ -92,12 +88,12 @@ public class ItemDAO {
 		return item;
 	}
 	
-	public void updatePrice(int upc, double price) throws SQLException
+	public void updatePrice(long upc, double price) throws SQLException
 	{
 		String update = "UPDATE ITEM SET sellPrice = ? WHERE upc = ?";
 		PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement(update);
 		statement.setDouble(1, price);
-		statement.setInt(2, upc);
+		statement.setLong(2, upc);
 		statement.executeUpdate();
 		statement.close();		
 	}
@@ -108,20 +104,23 @@ public class ItemDAO {
 	 * @param dQuantity
 	 * @throws SQLException
 	 */
-	public void updateStock(int upc, int dQuantity) throws SQLException
+	public void updateStock(long upc, int dQuantity) throws SQLException
 	{
 		String query = "SELECT stock FROM STORED WHERE upc = ?";
 		PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement(query);
-		statement.setInt(1, upc);
+		statement.setLong(1, upc);
 		ResultSet result = statement.executeQuery();
 		result.next();
 		int oldQuantity = result.getInt(1);
 		statement.close();
 		
+		if (oldQuantity + dQuantity < 0)
+			throw new OutOfStockException();
+		
 		String update = "UPDATE STORED SET stock = ? WHERE upc = ?";
 		statement = Controller.getInstance().getConnection().prepareStatement(update);
 		statement.setInt(1, oldQuantity + dQuantity);
-		statement.setInt(2, upc);
+		statement.setLong(2, upc);
 		statement.executeUpdate();
 		statement.close();
 	}

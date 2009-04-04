@@ -8,11 +8,9 @@ public class Purchase
 	
 	private boolean payByCredit;
 	
-	private int creditCardNum;
+	private long creditCardNum;
 	
-	private String expiryDate;
-	
-	private Date purchaseDate;	
+	private Date purchaseDate, expiryDate;	
 	
 	public void setPurchaseItems(PurchaseItem[] purchaseItems)
 	{
@@ -24,7 +22,7 @@ public class Purchase
 		return items;
 	}
 	
-	public void setPayByCredit(int ccNum, String expDate)
+	public void setPayByCredit(long ccNum, Date expDate)
 	{
 		payByCredit = true;
 		creditCardNum = ccNum;
@@ -41,12 +39,12 @@ public class Purchase
 		return payByCredit;
 	}
 	
-	public int getCreditCardNum()
+	public long getCreditCardNum()
 	{
 		return creditCardNum;
 	}
 	
-	public String getCardExpiryDate()
+	public Date getCardExpiryDate()
 	{
 		return expiryDate;
 	}
