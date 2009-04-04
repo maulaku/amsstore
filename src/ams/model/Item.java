@@ -2,18 +2,20 @@ package ams.model;
 
 public class Item
 {
-	private int id, year;
+	private int year;
+	
+	private long id;
 	
 	private String title, type, category, company;
 	
 	private double price;
 	
-	public Item(int upc)
+	public Item(long upc)
 	{
 		id = upc;
 	}
 	
-	public int getUPC()
+	public long getUPC()
 	{
 		return id;
 	}

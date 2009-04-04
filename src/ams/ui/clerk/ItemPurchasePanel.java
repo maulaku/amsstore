@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.sql.Date;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -44,7 +45,7 @@ public class ItemPurchasePanel extends JPanel
 	
 	private JRadioButton cardButton, cashButton;
 	
-	private JTextField cardNumField, expireField;
+	private JTextField cardNumField, expireMonthField, expireYearField;
 	
 	private JCheckBox receiptBox;
 	
@@ -110,9 +111,11 @@ public class ItemPurchasePanel extends JPanel
 		cardNumField = new JTextField();
 		cardNumField.setPreferredSize(new Dimension(100, cardNumField.getPreferredSize().height));
 		cardNumField.setEditable(false);
-		expireField = new JTextField();
-		expireField.setPreferredSize(new Dimension(50, expireField.getPreferredSize().height));			
-		expireField.setEditable(false);
+		expireMonthField = new JTextField(2);
+//		expireMonthField.setPreferredSize(new Dimension(50, expireField.getPreferredSize().height));			
+		expireMonthField.setEditable(false);
+		expireYearField = new JTextField(2);
+		expireYearField.setEditable(false);
 		
 		receiptBox = new JCheckBox("Show Receipt");
 		receiptBox.setSelected(true);
@@ -133,7 +136,10 @@ public class ItemPurchasePanel extends JPanel
 		purchaseInfoPanel.add(cardNumField);
 		label = new JLabel("Expiry Date:");
 		purchaseInfoPanel.add(label);
-		purchaseInfoPanel.add(expireField);
+		purchaseInfoPanel.add(expireMonthField);
+		label = new JLabel("/");
+		purchaseInfoPanel.add(label);
+		purchaseInfoPanel.add(expireYearField);
 		purchaseInfoPanel.add(receiptBox);
 		purchaseInfoPanel.add(purchaseButton);
 		purchaseInfoPanel.setMaximumSize(new Dimension(purchaseInfoPanel.getPreferredSize().width,50));
@@ -170,7 +176,8 @@ public class ItemPurchasePanel extends JPanel
 			public void actionPerformed(ActionEvent e)
 			{
 				cardNumField.setEditable(false);
-				expireField.setEditable(false);
+				expireMonthField.setEditable(false);
+				expireYearField.setEditable(false);
 			}
 		});
 		cardButton.addActionListener(new ActionListener() {
@@ -178,7 +185,8 @@ public class ItemPurchasePanel extends JPanel
 			public void actionPerformed(ActionEvent e)
 			{
 				cardNumField.setEditable(true);
-				expireField.setEditable(true);
+				expireMonthField.setEditable(true);
+				expireYearField.setEditable(true);
 			}
 		});
 	}
@@ -219,10 +227,10 @@ public class ItemPurchasePanel extends JPanel
 		purchase.setPayByCash();
 		if (cardButton.isSelected())
 		{
-			int cardNum = 0;
+			long cardNum = 0;
 			try
 			{
-				cardNum = Integer.parseInt(cardNumField.getText());
+				cardNum = Long.parseLong(cardNumField.getText());
 			} 
 			catch (NumberFormatException e)
 			{
@@ -230,7 +238,18 @@ public class ItemPurchasePanel extends JPanel
 				reset();
 				return;
 			}
-			String expiryDate = expireField.getText();
+			
+			String dateString = "20" + expireYearField.getText() + "-" + expireMonthField.getText() + "-01";
+			Date expiryDate = null;
+			try
+			{
+				expiryDate = Date.valueOf(dateString);
+			} catch (IllegalArgumentException e)
+			{
+				Controller.getInstance().setStatusString("Transaction Failed: credit card expiry date is invalid. Please enter the date in the form MM/YY", AMSFrame.FAILURE);
+				reset();
+				return;
+			}
 			purchase.setPayByCredit(cardNum, expiryDate);
 		} 
 		Receipt receipt = Controller.getInstance().purchase(purchase);
@@ -253,10 +272,12 @@ public class ItemPurchasePanel extends JPanel
 	{
 		removeAllItemPanels();
 		cardNumField.setText("");
-		expireField.setText("");
+		expireMonthField.setText("");
+		expireYearField.setText("");
 		cashButton.setSelected(true);
 		cardNumField.setEditable(false);
-		expireField.setEditable(false);
+		expireMonthField.setEditable(false);
+		expireYearField.setEditable(false);
 	}
 	
 	void removePanel( ItemPanel panel )
@@ -316,9 +337,9 @@ public class ItemPurchasePanel extends JPanel
 			});
 		}
 		
-		public int getUPC()
+		public long getUPC()
 		{
-			return Integer.parseInt(upcField.getText());
+			return Long.parseLong(upcField.getText());
 		}
 		
 		public int getQuantity()

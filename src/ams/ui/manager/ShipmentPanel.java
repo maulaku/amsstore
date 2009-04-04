@@ -241,9 +241,9 @@ public class ShipmentPanel extends JPanel
 			});
 		}
 		
-		public int getUPC()
+		public long getUPC()
 		{
-			return Integer.parseInt(upcField.getText());
+			return Long.parseLong(upcField.getText());
 		}
 		
 		public int getQuantity()

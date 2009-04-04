@@ -2,15 +2,16 @@ package ams.model;
 
 public class PurchaseItem
 {
-	private int upc, quantity;
+	private int quantity;
+	private long upc;
 	
-	public PurchaseItem(int itemUPC, int itemQuantity)
+	public PurchaseItem(long itemUPC, int itemQuantity)
 	{
 		upc = itemUPC;
 		quantity = itemQuantity;
 	}
 	
-	public int getUPC()
+	public long getUPC()
 	{
 		return upc;
 	}

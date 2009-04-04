@@ -11,9 +11,13 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.Vector;
 
+import ams.exceptions.OutOfStockException;
+import ams.model.ItemDAO;
 import ams.model.Purchase;
 import ams.model.PurchaseDAO;
+import ams.model.PurchaseItem;
 import ams.model.Receipt;
+import ams.model.ShipItem;
 import ams.model.Shipment;
 import ams.model.ShipmentDAO;
 import ams.ui.AMSFrame;
@@ -187,14 +191,90 @@ public class Controller {
 	{
 		Date date = new Date(System.currentTimeMillis());
 		purchase.setPurchaseDate(date);
-		return PurchaseDAO.getInstance().purchase(purchase);
+		
+		long rId = PurchaseDAO.getInstance().findMaxReceiptID() + 1;
+		Receipt receipt = new Receipt(rId, purchase);
+		Connection con = getConnection();
+		try
+		{
+			con.setAutoCommit(false);
+			PurchaseDAO.getInstance().insertPurchase(rId, purchase);
+		
+			for (PurchaseItem pItem : purchase.getPurchaseItems())
+				PurchaseDAO.getInstance().insertPurchaseItem(receipt, pItem);
+			
+			setStatusString("Purchase Successful: see receipt.", AMSFrame.SUCCESS);
+			
+			con.commit();
+			con.setAutoCommit(true);
+		} 
+		catch (OutOfStockException oosE)
+		{
+			rollback("Purchase Failed: item out of stock");
+		}catch (SQLException e)
+		{			
+			rollback("Purchase Failed: " + e.getMessage());
+			receipt = null;
+		}
+		return receipt;
 	}
 	
 	public void processShipment(Shipment shipment)
 	{
 		Date date = new Date(System.currentTimeMillis());
 		shipment.setDate(date);
-		ShipmentDAO.getInstance().processShipment(shipment);
+		Connection con = getConnection();
+		try
+		{
+			con.setAutoCommit(false);
+			long sId = ShipmentDAO.getInstance().findMaxShipmentID() + 1;
+			ShipmentDAO.getInstance().insertShipment(sId, shipment);
+			
+			for (ShipItem item : shipment.getShipItems())
+			{
+				ShipmentDAO.getInstance().insertShipItem(sId, item);
+				ItemDAO.getInstance().updatePrice(item.getUPC(), item.getPrice() * 1.20);
+				ItemDAO.getInstance().updateStock(item.getUPC(), item.getQuantity());
+			}
+			setStatusString("Shipment successfully processed.", AMSFrame.SUCCESS);
+			
+			con.commit();
+			con.setAutoCommit(true);
+		} catch (OutOfStockException oosE)
+		{
+			rollback("Shipment Process Failed: shipping negative quantities causing item to run out of stock");
+		} catch (SQLException e)
+		{		
+			rollback("Shipment Process Failed: " + e.getMessage());
+		}
+	}
+	
+	public void processDelivery(long rId)
+	{
+		Date date = new Date(System.currentTimeMillis());
+		Connection con = getConnection();
+		try
+		{
+			con.setAutoCommit(false);
+			Vector<PurchaseItem> items = PurchaseDAO.getInstance().selectPurchaseItems(rId);
+			// update stock
+			for (PurchaseItem item: items)
+				ItemDAO.getInstance().updateStock(item.getUPC(), -item.getQuantity());
+			
+			// set delivered date
+			PurchaseDAO.getInstance().updateDeliveredDate(rId, date);
+		
+			setStatusString("Delivery Process Successful.", AMSFrame.SUCCESS);
+			con.commit();
+			con.setAutoCommit(true);
+		} catch (OutOfStockException oosE)
+		{
+			rollback("Delivery Process Failed: item not enough stock");
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+			rollback("Delivery Process Failed: " + e.getMessage());
+		}	
 	}
 	
 	public void start()
@@ -229,4 +309,18 @@ public class Controller {
 		uiFrame.setStatusString(status);
 		uiFrame.setStatusColor(color);
 	}	
+	
+	private void rollback(String errorMsg)
+	{
+		Connection con = getConnection();
+		try
+		{
+			con.rollback();
+			con.setAutoCommit(true);
+		} catch (SQLException ex)
+		{
+			ex.printStackTrace();
+		}
+		setStatusString(errorMsg, AMSFrame.FAILURE);
+	}
 }

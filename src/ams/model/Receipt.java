@@ -4,13 +4,13 @@ import java.util.Vector;
 
 public class Receipt
 {
-	private int id;
+	private long id;
 	
 	private Purchase pur;
 	
 	private Vector<Item> items;
 	
-	public Receipt(int rId, Purchase purchase)
+	public Receipt(long rId, Purchase purchase)
 	{
 		id = rId;
 		pur = purchase;
@@ -23,7 +23,7 @@ public class Receipt
 		items.add(item);
 	}
 	
-	public int getReceiptId()
+	public long getReceiptId()
 	{
 		return id;
 	}
