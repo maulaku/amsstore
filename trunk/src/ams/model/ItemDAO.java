@@ -8,12 +8,64 @@ import ams.Controller;
 
 public class ItemDAO {
 	
+
+	private static final String NAME = "Item";
+	public static String getTableName() {
+		return NAME;
+	}
 	private static ItemDAO instance;
 	
 	private ItemDAO() 
 	{
 		
+
 	}
+
+	
+	public static ResultSet selectForItemSearch(String title, String category, String leadSingerName)
+	{
+		ResultSet rs = null;
+		try
+		{
+			String query = "SELECT * FROM " +
+					"(SELECT * FROM ITEM NATURAL JOIN (Select * from LeadSinger))"; 
+			
+			if(title.equals("") == false || category.equals("") == false || leadSingerName.equals("") == false)
+			{
+				query += "WHERE ";			
+				if(title.equals("") == false)
+				{
+					query += "title='"+title+"'";
+				}
+				if(title.equals("") == false && category.equals("") == false)
+				{
+					query += " AND ";
+				}
+				if(category.equals("") == false)
+				{
+					query += "category='"+category+"'";
+				}
+				if((category.equals("") == false || title.equals("") == false) && leadSingerName.equals("") == false)
+				{
+					query += " AND ";
+				}
+				if(leadSingerName.equals("") == false)
+				{
+					query += "name='"+leadSingerName+"'";
+				}
+			}
+			//query += " GROUP BY upc";
+			System.out.println(query);
+			PreparedStatement pstmt = Controller.getInstance().getConnection().prepareStatement(query);			
+			rs = pstmt.executeQuery();
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+		}
+		return rs;
+	}
+
 	
 	public static ItemDAO getInstance()
 	{
@@ -73,4 +125,5 @@ public class ItemDAO {
 		statement.executeUpdate();
 		statement.close();
 	}
+
 }
