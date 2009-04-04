@@ -6,7 +6,7 @@ import javax.swing.JTabbedPane;
 import ams.ui.clerk.ItemPurchasePanel;
 import ams.ui.clerk.ItemReturnPanel;
 import ams.ui.customer.PurchaseOnlinePanel;
-import ams.ui.customer.RegistrationPanel;
+import ams.ui.customer.RegistrationView;
 
 public class CustomerView extends JTabbedPane {
 
@@ -21,7 +21,6 @@ public class CustomerView extends JTabbedPane {
 	
 	private void initComponents()
 	{
-//		addTab("Purchase Item Online", new PurchaseOnlinePanel());
-		addTab("<html><body leftmargin=25 topmargin=8 marginwidth=45 marginheight=10>Registration</body></html>", new RegistrationPanel());
+		addTab("<html><body leftmargin=25 topmargin=8 marginwidth=45 marginheight=10>Purchase Online</body></html>", new PurchaseOnlinePanel());
 	}
 }
