@@ -98,7 +98,7 @@ public class LoginView extends JPanel {
 			if(customerIdField.getText().equals("") == false)
 			{
 				Statement s = Controller.getInstance().getConnection().createStatement();
-				String updateString = "SELECT password from CUSTOMER WHERE cid = "+customerIdField.getText();
+				String updateString = "SELECT * from CUSTOMER WHERE cid = "+customerIdField.getText();
 				ResultSet rs = s.executeQuery(updateString);
 				
 				if(rs.next())
@@ -111,6 +111,7 @@ public class LoginView extends JPanel {
 //						loginPanel.disable();
 						parentPanel.nextView(2);
 						parentPanel.currentCustomerId = Integer.parseInt(customerIdField.getText());
+						parentPanel.currentCustomerName = rs.getString("NAME");
 					}
 				}
 			}

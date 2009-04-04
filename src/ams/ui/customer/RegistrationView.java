@@ -124,6 +124,7 @@ public class RegistrationView extends JPanel{
 					passwordField.getText()+".");
 			continueButton.setVisible(true);
 			parentPanel.currentCustomerId = cid;
+			parentPanel.currentCustomerName = nameField.getText();
 		}
 	}
 	

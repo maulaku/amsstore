@@ -107,7 +107,7 @@ public class CheckoutView extends JPanel{
 			values.add(receiptId);
 			values.add(new Date(System.currentTimeMillis()));
 			values.add(parentPanel.currentCustomerId);
-			values.add("fillerName");//??
+			values.add(parentPanel.currentCustomerName);
 			values.add(cardNumberField.getText());
 			values.add(new Date(System.currentTimeMillis()));//need date picker
 			values.add(new Date(System.currentTimeMillis()));//??

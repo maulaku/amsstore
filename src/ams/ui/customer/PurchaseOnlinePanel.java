@@ -21,6 +21,7 @@ public class PurchaseOnlinePanel extends JPanel {
 	public Vector<String> queryTableColumns;
 	public Vector<String> cartTableColumns;
 	public int currentCustomerId = -1;
+	public String currentCustomerName = "";
 	
 	public final int UPC_COLUMN = 0;
 	public final int QUANTITY_COLUMN = 4;
@@ -114,6 +115,7 @@ public class PurchaseOnlinePanel extends JPanel {
 	{
 		cartData = null;
 		currentCustomerId = -1;
+		currentCustomerName = "";
 		nextView(-1*currentView);
 		currentView=0;
 		((LoginView)views.get(0)).cleanUp();
