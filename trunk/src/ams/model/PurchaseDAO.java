@@ -104,6 +104,26 @@ public class PurchaseDAO
 		statement.executeUpdate();
 	}
 	
+	public static Date getPurchaseDate(int receiptId){
+		Date date = new Date(0000);
+		
+		try {
+			String update = "SELECT PURCHASEDATE FROM PURCHASE WHERE PURCHASE.receiptId = ?";
+			PreparedStatement statement;
+			statement = Controller.getInstance().getConnection().prepareStatement(update);
+			statement.setLong(1, receiptId);
+			ResultSet result = statement.executeQuery();
+			result.next();
+			date = result.getDate(2);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return date;
+	}
+
+	
 	public static Date getExpectedDeliveryDate()
 	{
 		Date estimatedDelivery = null;
@@ -111,7 +131,6 @@ public class PurchaseDAO
 		{
 			String query = "SELECT count(*) FROM PURCHASE WHERE delivereddate IS null";
 			PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement(query);
-//			statement.setDate(1, null);
 			ResultSet rs = statement.executeQuery();
 			rs.next();
 			int outstandingDeliveries = rs.getInt(1);
@@ -125,4 +144,5 @@ public class PurchaseDAO
 		}
 		return estimatedDelivery;
 	}
+
 }

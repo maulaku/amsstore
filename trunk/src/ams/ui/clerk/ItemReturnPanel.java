@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -20,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import ams.Controller;
+import ams.model.PurchaseDAO;
 import ams.ui.AMSFrame;
 
 public class ItemReturnPanel extends JPanel
@@ -103,7 +106,8 @@ public class ItemReturnPanel extends JPanel
 	
 	private void onExecute()
 	{
-		if(Integer.parseInt(quantityField.getText().trim()) > 0){
+		boolean isWithinTimeLimit = checkDates();
+		if(Integer.parseInt(quantityField.getText().trim()) > 0 && isWithinTimeLimit){
 			try
 			{
 				int retID = getUniqueRetID();
@@ -178,8 +182,13 @@ public class ItemReturnPanel extends JPanel
 			quantityField.setText(" ");
 			nameField.setText(" ");
 		}
-		else
-			Controller.getInstance().setStatusString("Could not process return: invalid quantity", AMSFrame.FAILURE);
+		else{
+			if(isWithinTimeLimit)
+				Controller.getInstance().setStatusString("Could not process return: invalid quantity", AMSFrame.FAILURE);
+			else
+				Controller.getInstance().setStatusString("Could not process return: return period expired", AMSFrame.FAILURE);
+
+		}
 
 			
 	}
@@ -199,6 +208,13 @@ public class ItemReturnPanel extends JPanel
 		}
 		
 		return tempRetID + 1;
+	}
+	
+	private boolean checkDates(){
+		int receiptId = Integer.parseInt(retReceiptID.getText().trim());
+		Date purchaseDate = PurchaseDAO.getPurchaseDate(receiptId);
+		long calc = purchaseDate.getTime() - System.currentTimeMillis();
+		return (calc >=0 && calc <= 1296000000);
 	}
 	
 }
