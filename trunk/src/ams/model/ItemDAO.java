@@ -23,41 +23,42 @@ public class ItemDAO {
 		ResultSet rs = null;
 		try
 		{
-			String query = "SELECT * FROM " +
-					"(SELECT * FROM ITEM NATURAL JOIN (Select * from LeadSinger))"; 
-			
-			if(title.equals("") == false || category.equals("") == false || leadSingerName.equals("") == false)
+			String query;
+			int titleIndex = -1;
+			if(leadSingerName.equals(""))
 			{
-				query += "WHERE ";			
-				if(title.equals("") == false)
-				{
-					query += "title='"+title+"'";
-				}
-				if(title.equals("") == false && category.equals("") == false)
-				{
-					query += " AND ";
-				}
-				if(category.equals("") == false)
-				{
-					query += "category='"+category+"'";
-				}
-				if((category.equals("") == false || title.equals("") == false) && leadSingerName.equals("") == false)
-				{
-					query += " AND ";
-				}
-				if(leadSingerName.equals("") == false)
-				{
-					query += "name='"+leadSingerName+"'";
-				}
+				query = "SELECT * FROM ITEM WHERE title LIKE ? AND category LIKE ?";
+				titleIndex = 1;
 			}
-			//query += " GROUP BY upc";
+			else
+			{
+				query = "SELECT * FROM ITEM WHERE upc IN(SELECT upc from LEADSINGER WHERE name LIKE ? GROUP BY upc) AND title LIKE ? AND category LIKE ?";
+				titleIndex = 2;
+			}
+			
+			PreparedStatement ps = Controller.getInstance().getConnection().prepareStatement(query);			
+			
+			if(leadSingerName.equals(""))
+				ps.setString(1, "%");
+			else
+				ps.setString(1, leadSingerName);
+			
+			if(title.equals(""))
+				ps.setString(titleIndex, "%");
+			else
+				ps.setString(titleIndex, title);
+			
+			if(category.equals(""))
+				ps.setString(titleIndex+1, "%");
+			else
+				ps.setString(titleIndex+1, category);
+			
 			System.out.println(query);
-			PreparedStatement pstmt = Controller.getInstance().getConnection().prepareStatement(query);			
-			rs = pstmt.executeQuery();
+			rs = ps.executeQuery();
 		}
 		catch(SQLException e)
 		{
-			System.err.println(e.getMessage());
+			e.printStackTrace();
 		}
 		return rs;
 	}
