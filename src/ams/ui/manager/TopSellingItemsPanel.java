@@ -6,10 +6,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Vector;
 
@@ -75,15 +73,7 @@ public class TopSellingItemsPanel extends JPanel
 				return false;
 			}
 		};
-		Vector<String> columns = new Vector<String>();
-		columns.add("upc");
-		columns.add("title");
-		columns.add("company");
-		columns.add("stock");
-		columns.add("total");
-		DefaultTableModel model = new DefaultTableModel();
-		model.setColumnIdentifiers(columns);
-		table.setModel(model);
+
 		table.setBackground(Color.WHITE);
 
 		JScrollPane scrollPane = new JScrollPane(table);
@@ -120,8 +110,6 @@ public class TopSellingItemsPanel extends JPanel
 		{	
 			try
 			{
-				Date date = calendarPanel.getSelectedDate();
-				
 				int limit;
 				try
 				{
@@ -137,7 +125,7 @@ public class TopSellingItemsPanel extends JPanel
 				}
 				
 				PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement("SELECT upc, title, company, stock, total FROM Item INNER JOIN (SELECT upc, stock FROM Stored) USING (upc) INNER JOIN (SELECT i.upc, SUM(pi.quantity) AS total FROM Item i, PurchaseItem pi, Purchase p WHERE i.upc = pi.upc AND p.receiptId = pi.receiptId AND p.purchasedate = ? GROUP BY i.upc) USING (upc) WHERE ROWNUM <= ? ORDER BY total DESC");
-				statement.setDate(1, date);
+				statement.setDate(1, calendarPanel.getSelectedDate());
 				statement.setInt(2, limit);
 				ResultSet results = statement.executeQuery();
 				

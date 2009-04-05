@@ -2,16 +2,24 @@ package ams.ui.manager;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Vector;
 
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import ams.Controller;
@@ -19,16 +27,40 @@ import ams.Controller;
 public class DailySalesPanel extends JPanel
 {
 	private JTable table;
+	private JButton searchButton;
+	private JTextField storeField;
+	private CalendarPanel calendarPanel;
 	
 	public DailySalesPanel()
 	{
 		setBackground(Color.WHITE);
 		setLayout(new BorderLayout(5,5));
 		initComponents();
+		initListeners();
 	}
 	
 	private void initComponents()
 	{
+		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		
+		calendarPanel = new CalendarPanel();
+		calendarPanel.setPreferredSize(new Dimension(calendarPanel.getPreferredSize().width, 150));
+		calendarPanel.setCalendar(Calendar.getInstance());
+		calendarPanel.updateDisplay();
+		buttonPanel.add(calendarPanel);
+
+		JLabel storeLabel = new JLabel("Store:");
+		buttonPanel.add(storeLabel);
+		storeField = new JTextField();
+		storeField.setPreferredSize(new Dimension(100, storeField.getPreferredSize().height));
+		buttonPanel.add(storeField);
+
+		// button panel code
+		searchButton = new JButton("Search");
+		searchButton.setPreferredSize(new Dimension(100, searchButton.getPreferredSize().height));
+		buttonPanel.add(searchButton);
+		add(buttonPanel, BorderLayout.NORTH);
+
 		table = new JTable() {
 			@Override
 			public boolean isCellEditable(int row, int column)
@@ -40,8 +72,17 @@ public class DailySalesPanel extends JPanel
 
 		JScrollPane scrollPane = new JScrollPane(table);
 		add(scrollPane, BorderLayout.CENTER);
-		
-		populateTableList();
+	}
+	
+	private void initListeners()
+	{
+		searchButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				populateTableList();
+			}
+		});
 	}
 	
 	private void populateTableList()
@@ -60,7 +101,9 @@ public class DailySalesPanel extends JPanel
 		{	
 			try
 			{
-				PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement("SELECT upc, category, sellprice, units FROM Item INNER JOIN (SELECT upc, SUM(quantity) AS units FROM PurchaseItem WHERE receiptId IN (SELECT receiptId FROM Purchase WHERE purchasedate = current_date) GROUP BY upc) USING (upc) ORDER BY category ASC");
+				PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement("SELECT upc, category, sellprice, units FROM Item INNER JOIN (SELECT upc, SUM(quantity) AS units FROM PurchaseItem WHERE receiptId IN (SELECT receiptId FROM Purchase WHERE purchasedate = ? AND name = ?) GROUP BY upc) USING (upc) ORDER BY category ASC");
+				statement.setDate(1, calendarPanel.getSelectedDate());
+				statement.setString(2, storeField.getText());
 				ResultSet results = statement.executeQuery();
 				
 				DecimalFormat priceFormat = new DecimalFormat("#,##0.00");
