@@ -11,12 +11,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import ams.Controller;
+import ams.ui.AMSFrame;
 
 public class LoginView extends JPanel {
 	
@@ -40,6 +43,7 @@ public class LoginView extends JPanel {
 
 	private void initComponents() {
 		loginPanel = new JPanel();
+		loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
 		loginPanel.setBackground(Color.WHITE);
 		loginPanel.setBorder(BorderFactory.createTitledBorder("Login Credentials"));
 		
@@ -56,8 +60,8 @@ public class LoginView extends JPanel {
 		
 		subPanel = new JPanel();
 		subPanel.setBackground(Color.WHITE);
-		label = new JLabel("    Password:");
-		customerPasswordField = new JTextField();
+		label = new JLabel("     Password:");
+		customerPasswordField = new JPasswordField();
 		customerPasswordField.setPreferredSize(new Dimension(100, customerPasswordField.getPreferredSize().height));		
 		subPanel.add(label);
 		subPanel.add(customerPasswordField);
@@ -67,16 +71,18 @@ public class LoginView extends JPanel {
 		loginFailedLabel = new JLabel("Login Failed");
 		loginPanel.add(loginFailedLabel);
 		loginFailedLabel.setVisible(false);
-		
-		add(loginPanel, BorderLayout.CENTER);
-		
+
 		registerButton = new JButton("Register");		
 		loginButton = new JButton("Login");
-		JPanel buttonPanel = new JPanel(new GridLayout(0,1));
+		
+		JPanel buttonPanel = new JPanel();
 		buttonPanel.setBackground(Color.WHITE);
 		buttonPanel.add(loginButton);
 		buttonPanel.add(registerButton);
-		add(buttonPanel);
+		loginPanel.add(buttonPanel);
+		
+		add(loginPanel, BorderLayout.CENTER);
+		
 	}
 
 	private void initListeners() {
@@ -104,7 +110,7 @@ public class LoginView extends JPanel {
 	{
 		try
 		{
-			if(customerIdField.getText().equals("") == false)
+			if (!customerIdField.getText().equals(""))
 			{
 				Statement s = Controller.getInstance().getConnection().createStatement();
 				String updateString = "SELECT * from CUSTOMER WHERE cid = "+customerIdField.getText();
@@ -123,14 +129,16 @@ public class LoginView extends JPanel {
 						parentPanel.currentCustomerName = rs.getString("NAME");
 						parentPanel.setWelcomeText("Welcome " + parentPanel.currentCustomerName + "!");
 					}
+					else
+						Controller.getInstance().setStatusString("Login Failed: Incorrect password", AMSFrame.FAILURE);
 				}
 			}
-			loginFailedLabel.setVisible(true);
 			
 		}
 		catch(SQLException e)
 		{
-			System.err.println(e.getMessage());
+			Controller.getInstance().setStatusString("Login Failed: Cannot find CID", AMSFrame.FAILURE);
+//			System.err.println(e.getMessage());
 		}
 	}
 	

@@ -1,6 +1,7 @@
 package ams.ui.customer;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -62,9 +63,11 @@ public class CheckoutView extends JPanel
 	private void initComponents()
 	{
 		cardInfoPanel = new JPanel(new GridLayout(0, 1));
+		cardInfoPanel.setBackground(Color.WHITE);
 		cardInfoPanel.setBorder(BorderFactory.createTitledBorder("Card Information"));
 
 		JPanel subPanel = new JPanel();
+		subPanel.setBackground(Color.WHITE);
 		JLabel label = new JLabel("Card Number:");
 		cardNumberField = new JTextField();
 		cardNumberField.setPreferredSize(new Dimension(100, cardNumberField.getPreferredSize().height));
@@ -73,6 +76,7 @@ public class CheckoutView extends JPanel
 		cardInfoPanel.add(subPanel);
 
 		subPanel = new JPanel();
+		subPanel.setBackground(Color.WHITE);
 		label = new JLabel("Card Expiry Date (MM/YY):");
 		cardMonthExpiryField = new JTextField();
 		cardMonthExpiryField.setPreferredSize(new Dimension(20, cardMonthExpiryField.getPreferredSize().height));
@@ -88,16 +92,25 @@ public class CheckoutView extends JPanel
 		submitButton = new JButton("Submit");
 		cardInfoPanel.add(submitButton);
 
-		cartJTable = new JTable();
+		cartJTable = new JTable() {
+			@Override
+			public boolean isCellEditable(int row, int column)
+			{
+				return false;
+			}
+		};
 		JScrollPane cartScrollPane = new JScrollPane(cartJTable);
+		cartScrollPane.setBackground(Color.WHITE);
 		cartScrollPane.setBorder(BorderFactory.createTitledBorder("Cart"));
 
 		JPanel p = new JPanel();
+		p.setBackground(Color.WHITE);
 		p.setLayout(new BoxLayout(p, BoxLayout.X_AXIS));
 		p.add(cartScrollPane);
 		p.add(cardInfoPanel);
 
 		JPanel verticalPanel = new JPanel();
+		verticalPanel.setBackground(Color.WHITE);
 		verticalPanel.setLayout(new BoxLayout(verticalPanel, BoxLayout.Y_AXIS));
 		add(verticalPanel, BorderLayout.CENTER);
 		verticalPanel.add(p);
@@ -126,6 +139,7 @@ public class CheckoutView extends JPanel
 		{
 			Vector<Object> row = new Vector<Object>();
 			row.add(item.getUPC());
+			row.add(item.getTitle());
 			row.add(item.getCategory());
 			row.add(parentPanel.getCartItems().get(item));
 			data.add(row);
