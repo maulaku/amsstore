@@ -20,6 +20,7 @@ public class DeliveryPanel extends JPanel
 	
 	public DeliveryPanel()
 	{
+		setBackground(Color.WHITE);
 		setLayout(new BorderLayout());
 		initComponents();
 		initListeners();		

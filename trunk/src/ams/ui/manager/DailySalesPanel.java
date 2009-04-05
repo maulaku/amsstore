@@ -22,6 +22,7 @@ public class DailySalesPanel extends JPanel
 	
 	public DailySalesPanel()
 	{
+		setBackground(Color.WHITE);
 		setLayout(new BorderLayout(5,5));
 		initComponents();
 	}

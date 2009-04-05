@@ -57,13 +57,11 @@ public class SearchView extends JPanel
 	String queryTableColumns[] = new String[] { "UPC", "Title", "Category", "Quantity", "Add to Cart" };
 	String cartTableColumns[] = new String[] { "UPC", "Title", "Category", "Quantity" };
 
-	String queryFields[] = { "Title", "Category", "Quantity" };
-	String cartFields[] = { "Title", "Quantity" };
-
 	private HashMap<Item, Integer> cartItems;
 
 	public SearchView(PurchaseOnlinePanel parent)
 	{
+		setBackground(Color.WHITE);
 		parentPanel = parent;
 		cartItems = new HashMap<Item, Integer>();
 		setLayout(new BorderLayout(5, 5));
@@ -100,6 +98,7 @@ public class SearchView extends JPanel
 		queryJTable.setDefaultEditor(Boolean.class, new DefaultCellEditor(new JCheckBox()));
 
 		JScrollPane queryScrollPane = new JScrollPane(queryJTable);
+		queryScrollPane.setBackground(Color.WHITE);
 		queryScrollPane.setBorder(BorderFactory.createTitledBorder("Search Results"));
 		// queryScrollPane.setSize(tableDimension);
 		DefaultTableModel model = (DefaultTableModel) queryJTable.getModel();
@@ -109,9 +108,8 @@ public class SearchView extends JPanel
 
 		cartJTable = new JTable();
 		JScrollPane cartScrollPane = new JScrollPane(cartJTable);
+		cartScrollPane.setBackground(Color.WHITE);
 		cartScrollPane.setBorder(BorderFactory.createTitledBorder("Cart"));
-		// cartScrollPane.setPreferredSize(new
-		// Dimension(cartScrollPane.getPreferredSize().width, 250));
 		model = (DefaultTableModel) cartJTable.getModel();
 		model.setDataVector(null, cartTableColumns);
 
@@ -126,18 +124,12 @@ public class SearchView extends JPanel
 		cartPanel.add(checkoutButton, BorderLayout.SOUTH);
 
 		JPanel southPanel = new JPanel(new BorderLayout());
-		// p2.setLayout(new BoxLayout(p2, BoxLayout.X_AXIS));
-		// add(p2, BorderLayout.SOUTH);
-		// p2.add(cartScrollPane);
 		southPanel.add(queryPanel, BorderLayout.CENTER);
 		southPanel.add(cartPanel, BorderLayout.EAST);
 
 		JPanel pane = new JPanel(new BorderLayout());
-
-		// pane.setLayout(new BoxLayout(pane, BoxLayout.Y_AXIS));
 		pane.add(searchParameterPanel, BorderLayout.NORTH);
 		pane.add(southPanel, BorderLayout.CENTER);
-		// pane.add(p3);
 
 		add(pane, BorderLayout.CENTER);
 	}
@@ -145,10 +137,12 @@ public class SearchView extends JPanel
 	private JPanel createSearchParameterPanel()
 	{
 		searchParameterPanel = new JPanel();
+		searchParameterPanel.setBackground(Color.WHITE);
 		searchParameterPanel.setBorder(BorderFactory.createTitledBorder("Search Parameters"));
 		// searchParameterPanel.setSize(new Dimension(200, 200));
 
 		JPanel subPanel = new JPanel();
+		subPanel.setBackground(Color.WHITE);
 		JLabel label = new JLabel("      Item Title:");
 		titleField = new JTextField();
 		titleField.setPreferredSize(new Dimension(100, titleField.getPreferredSize().height));
@@ -157,6 +151,7 @@ public class SearchView extends JPanel
 		searchParameterPanel.add(subPanel);
 
 		subPanel = new JPanel();
+		subPanel.setBackground(Color.WHITE);
 		label = new JLabel("Item Category:");
 		categoryField = new JTextField();
 		categoryField.setPreferredSize(new Dimension(100, categoryField.getPreferredSize().height));
@@ -165,6 +160,7 @@ public class SearchView extends JPanel
 		searchParameterPanel.add(subPanel);
 
 		subPanel = new JPanel();
+		subPanel.setBackground(Color.WHITE);
 		label = new JLabel("    Artist Name:");
 		leadSingerNameField = new JTextField();
 		leadSingerNameField.setPreferredSize(new Dimension(100, leadSingerNameField.getPreferredSize().height));
@@ -214,15 +210,7 @@ public class SearchView extends JPanel
 		String targetCategory = categoryField.getText();
 		String targetLeadSinger = leadSingerNameField.getText();
 
-		// Vector<String> columns =
-		// Controller.getInstance().getColumnNames("ITEM");
-		// Vector<String> columns = new Vector<String>();
-		// columns.addElement("TITLE");
-		// columns.addElement("CATEGORY");
-		// columns.addElement("NAME");
-
 		Vector<Item> rs = ItemDAO.selectForItemSearch(targetTitle, targetCategory, targetLeadSinger);
-		// Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 		Object[][] data = new Object[rs.size()][5];
 		for (int i = 0; i < rs.size(); ++i)
 		{

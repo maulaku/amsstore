@@ -31,18 +31,22 @@ public class LoginView extends JPanel {
 	
 	
 	public LoginView(PurchaseOnlinePanel parent) {
+//		setLayout(new BorderLayout());
 		parentPanel = parent;
+		setBackground(Color.WHITE);
 		initComponents();
 		initListeners();
 	}
 
 	private void initComponents() {
-		loginPanel = new JPanel(new GridLayout(0,1));
+		loginPanel = new JPanel();
+		loginPanel.setBackground(Color.WHITE);
 		loginPanel.setBorder(BorderFactory.createTitledBorder("Login Credentials"));
 		
 		//loginPanel.setPreferredSize(new Dimension(300,500));
 		
 		JPanel subPanel = new JPanel();
+		subPanel.setBackground(Color.WHITE);
 		JLabel label = new JLabel("Customer ID:");
 		customerIdField = new JTextField();
 		customerIdField.setPreferredSize(new Dimension(100, customerIdField.getPreferredSize().height));		
@@ -51,6 +55,7 @@ public class LoginView extends JPanel {
 		loginPanel.add(subPanel);
 		
 		subPanel = new JPanel();
+		subPanel.setBackground(Color.WHITE);
 		label = new JLabel("    Password:");
 		customerPasswordField = new JTextField();
 		customerPasswordField.setPreferredSize(new Dimension(100, customerPasswordField.getPreferredSize().height));		
@@ -68,6 +73,7 @@ public class LoginView extends JPanel {
 		registerButton = new JButton("Register");		
 		loginButton = new JButton("Login");
 		JPanel buttonPanel = new JPanel(new GridLayout(0,1));
+		buttonPanel.setBackground(Color.WHITE);
 		buttonPanel.add(loginButton);
 		buttonPanel.add(registerButton);
 		add(buttonPanel);
@@ -115,6 +121,7 @@ public class LoginView extends JPanel {
 						parentPanel.nextView(SearchView.ID);
 						parentPanel.currentCustomerId = Integer.parseInt(customerIdField.getText());
 						parentPanel.currentCustomerName = rs.getString("NAME");
+						parentPanel.setWelcomeText("Welcome " + parentPanel.currentCustomerName + "!");
 					}
 				}
 			}

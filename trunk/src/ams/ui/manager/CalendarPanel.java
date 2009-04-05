@@ -1,6 +1,7 @@
-package assets;
+package ams.ui.manager;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,9 +33,9 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import assets.time.Day;
-import assets.time.DayOfWeek;
-import assets.time.Month;
+import ams.ui.time.Day;
+import ams.ui.time.DayOfWeek;
+import ams.ui.time.Month;
 
 public class CalendarPanel extends JPanel implements ActionListener {
 	
@@ -45,7 +46,7 @@ public class CalendarPanel extends JPanel implements ActionListener {
 	private DefaultTableModel tableModel;
 	private JLabel monthLabel;
 
-	private final int CELL_HEIGHT = 25;
+	private final int CELL_HEIGHT = 17;
 
 	public CalendarPanel()
 	{
@@ -96,6 +97,7 @@ public class CalendarPanel extends JPanel implements ActionListener {
 		monthLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
 		JPanel monthNavigator = new JPanel(new BorderLayout());
+		monthNavigator.setBackground(Color.WHITE);
 		monthNavigator.add(left, BorderLayout.WEST);
 		monthNavigator.add(monthLabel, BorderLayout.CENTER);
 		monthNavigator.add(right, BorderLayout.EAST);

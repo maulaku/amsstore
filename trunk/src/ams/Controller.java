@@ -203,8 +203,6 @@ public class Controller {
 			for (PurchaseItem pItem : purchase.getPurchaseItems())
 				PurchaseDAO.getInstance().insertPurchaseItem(receipt, pItem);
 			
-			setStatusString("Purchase Successful: see receipt.", AMSFrame.SUCCESS);
-			
 			con.commit();
 			con.setAutoCommit(true);
 		} 

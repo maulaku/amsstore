@@ -26,6 +26,7 @@ public class SupplierPanel extends JPanel {
 	
 	public SupplierPanel()
 	{
+		setBackground(Color.WHITE);
 		initComponents();
 		initListeners();
 	}
@@ -33,8 +34,10 @@ public class SupplierPanel extends JPanel {
 	private void initComponents()
 	{
 		JPanel infoPanel = new JPanel(new GridLayout(0,1));
+		infoPanel.setBackground(Color.WHITE);
 		
 		JPanel subPanel = new JPanel();
+		subPanel.setBackground(Color.WHITE);
 		JLabel label = new JLabel("    Name:");
 		nameField = new JTextField();
 		nameField.setPreferredSize(new Dimension(100, nameField.getPreferredSize().height));		
@@ -43,6 +46,7 @@ public class SupplierPanel extends JPanel {
 		infoPanel.add(subPanel);
 		
 		subPanel = new JPanel();	
+		subPanel.setBackground(Color.WHITE);
 		label = new JLabel("Address:");
 		addressField = new JTextField();
 		addressField.setPreferredSize(new Dimension(100, addressField.getPreferredSize().height));		
@@ -51,6 +55,7 @@ public class SupplierPanel extends JPanel {
 		infoPanel.add(subPanel);
 		
 		subPanel = new JPanel();
+		subPanel.setBackground(Color.WHITE);
 		label = new JLabel("      City:");
 		cityField = new JTextField();
 		cityField.setPreferredSize(new Dimension(100, cityField.getPreferredSize().height));		
@@ -59,6 +64,7 @@ public class SupplierPanel extends JPanel {
 		infoPanel.add(subPanel);
 		
 		subPanel = new JPanel();	
+		subPanel.setBackground(Color.WHITE);
 		label = new JLabel("  Status:");
 		statusField = new JTextField();
 		statusField.setPreferredSize(new Dimension(100, statusField.getPreferredSize().height));		
@@ -72,6 +78,7 @@ public class SupplierPanel extends JPanel {
 		addButton = new JButton("Add");
 		delButton = new JButton("Delete");
 		JPanel buttonPanel = new JPanel();
+		buttonPanel.setBackground(Color.WHITE);
 		buttonPanel.add(addButton);
 		buttonPanel.add(delButton);
 		

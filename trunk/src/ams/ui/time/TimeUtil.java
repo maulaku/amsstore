@@ -1,4 +1,4 @@
-package assets.time;
+package ams.ui.time;
 
 public class TimeUtil
 {
