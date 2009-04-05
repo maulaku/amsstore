@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -154,6 +155,11 @@ public class CalendarPanel extends JPanel implements ActionListener {
 		
 		Month month = Month.getMonth(calendar.get(Calendar.MONTH));
 		monthLabel.setText(month.toString() + " " + calendar.get(Calendar.YEAR));
+	}
+	
+	public Date getSelectedDate()
+	{
+		return new Date(calendar.getTimeInMillis());
 	}
 	
 	
