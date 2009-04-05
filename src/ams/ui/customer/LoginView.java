@@ -19,6 +19,9 @@ import javax.swing.JTextField;
 import ams.Controller;
 
 public class LoginView extends JPanel {
+	
+	public static final String ID = "LOGIN";
+	
 	private JPanel loginPanel;
 	private JTextField customerIdField, customerPasswordField;
 	private JButton loginButton, registerButton;
@@ -109,7 +112,7 @@ public class LoginView extends JPanel {
 					{
 						//login successful
 //						loginPanel.disable();
-						parentPanel.nextView(2);
+						parentPanel.nextView(SearchView.ID);
 						parentPanel.currentCustomerId = Integer.parseInt(customerIdField.getText());
 						parentPanel.currentCustomerName = rs.getString("NAME");
 					}
@@ -125,8 +128,8 @@ public class LoginView extends JPanel {
 	}
 	
 	private void onRegister()
-	{
-		parentPanel.nextView(1);		
+	{	
+		parentPanel.nextView(RegistrationView.ID);		
 	}
 	
 	public void cleanUp()
