@@ -32,7 +32,8 @@ CREATE TABLE Store (
     name VARCHAR(255),
     address VARCHAR(255),
     type VARCHAR(255),
-    PRIMARY KEY(name)
+    PRIMARY KEY(name),
+    CHECK (type = 'regular' OR type = 'warehouse')
 );
 
 CREATE TABLE Customer (
@@ -84,7 +85,7 @@ CREATE TABLE Purchase (
     purchaseDate DATE,
     cid INTEGER,
     name VARCHAR(255),
-    cardNum INTEGER,
+    cardNum LONG,
     expire DATE,
     expectedDate DATE,
     deliveredDate DATE,
