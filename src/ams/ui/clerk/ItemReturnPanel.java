@@ -1,6 +1,7 @@
 package ams.ui.clerk;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -28,6 +29,7 @@ public class ItemReturnPanel extends JPanel
 	
 	public ItemReturnPanel()
 	{
+		setBackground(Color.WHITE);
 		initComponents();
 		initListeners();
 	}
@@ -35,8 +37,10 @@ public class ItemReturnPanel extends JPanel
 	private void initComponents()
 	{
 		JPanel infoPanel = new JPanel(new GridLayout(0,1));
+		infoPanel.setBackground(Color.WHITE);
 		
 		JPanel subPanel = new JPanel();
+		subPanel.setBackground(Color.WHITE);
 		JLabel label = new JLabel("        Receipt ID:");
 		retReceiptID = new JTextField();
 		retReceiptID.setPreferredSize(new Dimension(100, retReceiptID.getPreferredSize().height));		
@@ -44,7 +48,8 @@ public class ItemReturnPanel extends JPanel
 		subPanel.add(retReceiptID);
 		infoPanel.add(subPanel);
 		
-		subPanel = new JPanel();	
+		subPanel = new JPanel();
+		subPanel.setBackground(Color.WHITE);
 		label = new JLabel("                  UPC:");
 		retItemUPC = new JTextField();
 		retItemUPC.setPreferredSize(new Dimension(100, retItemUPC.getPreferredSize().height));		
@@ -53,6 +58,7 @@ public class ItemReturnPanel extends JPanel
 		infoPanel.add(subPanel);
 		
 		subPanel = new JPanel();
+		subPanel.setBackground(Color.WHITE);
 		label = new JLabel("           Quantity:");
 		quantityField = new JTextField();
 		quantityField.setPreferredSize(new Dimension(100, quantityField.getPreferredSize().height));		
@@ -60,7 +66,8 @@ public class ItemReturnPanel extends JPanel
 		subPanel.add(quantityField);
 		infoPanel.add(subPanel);
 		
-		subPanel = new JPanel();	
+		subPanel = new JPanel();
+		subPanel.setBackground(Color.WHITE);
 		label = new JLabel("Customer Name:");
 		nameField = new JTextField();
 		nameField.setPreferredSize(new Dimension(100, nameField.getPreferredSize().height));		
@@ -74,6 +81,7 @@ public class ItemReturnPanel extends JPanel
 		retButton = new JButton("Process Return");
 		
 		JPanel buttonPanel = new JPanel();
+		buttonPanel.setBackground(Color.WHITE);
 		buttonPanel.add(retButton);
 				
 		add(buttonPanel);

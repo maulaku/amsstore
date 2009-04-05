@@ -8,19 +8,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -44,7 +39,6 @@ public class CheckoutView extends JPanel
 	private JTextField cardNumberField, cardMonthExpiryField, cardYearExpiryField;
 	private JTable cartJTable;
 	private JButton submitButton;
-	private JLabel deliveryDateLabel;
 
 	private HashMap<Item, Integer> cartItems;
 	String cartTableColumns[] = new String[] { "UPC", "Title", "Category", "Quantity" };
@@ -98,23 +92,15 @@ public class CheckoutView extends JPanel
 		JScrollPane cartScrollPane = new JScrollPane(cartJTable);
 		cartScrollPane.setBorder(BorderFactory.createTitledBorder("Cart"));
 
-		deliveryDateLabel = new JLabel("");
-		deliveryDateLabel.setVisible(false);
-
 		JPanel p = new JPanel();
 		p.setLayout(new BoxLayout(p, BoxLayout.X_AXIS));
 		p.add(cartScrollPane);
 		p.add(cardInfoPanel);
 
-		JPanel p2 = new JPanel();
-		p2.setLayout(new BoxLayout(p2, BoxLayout.X_AXIS));
-		p2.add(deliveryDateLabel);
-
 		JPanel verticalPanel = new JPanel();
 		verticalPanel.setLayout(new BoxLayout(verticalPanel, BoxLayout.Y_AXIS));
 		add(verticalPanel, BorderLayout.CENTER);
 		verticalPanel.add(p);
-		verticalPanel.add(p2);
 
 	}
 
@@ -181,12 +167,11 @@ public class CheckoutView extends JPanel
 			Controller.getInstance().setStatusString("Cannot complete purchase: credit card number invalid",
 					AMSFrame.FAILURE);
 		}
-		purchase.setExpectedDate(PurchaseDAO.getExpectedDeliveryDate());
+		Date eDate = PurchaseDAO.getExpectedDeliveryDate();
+		purchase.setExpectedDate(eDate);
+		Controller.getInstance().setStatusString("Purchase Successful: your purchases will be delivered on " + eDate, AMSFrame.SUCCESS);
+		
 		Controller.getInstance().purchase(purchase);
-
-		deliveryDateLabel.setText("Checkout successful, your purchases will be delivered on "
-				+ PurchaseDAO.getExpectedDeliveryDate() + ".");
-		deliveryDateLabel.setVisible(true);
 	}
 
 	public void cleanUp()

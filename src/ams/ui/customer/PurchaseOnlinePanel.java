@@ -2,6 +2,8 @@ package ams.ui.customer;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -21,8 +23,6 @@ public class PurchaseOnlinePanel extends JPanel {
 	
 	private HashMap<Item,Integer> checkedOut;
 	
-//	public Vector<String> queryTableColumns;
-//	public Vector<String> cartTableColumns;
 	public int currentCustomerId = -1;
 	public String currentCustomerName = "";
 	
@@ -50,7 +50,8 @@ public class PurchaseOnlinePanel extends JPanel {
 		logoutButton.setVisible(false);
 		
 		welcomeLabel = new JLabel();
-		JPanel logoutPanel = new JPanel();
+		JPanel logoutPanel = new JPanel(new GridLayout(1,2));
+		logoutPanel.setBackground(Color.WHITE);
 		logoutPanel.add(welcomeLabel);
 		logoutPanel.add(logoutButton);
 		
@@ -82,6 +83,7 @@ public class PurchaseOnlinePanel extends JPanel {
 		currentCustomerId = -1;
 		currentCustomerName = "";
 		nextView(LoginView.ID);
+		setWelcomeText("");
 	}
 	
 	public void setCheckoutItems(HashMap<Item, Integer> cartItems)
@@ -92,6 +94,11 @@ public class PurchaseOnlinePanel extends JPanel {
 	public HashMap<Item, Integer> getCartItems()
 	{
 		return checkedOut;
+	}
+	
+	public void setWelcomeText(String text)
+	{
+		welcomeLabel.setText(text);
 	}
 
 }

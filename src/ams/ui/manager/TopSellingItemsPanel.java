@@ -23,7 +23,6 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import ams.Controller;
-import assets.CalendarPanel;
 
 public class TopSellingItemsPanel extends JPanel
 {
@@ -34,6 +33,7 @@ public class TopSellingItemsPanel extends JPanel
 	
 	public TopSellingItemsPanel()
 	{
+		setBackground(Color.WHITE);
 		setLayout(new BorderLayout(5,5));
 		initComponents();
 		initListeners();
@@ -42,8 +42,10 @@ public class TopSellingItemsPanel extends JPanel
 	private void initComponents()
 	{
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		buttonPanel.setBackground(Color.WHITE);
 		
 		calendarPanel = new CalendarPanel();
+		calendarPanel.setBackground(Color.WHITE);
 		calendarPanel.setPreferredSize(new Dimension(calendarPanel.getPreferredSize().width, 150));
 		calendarPanel.setCalendar(Calendar.getInstance());
 		calendarPanel.updateDisplay();
@@ -62,6 +64,7 @@ public class TopSellingItemsPanel extends JPanel
 		buttonPanel.add(searchButton);
 
 		JPanel tablePanel = new JPanel(new BorderLayout(5,5));
+		tablePanel.setBackground(Color.WHITE);
 		tablePanel.setBorder(BorderFactory.createTitledBorder("Top Selling Items"));
 		tablePanel.add(buttonPanel, BorderLayout.NORTH);
 		
@@ -72,10 +75,20 @@ public class TopSellingItemsPanel extends JPanel
 				return false;
 			}
 		};
+		Vector<String> columns = new Vector<String>();
+		columns.add("upc");
+		columns.add("title");
+		columns.add("company");
+		columns.add("stock");
+		columns.add("total");
+		DefaultTableModel model = new DefaultTableModel();
+		model.setColumnIdentifiers(columns);
+		table.setModel(model);
 		table.setBackground(Color.WHITE);
 
 		JScrollPane scrollPane = new JScrollPane(table);
-		tablePanel.add(scrollPane, BorderLayout.SOUTH);
+		scrollPane.setBackground(Color.WHITE);
+		tablePanel.add(scrollPane, BorderLayout.CENTER);
 		
 		add(tablePanel, BorderLayout.CENTER);
 	}
