@@ -2,12 +2,15 @@ package ams.ui.manager;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Vector;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -34,10 +37,10 @@ public class DailySalesPanel extends JPanel
 		};
 		table.setBackground(Color.WHITE);
 
+		JScrollPane scrollPane = new JScrollPane(table);
+		add(scrollPane, BorderLayout.CENTER);
+		
 		populateTableList();
-		
-		
-		//TODO: Add Total Daily Sales
 	}
 	
 	private void populateTableList()
@@ -56,10 +59,10 @@ public class DailySalesPanel extends JPanel
 		{	
 			try
 			{
-				//TODO: Change back to current_date
-				PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement("SELECT i.upc, i.category, i.price, pi.quantity FROM Item i, PurchaseItem pi WHERE pi.receiptId IN (SELECT receiptId FROM Purchase WHERE purchasedate = ?) ORDER BY i.category ASC");
-				statement.setDate(1, java.sql.Date.valueOf("2009-04-01"));
+				PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement("SELECT upc, category, sellprice, units FROM Item INNER JOIN (SELECT upc, SUM(quantity) AS units FROM PurchaseItem WHERE receiptId IN (SELECT receiptId FROM Purchase WHERE purchasedate = current_date) GROUP BY upc) USING (upc) ORDER BY category ASC");
 				ResultSet results = statement.executeQuery();
+				
+				DecimalFormat priceFormat = new DecimalFormat("#,##0.00");
 				
 				//Group results by category
 				HashMap<String, Vector<Vector<Object>>> categories = new HashMap<String, Vector<Vector<Object>>>();
@@ -72,14 +75,14 @@ public class DailySalesPanel extends JPanel
 					String category = (String) results.getObject("category");
 					rowData.add(category);
 					
-					double price = Double.parseDouble((String) results.getObject("price"));
-					rowData.add(price);
+					double price = ((BigDecimal) results.getObject("sellprice")).doubleValue();
+					rowData.add(priceFormat.format(price));
 					
-					double quantity = Double.parseDouble((String) results.getObject("quantity"));
+					int quantity = ((BigDecimal) results.getObject("units")).intValue();
 					rowData.add(quantity);
 					
 					double total = price * quantity;
-					rowData.add(total);
+					rowData.add(priceFormat.format(total));
 					
 					//Initialize category if it doesn't already exist in the map
 					if(categories.get(category) == null)
@@ -99,7 +102,7 @@ public class DailySalesPanel extends JPanel
 					//Add category rows to data set
 					for(Vector<Object> row : category)
 					{
-						totalValue += Double.parseDouble((String) row.get(row.size() - 1));
+						totalValue += Double.parseDouble(row.get(row.size() - 1).toString());
 						data.add(row);
 					}
 					
@@ -114,17 +117,12 @@ public class DailySalesPanel extends JPanel
 					categoryTotal.add(null);
 					categoryTotal.add(category.size());
 					
-					categoryTotal.add(totalValue);
+					categoryTotal.add(priceFormat.format(totalValue));
 					data.add(categoryTotal);
+					
+					//Add spacer
+					data.add(new Vector<Object>());
 				}
-
-				//Add spacer
-				Vector<Object> spacer = new Vector<Object>();
-				spacer.add(null);
-				spacer.add(null);
-				spacer.add(null);
-				spacer.add(null);
-				spacer.add(null);
 				
 				//TODO: Display total daily sales outside of table
 				//Add total daily sales to data set
@@ -133,7 +131,7 @@ public class DailySalesPanel extends JPanel
 				total.add("Total Daily Sales");
 				total.add(null);
 				total.add(grandTotalUnits);
-				total.add(grandTotalValue);
+				total.add(priceFormat.format(grandTotalValue));
 				
 				data.add(total);
 				
