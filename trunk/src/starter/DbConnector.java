@@ -18,6 +18,7 @@ public class DbConnector {
 			 * "src\\assets\\dropall.txt"
 			 */
 			runScript("src" + File.separator+ "assets" + File.separator+ "createall.txt");
+			runScript("src" + File.separator+ "assets" + File.separator+ "inserttuples.txt");
 //			update();
 //			query();
 			cleanUp();
@@ -56,7 +57,7 @@ public class DbConnector {
 		}
 		catch(SQLException e)
 		{
-			System.out.println("exception caught: " + e.getMessage());
+			System.err.println(e.getMessage());
 		}
 	}
 	
@@ -77,6 +78,7 @@ public class DbConnector {
 			for(String sqlText : statements){
 				try
 				{
+					System.out.println(sqlText);
 					stmt.executeUpdate(sqlText);
 					
 				}
