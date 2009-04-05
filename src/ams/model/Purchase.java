@@ -14,7 +14,7 @@ public class Purchase
 	
 	private long cid;
 	
-	private String cName; 
+	private String storeName; 
 	
 	public void setCID(long id)
 	{
@@ -26,15 +26,15 @@ public class Purchase
 		return cid;
 	}
 	
-	public void setCustomerName(String name)
+	public void setStoreName(String name)
 	{
-		cName = name;
+		storeName = name;
 	}
 	
-	public String getCustomerName()
+	public String getStoreName()
 	{
-		return cName;
-	}
+		return storeName;
+	}	
 	
 	public void setPurchaseOnline(boolean o)
 	{

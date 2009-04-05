@@ -50,8 +50,7 @@ public class PurchaseDAO
 		values.add(purchase.getPurchaseDate());
 		Long cid = purchase.isPurchaseOnline() ? purchase.getCID() : null;
 		values.add(cid);
-		String cname = purchase.isPurchaseOnline() ? purchase.getCustomerName() : null;
-		values.add(cname);
+		values.add(purchase.getStoreName());
 		Long creditNum = purchase.isPaidByCredit() ? purchase.getCreditCardNum() : null;
 		Date creditDate = purchase.isPaidByCredit() ? purchase.getCardExpiryDate() : null;
 		values.add(creditNum);

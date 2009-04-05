@@ -156,7 +156,7 @@ public class CheckoutView extends JPanel
 		purchase.setPurchaseOnline(true);
 		purchase.setPurchaseItems(pItems);
 		purchase.setCID(parentPanel.currentCustomerId);
-		purchase.setCustomerName(parentPanel.currentCustomerName);
+		purchase.setStoreName("Online Store");
 
 		try
 		{

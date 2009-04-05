@@ -45,7 +45,7 @@ public class ItemPurchasePanel extends JPanel
 	
 	private JRadioButton cardButton, cashButton;
 	
-	private JTextField cardNumField, expireMonthField, expireYearField;
+	private JTextField cardNumField, expireMonthField, expireYearField, storeField;
 	
 	private JCheckBox receiptBox;
 	
@@ -75,6 +75,12 @@ public class ItemPurchasePanel extends JPanel
 	
 	private void initComponents()
 	{
+		storeField = new JTextField(20);
+		JPanel storePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		storePanel.setBackground(Color.WHITE);
+		storePanel.add(new JLabel("Store name: "));
+		storePanel.add(storeField);
+		
 		// button panel code
 		addButton = new JButton("Add Item");
 		addButton.setPreferredSize(new Dimension(100, addButton.getPreferredSize().height));
@@ -94,7 +100,7 @@ public class ItemPurchasePanel extends JPanel
 		
 		JPanel purchaseItemsPanel = new JPanel(new BorderLayout(5,5));
 		purchaseItemsPanel.setBackground(Color.WHITE);
-		purchaseItemsPanel.setBorder(BorderFactory.createTitledBorder("Item Purchases"));
+		purchaseItemsPanel.setBorder(BorderFactory.createTitledBorder("Item Purchases"));		
 		purchaseItemsPanel.add(itemPane, BorderLayout.CENTER);
 		purchaseItemsPanel.add(buttonPanel, BorderLayout.SOUTH);
 	
@@ -144,6 +150,7 @@ public class ItemPurchasePanel extends JPanel
 		purchaseInfoPanel.add(purchaseButton);
 		purchaseInfoPanel.setMaximumSize(new Dimension(purchaseInfoPanel.getPreferredSize().width,50));
 		
+		add(storePanel, BorderLayout.NORTH);
 		add(purchaseItemsPanel, BorderLayout.CENTER);
 		add(purchaseInfoPanel, BorderLayout.SOUTH);
 	}
@@ -224,6 +231,7 @@ public class ItemPurchasePanel extends JPanel
 			}
 		}
 		purchase.setPurchaseItems(purchaseItems);
+		purchase.setStoreName(storeField.getText());
 		purchase.setPayByCash();
 		if (cardButton.isSelected())
 		{
@@ -276,6 +284,7 @@ public class ItemPurchasePanel extends JPanel
 		cardNumField.setText("");
 		expireMonthField.setText("");
 		expireYearField.setText("");
+		storeField.setText("");
 		cashButton.setSelected(true);
 		cardNumField.setEditable(false);
 		expireMonthField.setEditable(false);
