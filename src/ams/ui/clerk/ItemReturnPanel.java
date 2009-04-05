@@ -37,7 +37,7 @@ public class ItemReturnPanel extends JPanel
 		JPanel infoPanel = new JPanel(new GridLayout(0,1));
 		
 		JPanel subPanel = new JPanel();
-		JLabel label = new JLabel("Receipt ID:");
+		JLabel label = new JLabel("        Receipt ID:");
 		retReceiptID = new JTextField();
 		retReceiptID.setPreferredSize(new Dimension(100, retReceiptID.getPreferredSize().height));		
 		subPanel.add(label);
@@ -45,7 +45,7 @@ public class ItemReturnPanel extends JPanel
 		infoPanel.add(subPanel);
 		
 		subPanel = new JPanel();	
-		label = new JLabel("UPC:");
+		label = new JLabel("                  UPC:");
 		retItemUPC = new JTextField();
 		retItemUPC.setPreferredSize(new Dimension(100, retItemUPC.getPreferredSize().height));		
 		subPanel.add(label);
@@ -53,7 +53,7 @@ public class ItemReturnPanel extends JPanel
 		infoPanel.add(subPanel);
 		
 		subPanel = new JPanel();
-		label = new JLabel("Quantity:");
+		label = new JLabel("           Quantity:");
 		quantityField = new JTextField();
 		quantityField.setPreferredSize(new Dimension(100, quantityField.getPreferredSize().height));		
 		subPanel.add(label);
@@ -68,10 +68,10 @@ public class ItemReturnPanel extends JPanel
 		subPanel.add(nameField);
 		infoPanel.add(subPanel);
 		
-		infoPanel.setBorder(BorderFactory.createTitledBorder("Registration Information"));
+		infoPanel.setBorder(BorderFactory.createTitledBorder("Enter Return Information"));
 		add(infoPanel, BorderLayout.CENTER);
 		
-		retButton = new JButton("Process Refund");
+		retButton = new JButton("Process Return");
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.add(retButton);
