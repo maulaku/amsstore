@@ -24,7 +24,7 @@ public class PurchaseOnlinePanel extends JPanel {
 	public String currentCustomerName = "";
 	
 	public final int UPC_COLUMN = 0;
-	public final int QUANTITY_COLUMN = 4;
+	public final int QUANTITY_COLUMN = 3;
 	
 	private JButton logoutButton = new JButton("Logout");
 	
@@ -38,13 +38,13 @@ public class PurchaseOnlinePanel extends JPanel {
 		queryTableColumns.addElement("UPC");
 		queryTableColumns.addElement("TITLE");
 		queryTableColumns.addElement("CATEGORY");
-		queryTableColumns.addElement("NAME");
+//		queryTableColumns.addElement("NAME");
 		
 		cartTableColumns = new Vector<String>();
 		cartTableColumns.addElement("UPC");
 		cartTableColumns.addElement("TITLE");
 		cartTableColumns.addElement("CATEGORY");
-		cartTableColumns.addElement("NAME");
+//		cartTableColumns.addElement("NAME");
 		cartTableColumns.addElement("QUANTITY");
 		
 		cartData = new Vector<Vector<Object>>();
