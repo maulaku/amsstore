@@ -29,6 +29,7 @@ public class PurchaseOnlinePanel extends JPanel {
 	public final int UPC_COLUMN = 0;
 	public final int QUANTITY_COLUMN = 3;
 	
+	private JPanel logoutPanel;
 	private JLabel welcomeLabel;
 	private JButton logoutButton = new JButton("Logout");
 	
@@ -50,7 +51,7 @@ public class PurchaseOnlinePanel extends JPanel {
 		logoutButton.setVisible(false);
 		
 		welcomeLabel = new JLabel();
-		JPanel logoutPanel = new JPanel(new GridLayout(1,2));
+		logoutPanel = new JPanel(new GridLayout(1,2));
 		logoutPanel.setBackground(Color.WHITE);
 		logoutPanel.add(welcomeLabel);
 		logoutPanel.add(logoutButton);
@@ -62,9 +63,9 @@ public class PurchaseOnlinePanel extends JPanel {
 	public void nextView(String ID)
 	{
 		cardLayout.show(contentPanel, ID);
-		logoutButton.setVisible(true);
+		logoutPanel.setVisible(true);
 		if (ID.equals(LoginView.ID))
-			logoutButton.setVisible(false);
+			logoutPanel.setVisible(false);
 	}
 
 	private void initListeners() 
