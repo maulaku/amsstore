@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Vector;
@@ -24,7 +25,9 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import ams.Controller;
+import ams.exceptions.OutOfStockException;
 import ams.model.Item;
+import ams.model.ItemDAO;
 import ams.model.Purchase;
 import ams.model.PurchaseDAO;
 import ams.model.PurchaseItem;
@@ -151,6 +154,27 @@ public class CheckoutView extends JPanel
 
 	private void onSubmit()
 	{
+		PurchaseItem[] pItems = new PurchaseItem[cartItems.size()];
+		int i = 0;
+		for (Item item : cartItems.keySet())
+		{
+			pItems[i++] = new PurchaseItem(item.getUPC(), cartItems.get(item));
+			try
+			{
+				ItemDAO.getInstance().updateStock(item.getUPC(), -1*cartItems.get(item));
+			}
+			catch(OutOfStockException e)
+			{
+				Controller.getInstance().setStatusString("Cannot purchase: Out of stock on item "+item.getTitle()+".", AMSFrame.FAILURE);
+				return;
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		
 		String dateString = "20" + cardYearExpiryField.getText() + "-" + cardMonthExpiryField.getText() + "-01";
 		Date expiryDate = null;
 		try
@@ -161,10 +185,7 @@ public class CheckoutView extends JPanel
 			Controller.getInstance().setStatusString("Cannot purchase: card expiry date not valid", AMSFrame.FAILURE);
 			e.printStackTrace();
 		}
-		PurchaseItem[] pItems = new PurchaseItem[cartItems.size()];
-		int i = 0;
-		for (Item item : cartItems.keySet())
-			pItems[i++] = new PurchaseItem(item.getUPC(), cartItems.get(item));
+		
 
 		Purchase purchase = new Purchase();
 		purchase.setPurchaseOnline(true);
