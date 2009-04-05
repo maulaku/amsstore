@@ -44,7 +44,7 @@ public class TopSellingItemsPanel extends JPanel
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		
 		calendarPanel = new CalendarPanel();
-		calendarPanel.setPreferredSize(new Dimension(calendarPanel.getPreferredSize().width, 200));
+		calendarPanel.setPreferredSize(new Dimension(calendarPanel.getPreferredSize().width, 150));
 		calendarPanel.setCalendar(Calendar.getInstance());
 		calendarPanel.updateDisplay();
 		buttonPanel.add(calendarPanel);
@@ -53,6 +53,7 @@ public class TopSellingItemsPanel extends JPanel
 		buttonPanel.add(resultsLabel);
 		numField = new JTextField();
 		numField.setPreferredSize(new Dimension(100, numField.getPreferredSize().height));
+		numField.setText("10");
 		buttonPanel.add(numField);
 
 		// button panel code
