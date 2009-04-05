@@ -14,6 +14,8 @@ public class PurchaseDAO
 {
 	private static PurchaseDAO instance;
 	
+	public static final int DELIVERIES_PER_DAY = 10;
+	
 	private PurchaseDAO()
 	{
 	}
@@ -98,5 +100,27 @@ public class PurchaseDAO
 		statement.setLong(2, receiptId);
 		
 		statement.executeUpdate();
+	}
+	
+	public static Date getExpectedDeliveryDate()
+	{
+		Date estimatedDelivery = null;
+		try
+		{
+			String query = "SELECT count(*) FROM PURCHASE WHERE delivereddate IS null";
+			PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement(query);
+//			statement.setDate(1, null);
+			ResultSet rs = statement.executeQuery();
+			rs.next();
+			int outstandingDeliveries = rs.getInt(1);
+			int daysToWait = outstandingDeliveries/PurchaseDAO.DELIVERIES_PER_DAY;
+			estimatedDelivery = new Date(System.currentTimeMillis());
+			estimatedDelivery.setDate(estimatedDelivery.getDate()+daysToWait);
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return estimatedDelivery;
 	}
 }
