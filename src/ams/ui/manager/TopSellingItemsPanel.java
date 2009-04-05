@@ -8,15 +8,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
+import com.greef.ui.calendar.DefaultDateSelectionModel;
+import com.greef.ui.calendar.JCalendar;
 
 import ams.Controller;
 
@@ -25,6 +31,7 @@ public class TopSellingItemsPanel extends JPanel
 	private JTable table;
 	private JButton searchButton;
 	private JTextField numField;
+	private JCalendar calendar;
 	
 	public TopSellingItemsPanel()
 	{
@@ -35,18 +42,22 @@ public class TopSellingItemsPanel extends JPanel
 	
 	private void initComponents()
 	{
+		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		
+//		JLabel dateLabel = new JLabel("Date:");
+//		buttonPanel.add(dateLabel);
+		calendar = new JCalendar();
+		buttonPanel.add(calendar);
+
+		JLabel resultsLabel = new JLabel("Number of Results:");
+		buttonPanel.add(resultsLabel);
+		numField = new JTextField();
+		numField.setPreferredSize(new Dimension(100, numField.getPreferredSize().height));
+		buttonPanel.add(numField);
+
 		// button panel code
 		searchButton = new JButton("Search");
 		searchButton.setPreferredSize(new Dimension(100, searchButton.getPreferredSize().height));
-
-		//TODO: Add Date picker
-		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		JLabel label = new JLabel("Number of Results:");
-		buttonPanel.add(label);
-		numField = new JTextField();
-		numField.setPreferredSize(new Dimension(100, numField.getPreferredSize().height));
-		numField.setEditable(true);
-		buttonPanel.add(numField);
 		buttonPanel.add(searchButton);
 
 		JPanel tablePanel = new JPanel(new BorderLayout(5,5));
@@ -62,6 +73,9 @@ public class TopSellingItemsPanel extends JPanel
 		};
 		table.setBackground(Color.WHITE);
 
+		JScrollPane scrollPane = new JScrollPane(table);
+		tablePanel.add(scrollPane, BorderLayout.SOUTH);
+		
 		add(tablePanel, BorderLayout.CENTER);
 	}
 	
@@ -90,14 +104,17 @@ public class TopSellingItemsPanel extends JPanel
 		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 		if(columns != null)
 		{	
-			//TODO: Get date string
-			int limit = Integer.parseInt(numField.getText());
-			String date = "";
-			String queryString = "SELECT i.upc, i.title, i.company, s.stock, SUM(pi.quantity) AS total, p.date FROM Item i, Stored s, PurchaseItem pi, Purchase p WHERE i.upc = pi.upc AND i.upc = s.upc AND pi.receiptId = p.receiptId AND p.date = '" + date + "' GROUP BY i.upc ORDER BY total DESC LIMIT " + limit;
-			
 			try
 			{
-				PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement(queryString);
+				Date date = calendar.getSelectedDate();
+				if(date == null)
+				{
+					date = new Date();
+				}
+				
+				PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement("SELECT upc, title, company, stock, total FROM Item INNER JOIN (SELECT upc, stock FROM Stored) USING (upc) INNER JOIN (SELECT i.upc, SUM(pi.quantity) AS total FROM Item i, PurchaseItem pi, Purchase p WHERE i.upc = pi.upc AND p.receiptId = pi.receiptId AND p.purchasedate = ? GROUP BY i.upc) USING (upc) WHERE ROWNUM <= ? ORDER BY total DESC");
+				statement.setDate(1, java.sql.Date.valueOf(new SimpleDateFormat("yyyy-MM-dd").format(date)));
+				statement.setInt(2, Integer.parseInt(numField.getText()));
 				ResultSet results = statement.executeQuery();
 				
 				// add data into the table
@@ -105,7 +122,9 @@ public class TopSellingItemsPanel extends JPanel
 				{
 					Vector<Object> rowData = new Vector<Object>();
 					for (String columnName : columns)
+					{
 						rowData.add(results.getObject(columnName));
+					}
 					data.add(rowData);
 				}
 				statement.close();
@@ -113,6 +132,7 @@ public class TopSellingItemsPanel extends JPanel
 			catch (Exception e)
 			{
 				System.err.println(e.getMessage());
+				e.printStackTrace();
 			}
 		} 
 		
