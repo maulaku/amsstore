@@ -106,7 +106,13 @@ public class SearchView extends JPanel
 
 		addToCartButton = new JButton("Add To Cart");
 
-		cartJTable = new JTable();
+		cartJTable = new JTable() {
+			@Override
+			public boolean isCellEditable(int row, int column)
+			{
+				return false;
+			}
+		};
 		JScrollPane cartScrollPane = new JScrollPane(cartJTable);
 		cartScrollPane.setBackground(Color.WHITE);
 		cartScrollPane.setBorder(BorderFactory.createTitledBorder("Cart"));

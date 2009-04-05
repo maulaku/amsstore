@@ -3,6 +3,7 @@ package ams.ui.customer;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,6 +33,7 @@ public class PurchaseOnlinePanel extends JPanel {
 	private JPanel logoutPanel;
 	private JLabel welcomeLabel;
 	private JButton logoutButton = new JButton("Logout");
+	private JButton backButton = new JButton("Back");
 	
 	public PurchaseOnlinePanel() {
 		setLayout(new BorderLayout());
@@ -46,15 +48,18 @@ public class PurchaseOnlinePanel extends JPanel {
 		contentPanel.add(new LoginView(this), LoginView.ID);
 		contentPanel.add(new RegistrationView(this), RegistrationView.ID);
 		contentPanel.add(new SearchView(this), SearchView.ID);
-		contentPanel.add(new CheckoutView(this), CheckoutView.ID);
-		
-		logoutButton.setVisible(false);
+		contentPanel.add(new CheckoutView(this), CheckoutView.ID);		
 		
 		welcomeLabel = new JLabel();
 		logoutPanel = new JPanel(new GridLayout(1,2));
 		logoutPanel.setBackground(Color.WHITE);
 		logoutPanel.add(welcomeLabel);
-		logoutPanel.add(logoutButton);
+		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		buttonPanel.setBackground(Color.WHITE);
+		buttonPanel.add(backButton);
+		buttonPanel.add(logoutButton);
+		logoutPanel.add(buttonPanel);
+		logoutPanel.setVisible(false);
 		
 		add(contentPanel, BorderLayout.CENTER);
 		add(logoutPanel, BorderLayout.NORTH);
@@ -64,12 +69,22 @@ public class PurchaseOnlinePanel extends JPanel {
 	{
 		cardLayout.show(contentPanel, ID);
 		logoutPanel.setVisible(true);
+		backButton.setVisible(false);
 		if (ID.equals(LoginView.ID))
 			logoutPanel.setVisible(false);
+		if (ID.equals(CheckoutView.ID))
+			backButton.setVisible(true);
 	}
 
 	private void initListeners() 
 	{
+		backButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				nextView(SearchView.ID);	
+			}
+		});
 		logoutButton.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e)
