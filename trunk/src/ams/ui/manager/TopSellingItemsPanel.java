@@ -44,8 +44,6 @@ public class TopSellingItemsPanel extends JPanel
 	{
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		
-//		JLabel dateLabel = new JLabel("Date:");
-//		buttonPanel.add(dateLabel);
 		calendar = new JCalendar();
 		buttonPanel.add(calendar);
 
