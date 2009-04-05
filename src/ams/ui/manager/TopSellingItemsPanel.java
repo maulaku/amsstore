@@ -110,9 +110,23 @@ public class TopSellingItemsPanel extends JPanel
 					date = new Date();
 				}
 				
+				int limit;
+				try
+				{
+					limit = Integer.parseInt(numField.getText().trim());
+					if(limit < 0)
+					{
+						throw new NumberFormatException();
+					}
+				}
+				catch(NumberFormatException e)
+				{
+					limit = 0;
+				}
+				
 				PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement("SELECT upc, title, company, stock, total FROM Item INNER JOIN (SELECT upc, stock FROM Stored) USING (upc) INNER JOIN (SELECT i.upc, SUM(pi.quantity) AS total FROM Item i, PurchaseItem pi, Purchase p WHERE i.upc = pi.upc AND p.receiptId = pi.receiptId AND p.purchasedate = ? GROUP BY i.upc) USING (upc) WHERE ROWNUM <= ? ORDER BY total DESC");
 				statement.setDate(1, java.sql.Date.valueOf(new SimpleDateFormat("yyyy-MM-dd").format(date)));
-				statement.setInt(2, Integer.parseInt(numField.getText()));
+				statement.setInt(2, limit);
 				ResultSet results = statement.executeQuery();
 				
 				// add data into the table
