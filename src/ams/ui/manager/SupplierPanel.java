@@ -35,7 +35,7 @@ public class SupplierPanel extends JPanel {
 		JPanel infoPanel = new JPanel(new GridLayout(0,1));
 		
 		JPanel subPanel = new JPanel();
-		JLabel label = new JLabel("Name:");
+		JLabel label = new JLabel("    Name:");
 		nameField = new JTextField();
 		nameField.setPreferredSize(new Dimension(100, nameField.getPreferredSize().height));		
 		subPanel.add(label);
@@ -51,7 +51,7 @@ public class SupplierPanel extends JPanel {
 		infoPanel.add(subPanel);
 		
 		subPanel = new JPanel();
-		label = new JLabel("City:");
+		label = new JLabel("      City:");
 		cityField = new JTextField();
 		cityField.setPreferredSize(new Dimension(100, cityField.getPreferredSize().height));		
 		subPanel.add(label);
@@ -59,7 +59,7 @@ public class SupplierPanel extends JPanel {
 		infoPanel.add(subPanel);
 		
 		subPanel = new JPanel();	
-		label = new JLabel("Status:");
+		label = new JLabel("  Status:");
 		statusField = new JTextField();
 		statusField.setPreferredSize(new Dimension(100, statusField.getPreferredSize().height));		
 		subPanel.add(label);
