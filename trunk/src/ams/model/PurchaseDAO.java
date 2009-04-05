@@ -48,13 +48,16 @@ public class PurchaseDAO
 		Vector<Object> values = new Vector<Object>();
 		values.add(rId);
 		values.add(purchase.getPurchaseDate());
-		values.add(null);
-		values.add(null);
+		Long cid = purchase.isPurchaseOnline() ? purchase.getCID() : null;
+		values.add(cid);
+		String cname = purchase.isPurchaseOnline() ? purchase.getCustomerName() : null;
+		values.add(cname);
 		Long creditNum = purchase.isPaidByCredit() ? purchase.getCreditCardNum() : null;
 		Date creditDate = purchase.isPaidByCredit() ? purchase.getCardExpiryDate() : null;
 		values.add(creditNum);
 		values.add(creditDate);
-		values.add(null);
+		Date expectedDate = purchase.isPurchaseOnline() ? purchase.getExpectedDate() : null;
+		values.add(expectedDate);
 		values.add(null);
 		Controller.getInstance().insertTuple("PURCHASE", values);
 	}

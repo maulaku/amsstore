@@ -3,6 +3,7 @@ package ams.model;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Vector;
 
 import ams.Controller;
 import ams.exceptions.OutOfStockException;
@@ -18,8 +19,9 @@ public class ItemDAO {
 	}
 
 	
-	public static ResultSet selectForItemSearch(String title, String category, String leadSingerName)
+	public static Vector<Item> selectForItemSearch(String title, String category, String leadSingerName)
 	{
+		Vector<Item> results = new Vector<Item>();
 		ResultSet rs = null;
 		try
 		{
@@ -53,14 +55,26 @@ public class ItemDAO {
 			else
 				ps.setString(titleIndex+1, category);
 			
-			System.out.println(query);
+//			System.out.println(query);
 			rs = ps.executeQuery();
+			
+			while (rs.next())
+			{
+				Item item = new Item(rs.getLong(1));
+				item.setTitle(rs.getString(2));
+				item.setType(rs.getString(3));
+				item.setCategory(rs.getString(4));
+				item.setCompany(rs.getString(5));
+				item.setYear(rs.getInt(6));
+				item.setPrice(rs.getDouble(7));
+				results.add(item);
+			}
 		}
 		catch(SQLException e)
 		{
 			e.printStackTrace();
 		}
-		return rs;
+		return results;
 	}
 
 	

@@ -80,5 +80,19 @@ public class Item
 	public double getPrice()
 	{
 		return price;
-	} 
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (obj == null || !(obj instanceof Item)) return false;
+		Item item = (Item) obj;
+		return id == item.id;
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return (int) id;
+	}
 }

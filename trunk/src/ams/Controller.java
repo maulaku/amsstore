@@ -272,7 +272,6 @@ public class Controller {
 			rollback("Delivery Process Failed: item not enough stock");
 		} catch (SQLException e)
 		{
-			e.printStackTrace();
 			rollback("Delivery Process Failed: " + e.getMessage());
 		}	
 	}

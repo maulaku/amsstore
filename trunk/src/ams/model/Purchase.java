@@ -6,11 +6,45 @@ public class Purchase
 {
 	private PurchaseItem[] items;
 	
-	private boolean payByCredit;
+	private boolean payByCredit, online;
 	
 	private long creditCardNum;
 	
-	private Date purchaseDate, expiryDate;	
+	private Date purchaseDate, expiryDate, expectedDate;
+	
+	private long cid;
+	
+	private String cName; 
+	
+	public void setCID(long id)
+	{
+		cid = id;
+	}
+	
+	public long getCID()
+	{
+		return cid;
+	}
+	
+	public void setCustomerName(String name)
+	{
+		cName = name;
+	}
+	
+	public String getCustomerName()
+	{
+		return cName;
+	}
+	
+	public void setPurchaseOnline(boolean o)
+	{
+		online = o;
+	}
+	
+	public boolean isPurchaseOnline()
+	{
+		return online;
+	}
 	
 	public void setPurchaseItems(PurchaseItem[] purchaseItems)
 	{
@@ -57,5 +91,15 @@ public class Purchase
 	public Date getPurchaseDate()
 	{
 		return purchaseDate;
+	}
+	
+	public void setExpectedDate(Date date)
+	{
+		expectedDate = date;
+	}
+	
+	public Date getExpectedDate()
+	{
+		return expectedDate;
 	}
 }

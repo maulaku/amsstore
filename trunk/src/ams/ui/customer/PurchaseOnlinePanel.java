@@ -1,103 +1,69 @@
 package ams.ui.customer;
 
 import java.awt.BorderLayout;
-import java.awt.LayoutManager;
+import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.ListModel;
-import javax.swing.table.DefaultTableModel;
+
+import ams.model.Item;
 
 
 public class PurchaseOnlinePanel extends JPanel {
-	private ArrayList<JPanel> views;
-	private int currentView = 0;
 	
-	Vector<Vector<Object>> cartData;
-	public Vector<String> queryTableColumns;
-	public Vector<String> cartTableColumns;
+	private JPanel contentPanel;
+	private CardLayout cardLayout;
+	
+	private HashMap<Item,Integer> checkedOut;
+	
+//	public Vector<String> queryTableColumns;
+//	public Vector<String> cartTableColumns;
 	public int currentCustomerId = -1;
 	public String currentCustomerName = "";
 	
 	public final int UPC_COLUMN = 0;
 	public final int QUANTITY_COLUMN = 3;
 	
+	private JLabel welcomeLabel;
 	private JButton logoutButton = new JButton("Logout");
 	
 	public PurchaseOnlinePanel() {
+		setLayout(new BorderLayout());
 		initComponents();
 		initListeners();
 	}
 
 	private void initComponents() {		
-		queryTableColumns = new Vector<String>();
-		queryTableColumns.addElement("UPC");
-		queryTableColumns.addElement("TITLE");
-		queryTableColumns.addElement("CATEGORY");
-//		queryTableColumns.addElement("NAME");
 		
-		cartTableColumns = new Vector<String>();
-		cartTableColumns.addElement("UPC");
-		cartTableColumns.addElement("TITLE");
-		cartTableColumns.addElement("CATEGORY");
-//		cartTableColumns.addElement("NAME");
-		cartTableColumns.addElement("QUANTITY");
-		
-		cartData = new Vector<Vector<Object>>();
-		
-		views = new ArrayList<JPanel>();
-		
-		//View 0
-		LoginView loginView = new LoginView(this);	
-		loginView.setVisible(false);		
-		views.add(loginView);
-		add(loginView);
-		
-		//View 1
-		RegistrationView registrationView = new RegistrationView(this);		
-		registrationView.setVisible(false);		
-		views.add(registrationView);
-		add(registrationView);
-		
-		//View 2
-		SearchView searchView = new SearchView(this);		
-		searchView.setVisible(false);		
-		views.add(searchView);
-		add(searchView);
-		
-		//View 3
-		CheckoutView checkoutView = new CheckoutView(this);
-		checkoutView.setVisible(false);
-		views.add(checkoutView);
-		add(checkoutView);
-		
-		views.get(currentView).setVisible(true);
+		cardLayout = new CardLayout();
+		contentPanel = new JPanel(cardLayout);
+		contentPanel.add(new LoginView(this), LoginView.ID);
+		contentPanel.add(new RegistrationView(this), RegistrationView.ID);
+		contentPanel.add(new SearchView(this), SearchView.ID);
+		contentPanel.add(new CheckoutView(this), CheckoutView.ID);
 		
 		logoutButton.setVisible(false);
-		add(logoutButton, BorderLayout.SOUTH);
+		
+		welcomeLabel = new JLabel();
+		JPanel logoutPanel = new JPanel();
+		logoutPanel.add(welcomeLabel);
+		logoutPanel.add(logoutButton);
+		
+		add(contentPanel, BorderLayout.CENTER);
+		add(logoutPanel, BorderLayout.NORTH);
 	}
 	
-	public void nextView(int flag)
+	public void nextView(String ID)
 	{
-		views.get(currentView).setVisible(false);
-		currentView += flag;
-		views.get(currentView).setVisible(true);
-		if(currentView == 3)
-		{
-			((CheckoutView)views.get(currentView)).initCart();
-		}
-		if(currentView > 1)
-		{
-			logoutButton.setVisible(true);
-		}
-		else
-		{
+		cardLayout.show(contentPanel, ID);
+		logoutButton.setVisible(true);
+		if (ID.equals(LoginView.ID))
 			logoutButton.setVisible(false);
-		}
 	}
 
 	private void initListeners() 
@@ -113,15 +79,19 @@ public class PurchaseOnlinePanel extends JPanel {
 
 	private void onLogout()
 	{
-		cartData = null;
 		currentCustomerId = -1;
 		currentCustomerName = "";
-		nextView(-1*currentView);
-		currentView=0;
-		((LoginView)views.get(0)).cleanUp();
-		((RegistrationView)views.get(1)).cleanUp();
-		((SearchView)views.get(2)).cleanUp();
-		((CheckoutView)views.get(3)).cleanUp();
+		nextView(LoginView.ID);
+	}
+	
+	public void setCheckoutItems(HashMap<Item, Integer> cartItems)
+	{
+		checkedOut = cartItems;
+	}
+	
+	public HashMap<Item, Integer> getCartItems()
+	{
+		return checkedOut;
 	}
 
 }

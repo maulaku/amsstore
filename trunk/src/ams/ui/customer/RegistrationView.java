@@ -16,6 +16,8 @@ import ams.model.CustomerDAO;
 
 public class RegistrationView extends JPanel{
 
+	public static final String ID = "REGISTRATION";
+	
 	private PurchaseOnlinePanel parentPanel;
 	private JButton registerButton, continueButton;
 	private JTextField passwordField, nameField, addressField, phoneField;
@@ -130,7 +132,7 @@ public class RegistrationView extends JPanel{
 	
 	private void onContinue()
 	{
-		parentPanel.nextView(1);
+		parentPanel.nextView(RegistrationView.ID);
 	}
 	
 	public void cleanUp()
