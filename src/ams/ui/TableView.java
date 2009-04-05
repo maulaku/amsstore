@@ -14,6 +14,8 @@ import java.awt.event.MouseEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -121,7 +123,7 @@ public class TableView extends JPanel
 			{
 				if (table.getSelectedRowCount() <= 0)
 					return;
-				if (e.getKeyCode() == KeyEvent.VK_DELETE)
+				if (e.getKeyCode() == KeyEvent.VK_DELETE || e.getKeyCode() == KeyEvent.VK_BACK_SPACE)
 					deleteTuple(table.getSelectedRow());
 			}
 		});
@@ -218,9 +220,20 @@ public class TableView extends JPanel
 		
 		try
 		{
-			Controller.getInstance().deleteTuple((String) list.getSelectedValue(), (Vector<Object>) model.getDataVector().get(rowNum));
+			String table = (String) list.getSelectedValue();
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			Vector<String> columns = Controller.getInstance().getColumnNames(table);
+			for(int i = 0; i < columns.size(); i++)
+			{
+				Object value = model.getValueAt(rowNum, i);
+				if(value != null)
+				{
+					map.put(columns.get(i), value);
+				}
+			}
+			Controller.getInstance().deleteTuple(table, map);
 			model.removeRow(rowNum);
-			Controller.getInstance().setStatusString("Tuple Deleted.", AMSFrame.SUCCESS);
+			Controller.getInstance().setStatusString("Delete Successful.", AMSFrame.SUCCESS);
 		} catch (SQLException e)
 		{
 			Controller.getInstance().setStatusString("Delete Failed: " + e.getMessage(), AMSFrame.FAILURE);
