@@ -52,7 +52,7 @@ public class DailySalesPanel extends JPanel
 		JLabel storeLabel = new JLabel("Store:");
 		buttonPanel.add(storeLabel);
 		storeField = new JTextField();
-		storeField.setPreferredSize(new Dimension(100, storeField.getPreferredSize().height));
+		storeField.setPreferredSize(new Dimension(200, storeField.getPreferredSize().height));
 		buttonPanel.add(storeField);
 
 		// button panel code

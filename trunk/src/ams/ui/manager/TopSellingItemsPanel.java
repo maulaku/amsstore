@@ -99,11 +99,12 @@ public class TopSellingItemsPanel extends JPanel
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		
 		Vector<String> columns = new Vector<String>();
-		columns.add("upc");
-		columns.add("title");
-		columns.add("company");
-		columns.add("stock");
-		columns.add("total");
+		columns.add("UPC");
+		columns.add("Title");
+		columns.add("Company");
+		columns.add("Store");
+		columns.add("Stock");
+		columns.add("Sold");
 
 		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 		if(columns != null)
@@ -124,7 +125,7 @@ public class TopSellingItemsPanel extends JPanel
 					limit = 0;
 				}
 				
-				PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement("SELECT upc, title, company, stock, total FROM Item INNER JOIN (SELECT upc, stock FROM Stored) USING (upc) INNER JOIN (SELECT i.upc, SUM(pi.quantity) AS total FROM Item i, PurchaseItem pi, Purchase p WHERE i.upc = pi.upc AND p.receiptId = pi.receiptId AND p.purchasedate = ? GROUP BY i.upc) USING (upc) WHERE ROWNUM <= ? ORDER BY total DESC");
+				PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement("SELECT upc, title, company, name AS store, stock, sold FROM Item INNER JOIN (SELECT upc, name, stock FROM Stored) USING (upc) INNER JOIN (SELECT i.upc, SUM(pi.quantity) AS sold FROM Item i, PurchaseItem pi, Purchase p WHERE i.upc = pi.upc AND p.receiptId = pi.receiptId AND p.purchasedate = ? GROUP BY i.upc) USING (upc) WHERE ROWNUM <= ? ORDER BY sold DESC");
 				statement.setDate(1, calendarPanel.getSelectedDate());
 				statement.setInt(2, limit);
 				ResultSet results = statement.executeQuery();
