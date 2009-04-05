@@ -134,7 +134,7 @@ public class PurchaseDAO
 			ResultSet rs = statement.executeQuery();
 			rs.next();
 			int outstandingDeliveries = rs.getInt(1);
-			int daysToWait = outstandingDeliveries/PurchaseDAO.DELIVERIES_PER_DAY;
+			int daysToWait = 1+outstandingDeliveries/PurchaseDAO.DELIVERIES_PER_DAY;
 			estimatedDelivery = new Date(System.currentTimeMillis());
 			estimatedDelivery.setDate(estimatedDelivery.getDate()+daysToWait);
 		}

@@ -250,7 +250,7 @@ public class SearchView extends JPanel
 				item.setCategory((String) queries.getValueAt(i, 2));
 				try
 				{
-					int quantity = Integer.parseInt((String) queries.getValueAt(i, 3));
+					int quantity = Integer.parseInt(queries.getValueAt(i, parentPanel.QUANTITY_COLUMN).toString());
 					if (cartItems.containsKey(item))
 						quantity += cartItems.get(item);
 
