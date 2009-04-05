@@ -6,10 +6,11 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -25,13 +26,14 @@ import com.greef.ui.calendar.DefaultDateSelectionModel;
 import com.greef.ui.calendar.JCalendar;
 
 import ams.Controller;
+import assets.CalendarPanel;
 
 public class TopSellingItemsPanel extends JPanel
 {
 	private JTable table;
 	private JButton searchButton;
 	private JTextField numField;
-	private JCalendar calendar;
+	private CalendarPanel calendarPanel;
 	
 	public TopSellingItemsPanel()
 	{
@@ -44,8 +46,11 @@ public class TopSellingItemsPanel extends JPanel
 	{
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		
-		calendar = new JCalendar();
-		buttonPanel.add(calendar);
+		calendarPanel = new CalendarPanel();
+		calendarPanel.setPreferredSize(new Dimension(calendarPanel.getPreferredSize().width, 200));
+		calendarPanel.setCalendar(Calendar.getInstance());
+		calendarPanel.updateDisplay();
+		buttonPanel.add(calendarPanel);
 
 		JLabel resultsLabel = new JLabel("Number of Results:");
 		buttonPanel.add(resultsLabel);
@@ -104,11 +109,7 @@ public class TopSellingItemsPanel extends JPanel
 		{	
 			try
 			{
-				Date date = calendar.getSelectedDate();
-				if(date == null)
-				{
-					date = new Date();
-				}
+				Date date = calendarPanel.getSelectedDate();
 				
 				int limit;
 				try
@@ -125,7 +126,7 @@ public class TopSellingItemsPanel extends JPanel
 				}
 				
 				PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement("SELECT upc, title, company, stock, total FROM Item INNER JOIN (SELECT upc, stock FROM Stored) USING (upc) INNER JOIN (SELECT i.upc, SUM(pi.quantity) AS total FROM Item i, PurchaseItem pi, Purchase p WHERE i.upc = pi.upc AND p.receiptId = pi.receiptId AND p.purchasedate = ? GROUP BY i.upc) USING (upc) WHERE ROWNUM <= ? ORDER BY total DESC");
-				statement.setDate(1, java.sql.Date.valueOf(new SimpleDateFormat("yyyy-MM-dd").format(date)));
+				statement.setDate(1, date);
 				statement.setInt(2, limit);
 				ResultSet results = statement.executeQuery();
 				
