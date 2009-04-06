@@ -126,21 +126,33 @@ public class ItemDAO {
 		statement.setString(1, storeName);
 		statement.setLong(2, upc);
 		ResultSet result = statement.executeQuery();
-		int oldQuantity = 0;
-		if (result.next())
-			oldQuantity = result.getInt(1);
-		statement.close();
 		
-		if (oldQuantity + dQuantity < 0)
-			throw new OutOfStockException();
-		
-		String update = "UPDATE STORED SET stock = ? WHERE name = ? AND upc = ?";
-		statement = Controller.getInstance().getConnection().prepareStatement(update);
-		statement.setInt(1, oldQuantity + dQuantity);
-		statement.setString(2, storeName);
-		statement.setLong(3, upc);
-		statement.executeUpdate();
-		statement.close();
+		if (!result.next())
+		{
+			if (dQuantity < 0)
+				throw new OutOfStockException();
+			Vector<Object> values = new Vector<Object>();
+			values.add(storeName);
+			values.add(upc);
+			values.add(dQuantity);
+			Controller.getInstance().insertTuple("STORED", values);
+		} 
+		else
+		{
+			int oldQuantity = result.getInt(1);
+			statement.close();
+			
+			if (oldQuantity + dQuantity < 0)
+				throw new OutOfStockException();		
+			
+			String update = "UPDATE STORED SET stock = ? WHERE name = ? AND upc = ?";
+			statement = Controller.getInstance().getConnection().prepareStatement(update);
+			statement.setInt(1, oldQuantity + dQuantity);
+			statement.setString(2, storeName);
+			statement.setLong(3, upc);
+			statement.executeUpdate();
+			statement.close();
+		}
 	}
 
 }
