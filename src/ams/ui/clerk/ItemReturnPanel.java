@@ -187,6 +187,8 @@ public class ItemReturnPanel extends JPanel
 
 					statement3.close();
 					statement4.close();
+					ItemDAO.getInstance().updateStock(nameField.getText(),Long.parseLong(retItemUPC.getText()), 
+							Integer.parseInt(quantityField.getText().trim()));
 				}
 				statement.close();
 				statement2.close();
