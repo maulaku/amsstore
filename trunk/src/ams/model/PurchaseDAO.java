@@ -114,7 +114,7 @@ public class PurchaseDAO
 			statement.setLong(1, receiptId);
 			ResultSet result = statement.executeQuery();
 			result.next();
-			date = result.getDate(2);
+			date = result.getDate(1);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

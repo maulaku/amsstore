@@ -118,10 +118,10 @@ public class SupplierPanel extends JPanel {
 		{
 			System.err.println(e.getMessage());
 		}
-		nameField.setText(" ");
-		addressField.setText(" ");
-		cityField.setText(" ");
-		statusField.setText(" ");
+		nameField.setText("");
+		addressField.setText("");
+		cityField.setText("");
+		statusField.setText("");
 	}
 	
 	
@@ -130,7 +130,7 @@ public class SupplierPanel extends JPanel {
 		try
 		{
 			Statement s = Controller.getInstance().getConnection().createStatement();
-			String updateString = "DELETE FROM Supplier s WHERE s.name = '"+nameField.getText()+"'";//, '"+addressField.getText()+"', '"+cityField.getText()+"',  '"+statusField.getText()+"')";
+			String updateString = "DELETE FROM Supplier s WHERE s.name = '"+nameField.getText()+"'";
 			s.executeUpdate(updateString);
 		}
 		catch(SQLException e)
@@ -138,10 +138,10 @@ public class SupplierPanel extends JPanel {
 			System.err.println(e.getMessage());
 		}	
 		
-		nameField.setText(" ");
-		addressField.setText(" ");
-		cityField.setText(" ");
-		statusField.setText(" ");
+		nameField.setText("");
+		addressField.setText("");
+		cityField.setText("");
+		statusField.setText("");
 	}
 
 	
