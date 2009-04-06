@@ -160,20 +160,22 @@ public class CheckoutView extends MyPanel
 		for (Item item : cartItems.keySet())
 		{
 			pItems[i++] = new PurchaseItem(item.getUPC(), cartItems.get(item));
-			try
-			{
-				ItemDAO.getInstance().updateStock("Warehouse", item.getUPC(), -1*cartItems.get(item));
-			}
-			catch(OutOfStockException e)
-			{
-				Controller.getInstance().setStatusString("Cannot purchase: Out of stock on item "+item.getTitle()+".", AMSFrame.FAILURE);
-				return;
-			}
-			catch(SQLException e)
-			{
-				e.printStackTrace();
-				return;
-			}
+//			try
+//			{
+//				System.out.println(item.getUPC() + " " + cartItems.get(item));
+//				ItemDAO.getInstance().updateStock("Warehouse", item.getUPC(), -1*cartItems.get(item));
+//			}
+//			catch(OutOfStockException e)
+//			{
+//				e.printStackTrace();
+//				Controller.getInstance().setStatusString("Cannot purchase: Out of stock on item "+item.getTitle()+".", AMSFrame.FAILURE);
+//				return;
+//			}
+//			catch(SQLException e)
+//			{
+//				e.printStackTrace();
+//				return;
+//			}
 		}
 		
 		

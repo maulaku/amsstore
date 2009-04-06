@@ -195,20 +195,27 @@ public class Controller {
 		long rId = PurchaseDAO.getInstance().findMaxReceiptID() + 1;
 		Receipt receipt = new Receipt(rId, purchase);
 		Connection con = getConnection();
+		PurchaseItem item = null;
 		try
 		{
 			con.setAutoCommit(false);
 			PurchaseDAO.getInstance().insertPurchase(rId, purchase);
 		
 			for (PurchaseItem pItem : purchase.getPurchaseItems())
+			{
+				item = pItem;
 				PurchaseDAO.getInstance().insertPurchaseItem(receipt, pItem, purchase.getStoreName());
+			}
 			
 			con.commit();
 			con.setAutoCommit(true);
 		} 
 		catch (OutOfStockException oosE)
 		{
-			rollback("Purchase Failed: item out of stock");
+			if (item == null)
+				rollback("Purchase Failed.");
+			else
+				rollback("Purchase Failed: out of stock for item with upc: " + item.getUPC());
 			receipt = null;
 		}catch (SQLException e)
 		{			
