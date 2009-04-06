@@ -209,6 +209,7 @@ public class Controller {
 		catch (OutOfStockException oosE)
 		{
 			rollback("Purchase Failed: item out of stock");
+			receipt = null;
 		}catch (SQLException e)
 		{			
 			rollback("Purchase Failed: " + e.getMessage());
