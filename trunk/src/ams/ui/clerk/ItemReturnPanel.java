@@ -167,6 +167,7 @@ public class ItemReturnPanel extends JPanel
 					{
 						Controller.getInstance().setStatusString("Could not process return: invalid quantity",
 								AMSFrame.FAILURE);
+						return;
 					}
 				} else if (wasPurchased && !wasReturned)
 				{

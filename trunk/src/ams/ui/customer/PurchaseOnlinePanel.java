@@ -81,7 +81,7 @@ public class PurchaseOnlinePanel extends JPanel {
 		cardLayout.show(contentPanel, ID);
 		logoutPanel.setVisible(true);
 		backButton.setVisible(false);
-		if (ID.equals(LoginView.ID))
+		if (ID.equals(LoginView.ID) || ID.equals(RegistrationView.ID))
 			logoutPanel.setVisible(false);
 		if (ID.equals(CheckoutView.ID))
 			backButton.setVisible(true);

@@ -132,7 +132,7 @@ public class RegistrationView extends MyPanel{
 	
 	private void onContinue()
 	{
-		parentPanel.nextView(RegistrationView.ID);
+		parentPanel.nextView(SearchView.ID);
 	}
 	
 	public void cleanUp()
