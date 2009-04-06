@@ -8,6 +8,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -208,6 +210,17 @@ public class SearchView extends JPanel
 				onCheckout();
 			}
 		});
+		
+		cartJTable.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e)
+			{
+				if (cartJTable.getSelectedRowCount() <= 0)
+					return;
+				if (e.getKeyCode() == KeyEvent.VK_DELETE || e.getKeyCode() == KeyEvent.VK_BACK_SPACE)
+					onRemoveFromCart(cartJTable.getSelectedRow());
+			}
+		});
 	}
 
 	private void onSearch()
@@ -253,6 +266,12 @@ public class SearchView extends JPanel
 					int quantity = Integer.parseInt(queries.getValueAt(i, parentPanel.QUANTITY_COLUMN).toString());
 					if (cartItems.containsKey(item))
 						quantity += cartItems.get(item);
+					if(quantity <= 0)
+					{
+						Controller.getInstance().setStatusString("Item quantity must be greater than zero.", AMSFrame.FAILURE);
+						return;
+					}
+						
 
 					cartItems.put(item, quantity);
 				} catch (NumberFormatException e)
@@ -313,6 +332,12 @@ public class SearchView extends JPanel
 			box.setSelected(val);
 			return box;
 		}
+	}
+	
+	private void onRemoveFromCart(int rowIndex)
+	{
+		DefaultTableModel cartRows = (DefaultTableModel) cartJTable.getModel();
+		cartRows.removeRow(rowIndex);
 	}
 
 }
