@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -24,7 +25,8 @@ import ams.ui.AMSFrame;
 public class SupplierPanel extends JPanel {
 
 	private JButton addButton, delButton;
-	private JTextField cityField, nameField, addressField, statusField;
+	private JTextField cityField, nameField, addressField;
+	private JComboBox statusCombo;
 	
 	public SupplierPanel()
 	{
@@ -68,11 +70,10 @@ public class SupplierPanel extends JPanel {
 		subPanel = new JPanel();	
 		subPanel.setBackground(Color.WHITE);
 		label = new JLabel("  Status:");
-		statusField = new JTextField();
-		statusField.setText("active");
-		statusField.setPreferredSize(new Dimension(100, statusField.getPreferredSize().height));		
+		statusCombo = new JComboBox(new String[] {"active", "inactive" });		
+		statusCombo.setPreferredSize(new Dimension(100, statusCombo.getPreferredSize().height));
 		subPanel.add(label);
-		subPanel.add(statusField);
+		subPanel.add(statusCombo);
 		infoPanel.add(subPanel);
 		
 		infoPanel.setBorder(BorderFactory.createTitledBorder("Supplier Registration Information"));
@@ -114,7 +115,7 @@ public class SupplierPanel extends JPanel {
 		try
 		{
 			Statement s = Controller.getInstance().getConnection().createStatement();
-			String updateString = "INSERT INTO Supplier VALUES ('"+nameField.getText()+"', '"+addressField.getText()+"', '"+cityField.getText()+"',  '"+statusField.getText()+"')";
+			String updateString = "INSERT INTO Supplier VALUES ('"+nameField.getText()+"', '"+addressField.getText()+"', '"+cityField.getText()+"',  '"+statusCombo.getSelectedItem().toString()+"')";
 			showFeedback(s.executeUpdate(updateString));
 			
 		}
@@ -125,7 +126,7 @@ public class SupplierPanel extends JPanel {
 		nameField.setText("");
 		addressField.setText("");
 		cityField.setText("");
-		statusField.setText("active");
+		statusCombo.setSelectedIndex(0);
 	}
 	
 	
@@ -145,7 +146,7 @@ public class SupplierPanel extends JPanel {
 		nameField.setText("");
 		addressField.setText("");
 		cityField.setText("");
-		statusField.setText("active");
+		statusCombo.setSelectedIndex(0);
 	}
 	
 	private void showFeedback(int flag)
