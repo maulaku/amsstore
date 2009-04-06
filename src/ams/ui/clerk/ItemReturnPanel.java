@@ -196,10 +196,10 @@ public class ItemReturnPanel extends JPanel
 				System.err.println(e.getMessage());
 				e.printStackTrace();
 			}
-			retReceiptID.setText(" ");
-			retItemUPC.setText(" ");
-			quantityField.setText(" ");
-			nameField.setText(" ");
+			retReceiptID.setText("");
+			retItemUPC.setText("");
+			quantityField.setText("");
+			nameField.setText("");
 		} else
 		{
 			if (isWithinTimeLimit)
