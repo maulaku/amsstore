@@ -224,13 +224,13 @@ public class Controller {
 		shipment.setDate(date);
 		Connection con = getConnection();
 		try
-		{
+		{			
 			con.setAutoCommit(false);
 			long sId = ShipmentDAO.getInstance().findMaxShipmentID() + 1;
 			ShipmentDAO.getInstance().insertShipment(sId, shipment);
 			
 			for (ShipItem item : shipment.getShipItems())
-			{
+			{				
 				ShipmentDAO.getInstance().insertShipItem(sId, item);
 				ItemDAO.getInstance().updatePrice(item.getUPC(), item.getPrice() * 1.20);
 				ItemDAO.getInstance().updateStock(shipment.getStoreName(), item.getUPC(), item.getQuantity());

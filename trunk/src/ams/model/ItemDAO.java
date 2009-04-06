@@ -111,7 +111,7 @@ public class ItemDAO {
 		statement.setLong(2, upc);
 		statement.executeUpdate();
 		statement.close();		
-	}
+	}	
 	
 	/**
 	 * Sets the stock of the item specified by upc to be old stock + dQuantity.
@@ -126,8 +126,9 @@ public class ItemDAO {
 		statement.setString(1, storeName);
 		statement.setLong(2, upc);
 		ResultSet result = statement.executeQuery();
-		result.next();
-		int oldQuantity = result.getInt(1);
+		int oldQuantity = 0;
+		if (result.next())
+			oldQuantity = result.getInt(1);
 		statement.close();
 		
 		if (oldQuantity + dQuantity < 0)
