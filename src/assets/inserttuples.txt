@@ -1,6 +1,6 @@
 INSERT INTO ITEM VALUES (1, 'In Rainbows', 'CD', 'rock', 'Virgin', 2007, 20);
 INSERT INTO ITEM VALUES (2, 'Washington Orchestral', 'DVD', 'classical', 'Whitehouse', '2009', '10');
-
+INSERT INTO ITEM VALUES (3, 'Sound of Music', 'CD', 'classical', 'Walt Disney', '1950', '.99');
 
 INSERT INTO SUPPLIER VALUES ('Black and White', '123 Fake Street', 'Fakouver', 'active');
 
