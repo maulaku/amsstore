@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import ams.Controller;
+import ams.model.ItemDAO;
 import ams.model.PurchaseDAO;
 import ams.ui.AMSFrame;
 
@@ -71,7 +72,7 @@ public class ItemReturnPanel extends JPanel
 
 		subPanel = new JPanel();
 		subPanel.setBackground(Color.WHITE);
-		label = new JLabel("Store Name:");
+		label = new JLabel("   Store Name:");
 		nameField = new JTextField();
 		nameField.setPreferredSize(new Dimension(100, nameField.getPreferredSize().height));
 		subPanel.add(label);
@@ -161,6 +162,8 @@ public class ItemReturnPanel extends JPanel
 						statement4.executeUpdate();
 						statement3.close();
 						statement4.close();
+						ItemDAO.getInstance().updateStock(nameField.getText(),Long.parseLong(retItemUPC.getText()), 
+								Integer.parseInt(quantityField.getText().trim()));
 
 						Controller.getInstance().setStatusString("Return Processed Successfully", AMSFrame.SUCCESS);
 					} else
@@ -232,7 +235,7 @@ public class ItemReturnPanel extends JPanel
 	{
 		int receiptId = Integer.parseInt(retReceiptID.getText().trim());
 		Date purchaseDate = PurchaseDAO.getPurchaseDate(receiptId);
-		long calc = purchaseDate.getTime() - System.currentTimeMillis();
+		long calc = System.currentTimeMillis() - purchaseDate.getTime();
 		return (calc >= 0 && calc <= 1296000000);
 	}
 
