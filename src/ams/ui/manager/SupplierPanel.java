@@ -77,7 +77,7 @@ public class SupplierPanel extends JPanel {
 		infoPanel.add(subPanel);
 		
 		infoPanel.setBorder(BorderFactory.createTitledBorder("Supplier Registration Information"));
-		add(infoPanel, BorderLayout.CENTER);
+		add(infoPanel);
 		
 		addButton = new JButton("Add");
 		delButton = new JButton("Delete");
@@ -121,6 +121,7 @@ public class SupplierPanel extends JPanel {
 		}
 		catch(SQLException e)
 		{
+			Controller.getInstance().setStatusString("Cannot Add Supplier: duplicate supplier name", AMSFrame.FAILURE);
 			System.err.println(e.getMessage());
 		}
 		nameField.setText("");
