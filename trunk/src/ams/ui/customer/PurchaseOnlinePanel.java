@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -22,6 +23,7 @@ public class PurchaseOnlinePanel extends JPanel {
 	private JPanel contentPanel;
 	private CardLayout cardLayout;
 	
+	private ArrayList<MyPanel> views;
 	private HashMap<Item,Integer> checkedOut;
 	
 	public int currentCustomerId = -1;
@@ -37,6 +39,7 @@ public class PurchaseOnlinePanel extends JPanel {
 	
 	public PurchaseOnlinePanel() {
 		setLayout(new BorderLayout());
+		views = new ArrayList<MyPanel>();
 		initComponents();
 		initListeners();
 	}
@@ -45,10 +48,18 @@ public class PurchaseOnlinePanel extends JPanel {
 		
 		cardLayout = new CardLayout();
 		contentPanel = new JPanel(cardLayout);
-		contentPanel.add(new LoginView(this), LoginView.ID);
-		contentPanel.add(new RegistrationView(this), RegistrationView.ID);
-		contentPanel.add(new SearchView(this), SearchView.ID);
-		contentPanel.add(new CheckoutView(this), CheckoutView.ID);		
+		MyPanel panel = new LoginView(this);
+		views.add(panel);
+		contentPanel.add(panel, LoginView.ID);
+		panel = new RegistrationView(this);
+		views.add(panel);
+		contentPanel.add(panel, RegistrationView.ID);
+		panel = new SearchView(this);
+		views.add(panel);
+		contentPanel.add(panel, SearchView.ID);
+		panel = new CheckoutView(this);
+		views.add(panel);
+		contentPanel.add(panel, CheckoutView.ID);		
 		
 		welcomeLabel = new JLabel();
 		logoutPanel = new JPanel(new GridLayout(1,2));
@@ -100,6 +111,8 @@ public class PurchaseOnlinePanel extends JPanel {
 		currentCustomerName = "";
 		nextView(LoginView.ID);
 		setWelcomeText("");
+		for (MyPanel panel : views)
+			panel.cleanUp();
 	}
 	
 	public void setCheckoutItems(HashMap<Item, Integer> cartItems)
