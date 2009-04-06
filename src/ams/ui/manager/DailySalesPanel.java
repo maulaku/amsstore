@@ -42,6 +42,7 @@ public class DailySalesPanel extends JPanel
 	private void initComponents()
 	{
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		buttonPanel.setBackground(Color.WHITE);
 		
 		calendarPanel = new CalendarPanel();
 		calendarPanel.setPreferredSize(new Dimension(calendarPanel.getPreferredSize().width, 150));

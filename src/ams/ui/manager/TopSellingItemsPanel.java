@@ -63,7 +63,7 @@ public class TopSellingItemsPanel extends JPanel
 
 		JPanel tablePanel = new JPanel(new BorderLayout(5,5));
 		tablePanel.setBackground(Color.WHITE);
-		tablePanel.setBorder(BorderFactory.createTitledBorder("Top Selling Items"));
+//		tablePanel.setBorder(BorderFactory.createTitledBorder("Top Selling Items"));
 		tablePanel.add(buttonPanel, BorderLayout.NORTH);
 		
 		table = new JTable() {
