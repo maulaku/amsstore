@@ -119,11 +119,12 @@ public class ItemDAO {
 	 * @param dQuantity
 	 * @throws SQLException
 	 */
-	public void updateStock(long upc, int dQuantity) throws SQLException
+	public void updateStock(String storeName, long upc, int dQuantity) throws SQLException
 	{
-		String query = "SELECT stock FROM STORED WHERE upc = ?";
+		String query = "SELECT stock FROM STORED WHERE name = ? AND upc = ?";
 		PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement(query);
-		statement.setLong(1, upc);
+		statement.setString(1, storeName);
+		statement.setLong(2, upc);
 		ResultSet result = statement.executeQuery();
 		result.next();
 		int oldQuantity = result.getInt(1);
@@ -132,10 +133,11 @@ public class ItemDAO {
 		if (oldQuantity + dQuantity < 0)
 			throw new OutOfStockException();
 		
-		String update = "UPDATE STORED SET stock = ? WHERE upc = ?";
+		String update = "UPDATE STORED SET stock = ? WHERE name = ? AND upc = ?";
 		statement = Controller.getInstance().getConnection().prepareStatement(update);
 		statement.setInt(1, oldQuantity + dQuantity);
-		statement.setLong(2, upc);
+		statement.setString(2, storeName);
+		statement.setLong(3, upc);
 		statement.executeUpdate();
 		statement.close();
 	}
