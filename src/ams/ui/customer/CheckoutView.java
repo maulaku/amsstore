@@ -162,7 +162,7 @@ public class CheckoutView extends MyPanel
 			pItems[i++] = new PurchaseItem(item.getUPC(), cartItems.get(item));
 			try
 			{
-				ItemDAO.getInstance().updateStock("Online Store", item.getUPC(), -1*cartItems.get(item));
+				ItemDAO.getInstance().updateStock("Warehouse", item.getUPC(), -1*cartItems.get(item));
 			}
 			catch(OutOfStockException e)
 			{
@@ -194,7 +194,7 @@ public class CheckoutView extends MyPanel
 		purchase.setPurchaseOnline(true);
 		purchase.setPurchaseItems(pItems);
 		purchase.setCID(parentPanel.currentCustomerId);
-		purchase.setStoreName("Online Store");
+		purchase.setStoreName("Warehouse");
 
 		try
 		{
