@@ -72,7 +72,7 @@ public class ItemReturnPanel extends JPanel
 
 		subPanel = new JPanel();
 		subPanel.setBackground(Color.WHITE);
-		label = new JLabel("   Store Name:");
+		label = new JLabel("     Store Name:");
 		nameField = new JTextField();
 		nameField.setPreferredSize(new Dimension(100, nameField.getPreferredSize().height));
 		subPanel.add(label);
