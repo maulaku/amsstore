@@ -264,7 +264,7 @@ public class ItemPurchasePanel extends JPanel
 		Controller.getInstance().setStatusString("Purchase Successful: see receipt.", AMSFrame.SUCCESS);		
 		Receipt receipt = Controller.getInstance().purchase(purchase);
 		
-		if (receiptBox.isSelected())
+		if (receiptBox.isSelected() && receipt != null)
 			printReceipt(receipt);
 		reset();
 	}
