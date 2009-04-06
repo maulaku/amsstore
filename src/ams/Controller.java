@@ -201,7 +201,7 @@ public class Controller {
 			PurchaseDAO.getInstance().insertPurchase(rId, purchase);
 		
 			for (PurchaseItem pItem : purchase.getPurchaseItems())
-				PurchaseDAO.getInstance().insertPurchaseItem(receipt, pItem);
+				PurchaseDAO.getInstance().insertPurchaseItem(receipt, pItem, purchase.getStoreName());
 			
 			con.commit();
 			con.setAutoCommit(true);
@@ -233,7 +233,7 @@ public class Controller {
 			{
 				ShipmentDAO.getInstance().insertShipItem(sId, item);
 				ItemDAO.getInstance().updatePrice(item.getUPC(), item.getPrice() * 1.20);
-				ItemDAO.getInstance().updateStock(item.getUPC(), item.getQuantity());
+				ItemDAO.getInstance().updateStock(shipment.getStoreName(), item.getUPC(), item.getQuantity());
 			}
 			setStatusString("Shipment successfully processed.", AMSFrame.SUCCESS);
 			
@@ -258,7 +258,7 @@ public class Controller {
 			Vector<PurchaseItem> items = PurchaseDAO.getInstance().selectPurchaseItems(rId);
 			// update stock
 			for (PurchaseItem item: items)
-				ItemDAO.getInstance().updateStock(item.getUPC(), -item.getQuantity());
+				ItemDAO.getInstance().updateStock("Online Store", item.getUPC(), -item.getQuantity());
 			
 			// set delivered date
 			PurchaseDAO.getInstance().updateDeliveredDate(rId, date);

@@ -61,7 +61,7 @@ public class PurchaseDAO
 		Controller.getInstance().insertTuple("PURCHASE", values);
 	}
 	
-	public void insertPurchaseItem(Receipt receipt, PurchaseItem item) throws SQLException
+	public void insertPurchaseItem(Receipt receipt, PurchaseItem item, String storeName) throws SQLException
 	{		
 		Vector<Object> values = new Vector<Object>();
 		values.clear();						
@@ -70,7 +70,7 @@ public class PurchaseDAO
 		values.add(item.getQuantity());
 		
 		Controller.getInstance().insertTuple("PURCHASEITEM", values);
-		ItemDAO.getInstance().updateStock(item.getUPC(), -item.getQuantity());
+		ItemDAO.getInstance().updateStock(storeName, item.getUPC(), -item.getQuantity());
 		receipt.addItem(ItemDAO.getInstance().getItem(item.getUPC()));
 	}
 	

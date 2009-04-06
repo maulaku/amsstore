@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -131,6 +132,8 @@ public class AMSFrame extends JFrame
 		statusLabel = new JLabel(" ");
 		statusLabel.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 2));
 		statusLabel.setOpaque(true);
+		statusLabel.setPreferredSize(new Dimension(statusLabel.getPreferredSize().width, 20));
+		statusLabel.setFont(new Font("Tahoma",Font.BOLD, 12));
 		JPanel statusPanel = new JPanel(new BorderLayout());
 		statusPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		statusPanel.add(statusLabel, BorderLayout.CENTER);
