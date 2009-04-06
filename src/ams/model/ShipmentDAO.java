@@ -47,7 +47,18 @@ public class ShipmentDAO
 		values.add(shipment.getSupplierName());
 		values.add(shipment.getStoreName());
 		values.add(shipment.getShipmentDate());
+		
+		updateShipmentStatus(shipment.getSupplierName());
 		Controller.getInstance().insertTuple("SHIPMENT", values);
+	}
+	
+	private void updateShipmentStatus(String supplierName) throws SQLException
+	{
+		String update = "UPDATE SUPPLIER SET status = 'active' WHERE name = ?";
+		PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement(update);
+		statement.setString(1, supplierName);
+		statement.executeUpdate();
+		statement.close();
 	}
 	
 	public void insertShipItem(long sId, ShipItem item) throws SQLException
