@@ -17,7 +17,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import ams.AMSApp;
 import ams.Controller;
+import ams.ui.AMSFrame;
 
 public class SupplierPanel extends JPanel {
 
@@ -67,6 +69,7 @@ public class SupplierPanel extends JPanel {
 		subPanel.setBackground(Color.WHITE);
 		label = new JLabel("  Status:");
 		statusField = new JTextField();
+		statusField.setText("active");
 		statusField.setPreferredSize(new Dimension(100, statusField.getPreferredSize().height));		
 		subPanel.add(label);
 		subPanel.add(statusField);
@@ -112,7 +115,8 @@ public class SupplierPanel extends JPanel {
 		{
 			Statement s = Controller.getInstance().getConnection().createStatement();
 			String updateString = "INSERT INTO Supplier VALUES ('"+nameField.getText()+"', '"+addressField.getText()+"', '"+cityField.getText()+"',  '"+statusField.getText()+"')";
-			s.executeUpdate(updateString);
+			showFeedback(s.executeUpdate(updateString));
+			
 		}
 		catch(SQLException e)
 		{
@@ -121,7 +125,7 @@ public class SupplierPanel extends JPanel {
 		nameField.setText("");
 		addressField.setText("");
 		cityField.setText("");
-		statusField.setText("");
+		statusField.setText("active");
 	}
 	
 	
@@ -131,7 +135,7 @@ public class SupplierPanel extends JPanel {
 		{
 			Statement s = Controller.getInstance().getConnection().createStatement();
 			String updateString = "DELETE FROM Supplier s WHERE s.name = '"+nameField.getText()+"'";
-			s.executeUpdate(updateString);
+			showFeedback(s.executeUpdate(updateString));
 		}
 		catch(SQLException e)
 		{
@@ -141,7 +145,15 @@ public class SupplierPanel extends JPanel {
 		nameField.setText("");
 		addressField.setText("");
 		cityField.setText("");
-		statusField.setText("");
+		statusField.setText("active");
+	}
+	
+	private void showFeedback(int flag)
+	{
+		if(flag == 0)
+			Controller.getInstance().setStatusString("Operation Failed.", AMSFrame.FAILURE);
+		else
+			Controller.getInstance().setStatusString("Operation Successful.", AMSFrame.SUCCESS);
 	}
 
 	
