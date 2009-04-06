@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 
 import ams.model.CustomerDAO;
 
-public class RegistrationView extends JPanel{
+public class RegistrationView extends MyPanel{
 
 	public static final String ID = "REGISTRATION";
 	

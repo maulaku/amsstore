@@ -21,14 +21,13 @@ import javax.swing.JTextField;
 import ams.Controller;
 import ams.ui.AMSFrame;
 
-public class LoginView extends JPanel {
+public class LoginView extends MyPanel {
 	
 	public static final String ID = "LOGIN";
 	
 	private JPanel loginPanel;
 	private JTextField customerIdField, customerPasswordField;
 	private JButton loginButton, registerButton;
-	private JLabel loginFailedLabel;
 	
 	public PurchaseOnlinePanel parentPanel;
 	
@@ -66,11 +65,6 @@ public class LoginView extends JPanel {
 		subPanel.add(label);
 		subPanel.add(customerPasswordField);
 		loginPanel.add(subPanel);
-		
-		
-		loginFailedLabel = new JLabel("Login Failed");
-		loginPanel.add(loginFailedLabel);
-		loginFailedLabel.setVisible(false);
 
 		registerButton = new JButton("Register");		
 		loginButton = new JButton("Login");
@@ -151,6 +145,5 @@ public class LoginView extends JPanel {
 	{
 		customerIdField.setText("");
 		customerPasswordField.setText("");
-		loginFailedLabel.setVisible(false);
 	}
 }

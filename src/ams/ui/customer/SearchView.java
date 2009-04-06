@@ -43,7 +43,7 @@ import ams.model.Item;
 import ams.model.ItemDAO;
 import ams.ui.AMSFrame;
 
-public class SearchView extends JPanel
+public class SearchView extends MyPanel
 {
 
 	public static final String ID = "SEARCH";
@@ -132,8 +132,8 @@ public class SearchView extends JPanel
 		cartPanel.add(checkoutButton, BorderLayout.SOUTH);
 
 		JPanel southPanel = new JPanel(new BorderLayout());
-		southPanel.add(queryPanel, BorderLayout.CENTER);
-		southPanel.add(cartPanel, BorderLayout.EAST);
+		southPanel.add(queryPanel, BorderLayout.WEST);
+		southPanel.add(cartPanel, BorderLayout.CENTER);
 
 		JPanel pane = new JPanel(new BorderLayout());
 		pane.add(searchParameterPanel, BorderLayout.NORTH);
@@ -314,9 +314,13 @@ public class SearchView extends JPanel
 
 		DefaultTableModel model = (DefaultTableModel) queryJTable.getModel();
 		model.setDataVector(null, queryTableColumns);
-
+		
 		model = (DefaultTableModel) cartJTable.getModel();
 		model.setDataVector(null, cartTableColumns);
+		
+		cartItems.clear();
+		queryJTable.updateUI();
+		cartJTable.updateUI();
 	}
 
 	private class CheckBoxRenderer implements TableCellRenderer
@@ -337,7 +341,10 @@ public class SearchView extends JPanel
 	private void onRemoveFromCart(int rowIndex)
 	{
 		DefaultTableModel cartRows = (DefaultTableModel) cartJTable.getModel();
+		Item item = new Item((Long) cartRows.getValueAt(rowIndex, 0));
 		cartRows.removeRow(rowIndex);
+		
+		cartItems.remove(item);
 	}
 
 }

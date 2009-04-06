@@ -33,7 +33,7 @@ import ams.model.PurchaseDAO;
 import ams.model.PurchaseItem;
 import ams.ui.AMSFrame;
 
-public class CheckoutView extends JPanel
+public class CheckoutView extends MyPanel
 {
 
 	public static final String ID = "CHECKOUT";
@@ -45,7 +45,7 @@ public class CheckoutView extends JPanel
 	private JButton submitButton;
 
 	private HashMap<Item, Integer> cartItems;
-	String cartTableColumns[] = new String[] { "UPC", "Title", "Category", "Quantity" };
+	private String cartTableColumns[] = new String[] { "UPC", "Title", "Category", "Quantity" };
 
 	public CheckoutView(PurchaseOnlinePanel parent)
 	{
@@ -65,7 +65,7 @@ public class CheckoutView extends JPanel
 
 	private void initComponents()
 	{
-		cardInfoPanel = new JPanel(new GridLayout(0, 1));
+		cardInfoPanel = new JPanel();
 		cardInfoPanel.setBackground(Color.WHITE);
 		cardInfoPanel.setBorder(BorderFactory.createTitledBorder("Card Information"));
 
@@ -106,18 +106,19 @@ public class CheckoutView extends JPanel
 		cartScrollPane.setBackground(Color.WHITE);
 		cartScrollPane.setBorder(BorderFactory.createTitledBorder("Cart"));
 
-		JPanel p = new JPanel();
-		p.setBackground(Color.WHITE);
-		p.setLayout(new BoxLayout(p, BoxLayout.X_AXIS));
-		p.add(cartScrollPane);
-		p.add(cardInfoPanel);
+//		JPanel p = new JPanel();
+//		p.setBackground(Color.WHITE);
+//		p.setLayout(new BoxLayout(p, BoxLayout.X_AXIS));
+//		p.add(cartScrollPane);
+//		p.add(cardInfoPanel);
 
-		JPanel verticalPanel = new JPanel();
-		verticalPanel.setBackground(Color.WHITE);
-		verticalPanel.setLayout(new BoxLayout(verticalPanel, BoxLayout.Y_AXIS));
-		add(verticalPanel, BorderLayout.CENTER);
-		verticalPanel.add(p);
-
+//		JPanel verticalPanel = new JPanel();
+//		verticalPanel.setBackground(Color.WHITE);
+//		verticalPanel.setLayout(new BoxLayout(verticalPanel, BoxLayout.Y_AXIS));
+//		verticalPanel.add(p);
+		
+		add(cartScrollPane, BorderLayout.CENTER);
+		add(cardInfoPanel, BorderLayout.SOUTH);
 	}
 
 	private void initListeners()
@@ -171,6 +172,7 @@ public class CheckoutView extends JPanel
 			catch(SQLException e)
 			{
 				e.printStackTrace();
+				return;
 			}
 		}
 		
@@ -184,6 +186,7 @@ public class CheckoutView extends JPanel
 		{
 			Controller.getInstance().setStatusString("Cannot purchase: card expiry date not valid", AMSFrame.FAILURE);
 			e.printStackTrace();
+			return;
 		}
 		
 
@@ -201,6 +204,7 @@ public class CheckoutView extends JPanel
 		{
 			Controller.getInstance().setStatusString("Cannot complete purchase: credit card number invalid",
 					AMSFrame.FAILURE);
+			return;
 		}
 		Date eDate = PurchaseDAO.getExpectedDeliveryDate();
 		purchase.setExpectedDate(eDate);
@@ -214,7 +218,11 @@ public class CheckoutView extends JPanel
 		cardNumberField.setText("");
 		cardMonthExpiryField.setText("");
 		cardYearExpiryField.setText("");
-		// DefaultTableModel model = (DefaultTableModel) cartJTable.getModel();
-		// model.setDataVector(null, parentPanel.cartTableColumns);
+		if (cartItems != null)
+			cartItems.clear();
+		
+		DefaultTableModel model = (DefaultTableModel) cartJTable.getModel();
+		for (int i = 0; i < model.getRowCount(); ++i)
+			model.removeRow(i);
 	}
 }
