@@ -125,7 +125,8 @@ public class LoginView extends MyPanel {
 					}
 					else
 						Controller.getInstance().setStatusString("Login Failed: Incorrect password", AMSFrame.FAILURE);
-				}
+				} else
+					Controller.getInstance().setStatusString("Login Failed: Cannot find CID", AMSFrame.FAILURE);
 			}
 			
 		}

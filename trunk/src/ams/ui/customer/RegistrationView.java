@@ -1,12 +1,14 @@
 package ams.ui.customer;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,13 +21,14 @@ public class RegistrationView extends MyPanel{
 	public static final String ID = "REGISTRATION";
 	
 	private PurchaseOnlinePanel parentPanel;
-	private JButton registerButton, continueButton;
+	private JButton registerButton, continueButton, backButton;
 	private JTextField passwordField, nameField, addressField, phoneField;
 	
 	private JLabel feedbackLabel;
 	
 	public RegistrationView(PurchaseOnlinePanel parent)
 	{
+		setBackground(Color.WHITE);
 		parentPanel = parent;
 		initComponents();
 		initListeners();
@@ -33,11 +36,13 @@ public class RegistrationView extends MyPanel{
 	
 	private void initComponents()
 	{
-		JPanel superPanel = new JPanel(new GridLayout(0,1));
-		add(superPanel);
+		JPanel superPanel = new JPanel();
+		superPanel.setLayout(new BoxLayout(superPanel, BoxLayout.Y_AXIS));
+		
 		JPanel infoPanel = new JPanel(new GridLayout(0,1));
 		
 		JPanel subPanel = new JPanel();
+		subPanel.setBackground(Color.WHITE);
 		JLabel label = new JLabel("Password:");
 		passwordField = new JTextField();
 		passwordField.setPreferredSize(new Dimension(100, passwordField.getPreferredSize().height));		
@@ -46,6 +51,7 @@ public class RegistrationView extends MyPanel{
 		infoPanel.add(subPanel);
 		
 		subPanel = new JPanel();
+		subPanel.setBackground(Color.WHITE);
 		label = new JLabel("     Name:");
 		nameField = new JTextField();
 		nameField.setPreferredSize(new Dimension(100, nameField.getPreferredSize().height));		
@@ -53,7 +59,8 @@ public class RegistrationView extends MyPanel{
 		subPanel.add(nameField);
 		infoPanel.add(subPanel);
 		
-		subPanel = new JPanel();	
+		subPanel = new JPanel();
+		subPanel.setBackground(Color.WHITE);
 		label = new JLabel("  Address:");
 		addressField = new JTextField();
 		addressField.setPreferredSize(new Dimension(100, addressField.getPreferredSize().height));		
@@ -62,6 +69,7 @@ public class RegistrationView extends MyPanel{
 		infoPanel.add(subPanel);
 		
 		subPanel = new JPanel();	
+		subPanel.setBackground(Color.WHITE);
 		label = new JLabel("    Phone:");
 		phoneField = new JTextField();
 		phoneField.setPreferredSize(new Dimension(100, phoneField.getPreferredSize().height));		
@@ -70,20 +78,32 @@ public class RegistrationView extends MyPanel{
 		infoPanel.add(subPanel);
 		
 		infoPanel.setBorder(BorderFactory.createTitledBorder("Registration Information"));
+		infoPanel.setBackground(Color.WHITE);
 		superPanel.add(infoPanel, BorderLayout.NORTH);
 		registerButton = new JButton("Register");
+		backButton = new JButton("Back");
 		
-		add(registerButton);
 		
 		continueButton = new JButton("Continue");
 		continueButton.setVisible(false);
 		feedbackLabel = new JLabel("");
 		feedbackLabel.setVisible(false);
 		JPanel feedbackPanel = new JPanel(new GridLayout(0,1));
+		feedbackPanel.setBackground(Color.WHITE);
 		feedbackPanel.add(feedbackLabel);
 		feedbackPanel.add(continueButton);
+		feedbackPanel.add(backButton);
 		
 		superPanel.add(feedbackPanel);
+		add(superPanel);
+		
+
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setBackground(Color.WHITE);
+		buttonPanel.add(backButton);
+		buttonPanel.add(registerButton);
+		
+		add(buttonPanel);
 	}
 	
 	private void initListeners()
@@ -94,6 +114,12 @@ public class RegistrationView extends MyPanel{
 			{
 				onRegister();
 			}
+		});
+		
+		backButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				parentPanel.nextView(LoginView.ID);
+			};
 		});
 		
 		continueButton.addActionListener(new ActionListener() {
