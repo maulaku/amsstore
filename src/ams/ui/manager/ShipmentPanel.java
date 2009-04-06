@@ -177,6 +177,8 @@ public class ShipmentPanel extends JPanel
 		Controller.getInstance().processShipment(shipment);
 		
 		removeAllItemPanels();
+		storeField.setText("");
+		supplierField.setText("");
 	}
 	
 	void removePanel( ItemPanel panel )

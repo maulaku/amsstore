@@ -255,10 +255,6 @@ public class Controller {
 		try
 		{
 			con.setAutoCommit(false);
-			Vector<PurchaseItem> items = PurchaseDAO.getInstance().selectPurchaseItems(rId);
-			// update stock
-			for (PurchaseItem item: items)
-				ItemDAO.getInstance().updateStock("Online Store", item.getUPC(), -item.getQuantity());
 			
 			// set delivered date
 			PurchaseDAO.getInstance().updateDeliveredDate(rId, date);
