@@ -5,11 +5,11 @@ INSERT INTO ITEM VALUES (2, 'Washington Orchestral', 'DVD', 'classical', 'Whiteh
 INSERT INTO SUPPLIER VALUES ('Black and White', '123 Fake Street', 'Fakouver', 'active');
 
 
-INSERT INTO SHIPMENT VALUES (1, 'Black and White', 'AMS Broadway Store', to_date('2009/04/05', 'yyyy/mm/dd'));
+INSERT INTO SHIPMENT VALUES (1, 'Black and White', 'AMS', to_date('2009/04/05', 'yyyy/mm/dd'));
 
 
-INSERT INTO STORE VALUES ('AMS Broadway Store', '110 Broadway Street', 'regular');
-INSERT INTO STORE VALUES ('Online Store', '', 'warehouse');
+INSERT INTO STORE VALUES ('AMS', '110 Broadway Street', 'regular');
+INSERT INTO STORE VALUES ('Warehouse', '', 'warehouse');
 
 
 INSERT INTO CUSTOMER VALUES (1, 'dow2', 'David', '10115 Williams Road', '778-354-8645');
@@ -28,20 +28,20 @@ INSERT INTO HASSONG VALUES (2, 'Morning Breeze');
 INSERT INTO SHIPITEM VALUES (1, 1, 15, 10);
 
 
-INSERT INTO STORED VALUES ('AMS Broadway Store', '1', 10);
-INSERT INTO STORED VALUES ('AMS Broadway Store', '2', 20);
-INSERT INTO STORED VALUES ('Online Store', '1', 20);
-INSERT INTO STORED VALUES ('Online Store', '2', 20);
+INSERT INTO STORED VALUES ('AMS', '1', 10);
+INSERT INTO STORED VALUES ('AMS', '2', 20);
+INSERT INTO STORED VALUES ('Warehouse', '1', 20);
+INSERT INTO STORED VALUES ('Warehouse', '2', 20);
 
 
-INSERT INTO PURCHASE VALUES (1, to_date('2009/04/03', 'yyyy/mm/dd'), 1, 'AMS Broadway Store', 5678123456781234, to_date('2011/10/01', 'yyyy/mm/dd'), null, null);
-INSERT INTO PURCHASE VALUES (2, to_date('2009/04/01', 'yyyy/mm/dd'), 2, 'AMS Broadway Store', 1443225677897765, to_date('2010/03/01', 'yyyy/mm/dd'), null, null);
+INSERT INTO PURCHASE VALUES (1, to_date('2009/04/03', 'yyyy/mm/dd'), 1, 'AMS', 5678123456781234, to_date('2011/10/01', 'yyyy/mm/dd'), null, null);
+INSERT INTO PURCHASE VALUES (2, to_date('2009/04/01', 'yyyy/mm/dd'), 2, 'AMS', 1443225677897765, to_date('2010/03/01', 'yyyy/mm/dd'), null, null);
 
 
 INSERT INTO PURCHASEITEM VALUES (1, 1, 1);
 INSERT INTO PURCHASEITEM VALUES (2, 2, 1);
 
 
-INSERT INTO RETURN VALUES (1, to_date('2009/04/05', 'yyyy/mm/dd'), 2, 'AMS Broadway Store');
+INSERT INTO RETURN VALUES (1, to_date('2009/04/05', 'yyyy/mm/dd'), 2, 'AMS');
 
 INSERT INTO RETURNITEM VALUES (1, 2, 1);
