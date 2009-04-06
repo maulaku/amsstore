@@ -261,7 +261,7 @@ public class ItemPurchasePanel extends JPanel
 			purchase.setPayByCredit(cardNum, expiryDate);
 		} 
 
-		Controller.getInstance().setStatusString("Purchase Successful: see receipt.", AMSFrame.SUCCESS);		
+		Controller.getInstance().setStatusString("Purchase Successful: " + (receiptBox.isSelected()? "see receipt":""), AMSFrame.SUCCESS);		
 		Receipt receipt = Controller.getInstance().purchase(purchase);
 		
 		if (receiptBox.isSelected() && receipt != null)
