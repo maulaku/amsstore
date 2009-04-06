@@ -132,8 +132,8 @@ public class SearchView extends MyPanel
 		cartPanel.add(checkoutButton, BorderLayout.SOUTH);
 
 		JPanel southPanel = new JPanel(new BorderLayout());
-		southPanel.add(queryPanel, BorderLayout.WEST);
-		southPanel.add(cartPanel, BorderLayout.CENTER);
+		southPanel.add(queryPanel, BorderLayout.CENTER);
+		southPanel.add(cartPanel, BorderLayout.EAST);
 
 		JPanel pane = new JPanel(new BorderLayout());
 		pane.add(searchParameterPanel, BorderLayout.NORTH);

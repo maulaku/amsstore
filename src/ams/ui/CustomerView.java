@@ -22,6 +22,6 @@ public class CustomerView extends JTabbedPane {
 	
 	private void initComponents()
 	{
-		addTab("<html><body leftmargin=25 topmargin=8 marginwidth=45 marginheight=10>Purchase Online</body></html>", new PurchaseOnlinePanel());
+		addTab("<html><body leftmargin=25 topmargin=8 marginwidth=35 marginheight=10>Purchase Online</body></html>", new PurchaseOnlinePanel());
 	}
 }
