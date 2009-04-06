@@ -141,27 +141,29 @@ public class DailySalesPanel extends JPanel
 				int grandTotalUnits = 0;
 				for(Vector<Vector<Object>> category : categories.values())
 				{
+					int totalUnits = 0;
 					double totalValue = 0.00;
 					
 					//Add category rows to data set
 					for(Vector<Object> row : category)
 					{
+						totalUnits += Integer.parseInt(row.get(row.size() - 2).toString());
 						totalValue += Double.parseDouble(row.get(row.size() - 1).toString());
 						data.add(row);
 					}
 					
 					//Add to grand total
+					grandTotalUnits += totalUnits;
 					grandTotalValue += totalValue;
-					grandTotalUnits += category.size();
 					
 					//Add category's total to data set
 					Vector<Object> categoryTotal = new Vector<Object>();
 					categoryTotal.add(null);
 					categoryTotal.add("Total");
 					categoryTotal.add(null);
-					categoryTotal.add(category.size());
-					
+					categoryTotal.add(totalUnits);
 					categoryTotal.add(priceFormat.format(totalValue));
+					
 					data.add(categoryTotal);
 					
 					//Add spacer
