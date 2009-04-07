@@ -85,7 +85,7 @@ CREATE TABLE Purchase (
     purchaseDate DATE,
     cid INTEGER,
     name VARCHAR(255),
-    cardNum LONG,
+    cardNum number(16,0),
     expire DATE,
     expectedDate DATE,
     deliveredDate DATE,
