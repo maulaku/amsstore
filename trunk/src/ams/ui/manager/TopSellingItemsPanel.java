@@ -125,7 +125,7 @@ public class TopSellingItemsPanel extends JPanel
 					limit = 0;
 				}
 				
-				PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement("SELECT upc, title, company, name AS store, stock, sold FROM Item INNER JOIN (SELECT upc, name, stock FROM Stored) USING (upc) INNER JOIN (SELECT i.upc, SUM(pi.quantity) AS sold FROM Item i, PurchaseItem pi, Purchase p WHERE i.upc = pi.upc AND p.receiptId = pi.receiptId AND p.purchasedate = ? GROUP BY i.upc ORDER BY sold DESC) USING (upc) WHERE ROWNUM <= ?");
+				PreparedStatement statement = Controller.getInstance().getConnection().prepareStatement("SELECT upc, title, company, name AS store, stock, sold FROM Item INNER JOIN (SELECT upc, name, stock FROM Stored) USING (upc) INNER JOIN (SELECT i.upc, SUM(pi.quantity) AS sold FROM Item i, PurchaseItem pi, Purchase p WHERE i.upc = pi.upc AND p.receiptId = pi.receiptId AND p.purchasedate = ? GROUP BY i.upc ORDER BY sold DESC) USING (upc) WHERE ROWNUM <= ? ORDER BY sold DESC");
 				statement.setDate(1, calendarPanel.getSelectedDate());
 				statement.setInt(2, limit);
 				ResultSet results = statement.executeQuery();
