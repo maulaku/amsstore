@@ -34,9 +34,17 @@ INSERT INTO STORED VALUES ('Warehouse', '1', 20);
 INSERT INTO STORED VALUES ('Warehouse', '2', 20);
 
 
-INSERT INTO PURCHASE VALUES (1, to_date('2009/04/03', 'yyyy/mm/dd'), 1, 'AMS', 5678123456781234, to_date('2011/10/01', 'yyyy/mm/dd'), null, null);
-INSERT INTO PURCHASE VALUES (2, to_date('2009/04/01', 'yyyy/mm/dd'), 2, 'AMS', 1443225677897765, to_date('2010/03/01', 'yyyy/mm/dd'), null, null);
+INSERT INTO PURCHASE VALUES (1, to_date('2009/04/03', 'yyyy/mm/dd'), NULL, 'AMS', 5678123456781234, to_date('2011/10/01', 'yyyy/mm/dd'), null, null);
+INSERT INTO PURCHASE VALUES (2, to_date('2009/04/01', 'yyyy/mm/dd'), NULL, 'AMS', 1443225677897765, to_date('2010/03/01', 'yyyy/mm/dd'), null, null);
 INSERT INTO PURCHASE VALUES (3, to_date('2009/03/01', 'yyyy/mm/dd'), NULL, 'AMS', NULL, NULL, null, null);
+INSERT INTO PURCHASE VALUES (4, to_date('2009/03/01', 'yyyy/mm/dd'), 1, 'Warehouse', 1234678534567654, to_date('2010/03/01', 'yyyy/mm/dd'), to_date('2009/03/09', 'yyyy/mm/dd'), null);
+INSERT INTO PURCHASE VALUES (5, to_date('2009/03/01', 'yyyy/mm/dd'), 2, 'Warehouse', 5783629496308934, to_date('2010/03/01', 'yyyy/mm/dd'), to_date('2009/03/09', 'yyyy/mm/dd'), null);
+INSERT INTO PURCHASE VALUES (6, to_date('2009/03/01', 'yyyy/mm/dd'), 1, 'Warehouse', 1234678534567654, to_date('2010/03/01', 'yyyy/mm/dd'), to_date('2009/03/09', 'yyyy/mm/dd'), null);
+INSERT INTO PURCHASE VALUES (7, to_date('2009/03/01', 'yyyy/mm/dd'), 2, 'Warehouse', 5783629496308934, to_date('2010/03/01', 'yyyy/mm/dd'), to_date('2009/03/09', 'yyyy/mm/dd'), null);
+INSERT INTO PURCHASE VALUES (8, to_date('2009/03/01', 'yyyy/mm/dd'), 2, 'Warehouse', 5783629496308934, to_date('2010/03/01', 'yyyy/mm/dd'), to_date('2009/03/09', 'yyyy/mm/dd'), null);
+INSERT INTO PURCHASE VALUES (9, to_date('2009/03/01', 'yyyy/mm/dd'), 1, 'Warehouse', 1234678534567654, to_date('2010/03/01', 'yyyy/mm/dd'), to_date('2009/03/09', 'yyyy/mm/dd'), null);
+INSERT INTO PURCHASE VALUES (10, to_date('2009/03/01', 'yyyy/mm/dd'), 2, 'Warehouse', 5783629496308934, to_date('2010/03/01', 'yyyy/mm/dd'), to_date('2009/03/09', 'yyyy/mm/dd'), null);
+INSERT INTO PURCHASE VALUES (11, to_date('2009/03/01', 'yyyy/mm/dd'), 1, 'Warehouse', 1234678534567654, to_date('2010/03/01', 'yyyy/mm/dd'), to_date('2009/03/09', 'yyyy/mm/dd'), null);
 
 
 INSERT INTO PURCHASEITEM VALUES (1, 1, 1);
